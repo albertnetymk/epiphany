@@ -1,0 +1,1 @@
+Simple FIFO communication between cores of [Epiphany](http://www.parallella.org/) architecture.
