@@ -26,7 +26,7 @@ int main(void) {
     puts("Host is running ...");
     fo = stdout;
     for (i=start; i<end; ++i) {
-        Mailbox.core.go[i] = 0;
+        Mailbox.core.go[i] = 1;
     }
 
     // for (i=start; i<end; ++i) {
@@ -55,20 +55,22 @@ int main(void) {
     // printf("go is %d\n", Mailbox.core.go[i]);
     // }
 
-    for (i=start; i<end; ++i) {
-        addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
-        // while (1) {
-        e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
-        if (Mailbox.core.go[i] == 1){
-            addr = DRAM_BASE + offsetof(shared_buf_t, dummy[i]);
-            e_read(addr, (void *) (&Mailbox.dummy[i]), sizeof(int));
-            printf("read from core %d: %p\n", i, Mailbox.dummy[i]);
-        } else {
-            printf("Skip for %dth core\n", i);
-        }
-        // }
+    for (i = 0; i < 10; ++i) {
+        printf("sink[%d]: %d", i, Mailbox.sink[i]);
     }
-    // printf("int is %d\n", sizeof(int));
+    // for (i=start; i<end; ++i) {
+    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
+    //     // while (1) {
+    //     e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
+    //     if (Mailbox.core.go[i] == 1){
+    //         addr = DRAM_BASE + offsetof(shared_buf_t, dummy[i]);
+    //         e_read(addr, (void *) (&Mailbox.dummy[i]), sizeof(int));
+    //         printf("read from core %d: %p\n", i, Mailbox.dummy[i]);
+    //     } else {
+    //         printf("Skip for %dth core\n", i);
+    //     }
+    //     // }
+    // }
 
     if (e_close()) {
         fprintf(fo, "\nERROR: Can't close connection to E-SERVER!\n\n");
