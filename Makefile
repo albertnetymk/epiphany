@@ -81,8 +81,9 @@ define make_library
   programs += $1
   $2 : ;
   $(shell mkdir -p $(dir $1))
+  objects += $(call source_to_object,$2)
   $1 : $(call source_to_object,$2) common/common.a
-	${CC} -T ${ESDK}/bsps/emek3/legacy.ldf $$^ -o $$@
+	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
 endef
 $(foreach m, $(modules), \
 	$(eval $(call make_library, $(notdir $(m))/main.elf, \
@@ -101,7 +102,7 @@ main.srec : $(programs)
 all : main.srec
 
 .PHONY: compile
-compile : $(programs)
+compile : $(objects) common/common.a
 	@$(MAKE) $(MFLAGS) -f ../Makefile ROOT_DIR=.. host-compile
 
 .PHONY: build
