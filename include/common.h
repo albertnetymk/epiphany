@@ -1,8 +1,7 @@
 #ifndef _COMMON_H
 #define _COMMON_H
+
 #include <e_coreid.h>
-// extern int list[];
-// extern int flag[];
 unsigned core_num(e_coreid_t coreid);
 void dummy(int i, int v);
 void core0_main();
@@ -21,4 +20,5 @@ void core12_main();
 void core13_main();
 void core14_main();
 void core15_main();
+
 #endif
