@@ -1,0 +1,3 @@
+-I../include
+-I../../tools/host/x86_64/include
+-D__HOST__
