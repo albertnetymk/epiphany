@@ -3,7 +3,7 @@
 actor_b *actor_b_new()
 {
     actor_b *instance_b = malloc(sizeof(actor_b));
-    port_in *in = malloc(sizeof(port_in));
+    port_in *in = port_in_new();
     instance_b->in = in;
     return instance_b;
 }

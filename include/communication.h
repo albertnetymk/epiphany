@@ -14,6 +14,8 @@ typedef struct port_out_struct {
     struct port_in_struct *dest;
 } port_out;
 
+port_out *port_out_new();
+port_in *port_in_new();
 void epiphany_write(port_out *p, int v);
 int epiphany_read(port_in *p);
 void connect(port_out *out, port_in *in);
