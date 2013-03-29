@@ -1,3 +1,5 @@
+#include <e_coreid.h>
+#include "types.h"
 #include "common_buffers.h"
 #include "common.h"
 

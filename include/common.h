@@ -1,9 +1,6 @@
 #ifndef _COMMON_H
 #define _COMMON_H
 
-#include <e_coreid.h>
-unsigned core_num(e_coreid_t coreid);
-void dummy(int i, int v);
 void core0_main();
 void core1_main();
 void core2_main();
