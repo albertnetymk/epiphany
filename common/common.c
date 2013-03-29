@@ -21,12 +21,12 @@ void dummy(int i, int v)
     while(1);
 }
 
-
 void stage(uint s)
 {
     uint index = core_num(e_get_coreid());
     while(Mailbox.core.go[index] < s) ;
 }
+
 void core0_main()
 {
     int i;

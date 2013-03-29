@@ -1,5 +1,12 @@
 #include <stdlib.h>
+#include "types.h"
 #include "communication.h"
+
+struct port_in_struct {
+};
+
+struct port_out_struct {
+};
 
 port_out *port_out_new()
 {
