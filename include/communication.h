@@ -8,6 +8,7 @@ port_out *port_out_new();
 port_in *port_in_new();
 void epiphany_write(port_out *p, int v);
 int epiphany_read(port_in *p);
+void end(port_out *p);
 void connect(port_out *out, port_in *in);
 
 #endif /* end of include guard: _COMMUNICATION_H */

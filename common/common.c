@@ -50,6 +50,7 @@ void core0_main()
     // for (i = 0; i < 10; ++i) {
     //     epiphany_write(instance_a->out, i);
     // }
+    end(all.instance_a->out);
     while(1) ;
 }
 

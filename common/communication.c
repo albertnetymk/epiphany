@@ -29,6 +29,10 @@ int epiphany_read(port_in *p)
     return 0;
 }
 
+void end(port_out *p)
+{
+}
+
 void connect(port_out *out, port_in *in)
 {
 }
