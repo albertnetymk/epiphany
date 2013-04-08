@@ -6,9 +6,12 @@
 #else // __HOST__
 #include "actors.h"
 #include <e_common.h>
-volatile actors all SECTION(".shared_dram");
 #endif // __HOST__
 
 volatile shared_buf_t Mailbox SECTION(".shared_dram");
+
+#ifndef __HOST__
+volatile actors all SECTION(".shared_dram");
+#endif
 
 #endif // __COMMON_BUFFERS_H__
