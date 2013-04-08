@@ -5,6 +5,7 @@ MAKETARGET = $(MAKE) $(MFLAGS) --no-print-directory -C $@ -f ../Makefile \
 
 .PHONY: $(OBJDIR)
 $(OBJDIR):
+	mkdir -p $@
 	@$(MAKETARGET)
 
 Makefile : ;
