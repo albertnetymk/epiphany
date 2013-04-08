@@ -56,6 +56,8 @@ int main(void) {
     // }
 
     for (i = 0; i < 10; ++i) {
+        addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
+        e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
         printf("sink[%d]: %d", i, Mailbox.sink[i]);
     }
     // for (i=start; i<end; ++i) {
