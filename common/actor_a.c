@@ -1,11 +1,7 @@
 #include <stdlib.h>
 #include "actor_a.h"
 
-actor_a *actor_a_new()
+void actor_a_init(actor_a *a)
 {
-    actor_a *instance_a = malloc(sizeof(actor_a));
-    port_out *out = port_out_new();
-    instance_a->out = out;
-    return instance_a;
+    port_out_init(a->out);
 }
-

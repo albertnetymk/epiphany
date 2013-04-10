@@ -4,7 +4,6 @@
 #ifdef __HOST__
 #define SECTION(x)
 #else // __HOST__
-#include "actors.h"
 #include <e_common.h>
 #endif // __HOST__
 

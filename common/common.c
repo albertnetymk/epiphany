@@ -1,5 +1,6 @@
 #include <e_coreid.h>
 #include "types.h"
+#include "actors.h"
 #include "common_buffers.h"
 #include "common.h"
 
@@ -27,7 +28,7 @@ void stage(uint s)
     while(Mailbox.core.go[index] < s) ;
 }
 
-void core0_main()
+void core0_main(actor_a *a)
 {
     int i;
     Mailbox.core.go[0] = 0;
@@ -36,7 +37,8 @@ void core0_main()
     for (i = 0; i < 10; ++i) {
         Mailbox.sink[i] = 0;
     }
-    all.instance_a = actor_a_new();
+    all.instance_a = a;
+    actor_a_init(a);
 
     stage(2);
     // network
@@ -54,13 +56,14 @@ void core0_main()
     while(1) ;
 }
 
-void core1_main()
+void core1_main(actor_b *a)
 {
     int i;
     Mailbox.core.go[1] = 0;
 
     stage(1);
-    all.instance_b = actor_b_new();
+    all.instance_b = a;
+    actor_b_init(a);
 
     stage(2);
 

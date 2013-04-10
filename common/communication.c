@@ -1,23 +1,12 @@
 #include <stdlib.h>
-#include "types.h"
 #include "communication.h"
 
-struct port_in_struct {
-};
-
-struct port_out_struct {
-};
-
-port_out *port_out_new()
+void port_out_init(port_out *p)
 {
-    port_out *port = NULL;
-    return port;
 }
 
-port_in *port_in_new()
+void port_in_init(port_in *p)
 {
-    port_in *port = NULL;
-    return port;
 }
 
 void epiphany_write(port_out *p, int v)
