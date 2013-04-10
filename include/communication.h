@@ -4,9 +4,13 @@
 #include "types.h"
 
 typedef struct port_in_struct {
+    uchar read_index;
+    uchar write_index;
+    int array[10];
 } port_in;
 
 typedef struct port_out_struct {
+    volatile port_in *dest;
 } port_out;
 
 void port_out_init(volatile port_out *p);
