@@ -45,10 +45,11 @@ typedef struct {
 
 
 typedef struct {
-    float  A[_Smtx * _Smtx]; // Global A matrix 
-    float  B[_Smtx * _Smtx]; // Global B matrix 
-    float  C[_Smtx * _Smtx]; // Global C matrix
+    // float  A[_Smtx * _Smtx]; // Global A matrix 
+    // float  B[_Smtx * _Smtx]; // Global B matrix 
+    // float  C[_Smtx * _Smtx]; // Global C matrix
     int sink[10];
+    int debug[10];
     mbox_t core;
 } shared_buf_t;
 
