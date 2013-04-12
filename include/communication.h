@@ -1,12 +1,14 @@
 #ifndef _COMMUNICATION_H
 #define _COMMUNICATION_H
 
+#include <stdbool.h>
 #include "types.h"
 
 typedef struct port_in_struct {
     uchar read_index;
     uchar write_index;
     int array[10];
+    bool carrier;
 } port_in;
 
 typedef struct port_out_struct {
