@@ -59,9 +59,9 @@ void core0_main(actor_a *a)
 
     stage(3);
     while(Mailbox.core.go[0] < 3) ;
-    // for (i = 0; i < 10; ++i) {
-    //     epiphany_write(instance_a->out, i);
-    // }
+    for (i = 0; i < 10; ++i) {
+        epiphany_write(a->out, i);
+    }
     end(all.instance_a->out);
     while(1) ;
 }
@@ -81,7 +81,7 @@ void core1_main(actor_b *a)
     stage(3);
     int value;
     for (i = 0; i < 10; ++i) {
-        value = epiphany_read(all.instance_b->in);
+        value = epiphany_read(a->in);
         Mailbox.sink[i] = value;
     }
     while(1) ;
