@@ -8,6 +8,7 @@ void port_out_init(volatile port_out *p)
 void port_in_init(volatile port_in *p)
 {
     p->read_index = p->write_index = 0;
+    p->carrier = false;
 }
 
 void epiphany_write(volatile port_out *p, int v)
@@ -17,10 +18,11 @@ void epiphany_write(volatile port_out *p, int v)
         while (dest->write_index == dest->read_index) ;
     }
     dest->array[dest->write_index] = v;
-    if (dest->write_index ==
-            (dest->write_index+1) % (sizeof(dest->array)/sizeof(int)) - 1 ) {
+    if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
         dest->carrier = true;
         dest->write_index = 0;
+    } else {
+        dest->write_index++;
     }
 }
 
@@ -30,10 +32,11 @@ int epiphany_read(volatile port_in *p)
         while (p->read_index == p->write_index) ;
     }
     int result = p->array[p->read_index];
-    if (p->read_index ==
-            (p->read_index+1) % (sizeof(p->array)/sizeof(int)) - 1) {
+    if (p->read_index == sizeof(p->array)/sizeof(int) - 1) {
         p->carrier = false;
         p->read_index = 0;
+    } else {
+        p->read_index++;
     }
     return result;
 }
