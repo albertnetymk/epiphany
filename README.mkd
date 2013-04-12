@@ -2,3 +2,5 @@ Simple FIFO communication between cores of [Epiphany](http://www.parallella.org/
 
 I do rebase a lot, so there's no real code in master branch (default one). Instead, various implementation could be find in other branches, such as
 *destinatnion-fifo*, *both-fifo*, and *double-buffer-per-port*.
+
+Since we need to switch to different implementation more easily, so I am trying to merge all three into one branch (combine).
