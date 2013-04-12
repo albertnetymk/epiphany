@@ -28,19 +28,29 @@ void stage(uint s)
     while(Mailbox.core.go[index] < s) ;
 }
 
+void stage_all(uint s)
+{
+    int i;
+    for (i=0; i<2; ++i) {
+        while(Mailbox.core.go[i] < s) ;
+    }
+}
+
 void core0_main(actor_a *a)
 {
     int i;
     Mailbox.core.go[0] = 0;
 
-    stage(1);
     for (i = 0; i < 10; ++i) {
         Mailbox.sink[i] = 0;
     }
+
+    stage(1);
     all.instance_a = a;
     actor_a_init(a);
 
-    stage(2);
+    Mailbox.core.go[0] = 2;
+    stage_all(2);
     // network
     connect(all.instance_a->out, all.instance_b->in);
     for(i=0; i<3; ++i) {
@@ -65,7 +75,8 @@ void core1_main(actor_b *a)
     all.instance_b = a;
     actor_b_init(a);
 
-    stage(2);
+    Mailbox.core.go[1] = 2;
+    stage_all(2);
 
     stage(3);
     int value;
