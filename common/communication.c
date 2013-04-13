@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "communication.h"
 
+#ifdef USE_DESTINATION_BUFFER
 void port_out_init(volatile port_out *p)
 {
 }
@@ -49,3 +50,4 @@ void connect(volatile port_out *out, volatile port_in *in)
 {
     out->dest = in;
 }
+#endif

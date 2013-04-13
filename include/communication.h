@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include "types.h"
 
+#define USE_DESTINATION_BUFFER
+#ifdef USE_DESTINATION_BUFFER
 typedef struct port_in_struct {
     uchar read_index;
     uchar write_index;
@@ -14,7 +16,7 @@ typedef struct port_in_struct {
 typedef struct port_out_struct {
     volatile port_in *dest;
 } port_out;
-
+#endif
 void port_out_init(volatile port_out *p);
 void port_in_init(volatile port_in *p);
 void epiphany_write(volatile port_out *p, int v);
