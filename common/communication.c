@@ -2,17 +2,17 @@
 #include "communication.h"
 
 #ifdef USE_DESTINATION_BUFFER
-void port_out_init(volatile port_out *p)
+void port_out_init(port_out *p)
 {
 }
 
-void port_in_init(volatile port_in *p)
+void port_in_init(port_in *p)
 {
     p->read_index = p->write_index = 0;
     p->carrier = false;
 }
 
-void epiphany_write(volatile port_out *p, int v)
+void epiphany_write(port_out *p, int v)
 {
     volatile port_in *dest = p->dest;
     if (dest->carrier) {
@@ -27,7 +27,7 @@ void epiphany_write(volatile port_out *p, int v)
     }
 }
 
-int epiphany_read(volatile port_in *p)
+int epiphany_read(port_in *p)
 {
     if (!p->carrier) {
         while (p->read_index == p->write_index) ;
@@ -42,11 +42,11 @@ int epiphany_read(volatile port_in *p)
     return result;
 }
 
-void flush(volatile port_out *p)
+void flush(port_out *p)
 {
 }
 
-void connect(volatile port_out *out, volatile port_in *in)
+void connect(port_out *out, volatile port_in *in)
 {
     out->dest = in;
 }

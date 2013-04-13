@@ -3,10 +3,10 @@
 
 #include <stdbool.h>
 #include "types.h"
+#include "flags.h"
 
-#define USE_DESTINATION_BUFFER
 #ifdef USE_DESTINATION_BUFFER
-typedef struct port_in_struct {
+typedef volatile struct port_in_struct {
     uchar read_index;
     uchar write_index;
     int array[10];
@@ -14,14 +14,15 @@ typedef struct port_in_struct {
 } port_in;
 
 typedef struct port_out_struct {
-    volatile port_in *dest;
+    port_in *dest;
 } port_out;
+
+void port_out_init(port_out *p);
+void port_in_init(port_in *p);
+void epiphany_write(port_out *p, int v);
+int epiphany_read(port_in *p);
+void flush(port_out *p);
+void connect(port_out *out, port_in *in);
 #endif
-void port_out_init(volatile port_out *p);
-void port_in_init(volatile port_in *p);
-void epiphany_write(volatile port_out *p, int v);
-int epiphany_read(volatile port_in *p);
-void flush(volatile port_out *p);
-void connect(volatile port_out *out, volatile port_in *in);
 
 #endif /* end of include guard: _COMMUNICATION_H */

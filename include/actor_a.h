@@ -3,7 +3,7 @@
 
 #include "communication.h"
 typedef struct actor_a_struct {
-    volatile port_out *out;
+    port_out *out;
 } actor_a;
 void actor_a_init(actor_a *a);
 
