@@ -41,7 +41,7 @@ int epiphany_read(volatile port_in *p)
     return result;
 }
 
-void end(volatile port_out *p)
+void flush(volatile port_out *p)
 {
 }
 
