@@ -13,6 +13,12 @@ unsigned core_num(e_coreid_t coreid)
     return row * E_COLS_IN_CHIP + col;
 }
 
+inline void *address_from_coreid(e_coreid_t coreid, volatile void *ptr)
+{
+    return e_address_from_coreid(coreid, (void *)ptr);
+}
+
+
 void dummy(int i, int v)
 {
     Mailbox.core.go[i] = 1;
