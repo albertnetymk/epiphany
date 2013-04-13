@@ -14,7 +14,7 @@ void port_in_init(port_in *p)
 
 void epiphany_write(port_out *p, int v)
 {
-    volatile port_in *dest = p->dest;
+    port_in *dest = p->dest;
     if (dest->carrier) {
         while (dest->write_index == dest->read_index) ;
     }
@@ -50,27 +50,7 @@ void connect(port_out *out, volatile port_in *in)
 {
     out->dest = in;
 }
-#endif
-
-#ifdef USE_BOTH_BUFFER
-void port_out_init(port_out *p)
-{
-    p->buffer->dma->status = DMA_IDLE;
-
-    p->buffer->ready_to_dma = false;
-    p->buffer->size = sizeof(p->buffer->array)/sizeof(int);
-
-    p->index = 0;
-}
-
-void port_in_init(port_in *p)
-{
-    p->buffer->ready_to_dma = true;
-    p->buffer->size = sizeof(p->buffer->array)/sizeof(int);
-
-    p->index = 0;
-}
-
+#else // USE_DESTINATION_BUFFER
 static dma_cfg *dma_pool[2];
 static bool try_dma(dma_cfg *dma)
 {
@@ -136,6 +116,30 @@ static void try_flush(volatile fifo *b)
     }
 }
 
+static void wait_till_ready_to_read(volatile fifo *b)
+{
+    while(b->ready_to_dma) ;
+}
+
+#ifdef USE_BOTH_BUFFER
+void port_out_init(port_out *p)
+{
+    p->buffer->dma->status = DMA_IDLE;
+
+    p->buffer->ready_to_dma = false;
+    p->buffer->size = sizeof(p->buffer->array)/sizeof(int);
+
+    p->index = 0;
+}
+
+void port_in_init(port_in *p)
+{
+    p->buffer->ready_to_dma = true;
+    p->buffer->size = sizeof(p->buffer->array)/sizeof(int);
+
+    p->index = 0;
+}
+
 void epiphany_write(port_out *p, int v)
 {
     if (p->index == 0 && p->buffer->ready_to_dma) {
@@ -148,11 +152,6 @@ void epiphany_write(port_out *p, int v)
         p->buffer->dma->status = DMA_PENDING;
         try_flush(p->buffer);
     }
-}
-
-static void wait_till_ready_to_read(volatile fifo *b)
-{
-    while(b->ready_to_dma) ;
 }
 
 int epiphany_read(port_in *p)
@@ -184,9 +183,105 @@ void flush(port_out *p)
 
 void connect(port_out *out, port_in *in)
 {
-    in->buffer->dma = out->buffer->dma;
     out->buffer->twin = in->buffer;
     in->buffer->twin = out->buffer;
 }
+#endif // USE_BOTH_BUFFER
 
-#endif
+#ifdef USE_DOUBLE_BUFFER
+
+void port_out_init(port_out *p)
+{
+    int i;
+    fifo *b;
+    for(i=0; i<sizeof(p->buffers)/sizeof(fifo *); ++i) {
+        b = p->buffers[i];
+        b->dma->status = DMA_IDLE;
+        b->ready_to_dma = false;
+        b->size = sizeof(b->array)/sizeof(int);
+    }
+    p->index = p->ping_pang = 0;
+}
+
+void port_in_init(port_in *p)
+{
+    int i;
+    fifo *b;
+    for(i=0; i<sizeof(p->buffers)/sizeof(fifo *); ++i) {
+        b = p->buffers[i];
+        b->ready_to_dma = true;
+        b->size = sizeof(b->array)/sizeof(int);
+    }
+    p->index = p->ping_pang = 0;
+}
+
+void epiphany_write(port_out *p, int v)
+{
+    if (p->index == 0 && p->buffers[p->ping_pang]->ready_to_dma) {
+        do_flush(p->buffers[p->ping_pang], p->buffers[p->ping_pang]->size);
+    } else {
+        uchar other = 1-p->ping_pang;
+        if (p->buffers[other]->ready_to_dma) {
+            try_flush(p->buffers[other]);
+        }
+    }
+    p->buffers[p->ping_pang]->array[p->index++] = v;
+    if (p->index == p->buffers[p->ping_pang]->size) {
+        p->index = 0;
+        p->buffers[p->ping_pang]->ready_to_dma = true;
+        p->buffers[p->ping_pang]->dma->status = DMA_PENDING;
+        try_flush(p->buffers[p->ping_pang]);
+        p->ping_pang ^= 1;
+    }
+}
+
+int epiphany_read(port_in *p)
+{
+    if (p->index == 0) {
+        wait_till_ready_to_read(p->buffers[p->ping_pang]);
+    }
+    int result = p->buffers[p->ping_pang]->array[p->index++];
+    if (p->index == p->buffers[p->ping_pang]->size) {
+        p->index = 0;
+        p->buffers[p->ping_pang]->ready_to_dma = true;
+        p->ping_pang ^= 1;
+    }
+    return result;
+}
+
+void flush(port_out *p)
+{
+    uchar current;
+    if (p->buffers[p->ping_pang]->ready_to_dma) {
+        // double buffer full
+        current = p->ping_pang;
+        do_flush(p->buffers[current], p->buffers[current]->size);
+        current = 1-p->ping_pang;
+        do_flush(p->buffers[current], p->buffers[current]->size);
+    } else {
+        if (p->buffers[1-p->ping_pang]->ready_to_dma){
+            // only one buffer full
+            current = 1-p->ping_pang;
+            do_flush(p->buffers[current], p->buffers[current]->size);
+        }
+        if (p->index > 0) {
+            current = p->ping_pang;
+            p->buffers[current]->ready_to_dma =true;
+            do_flush(p->buffers[current], p->index);
+            p->index = 0;
+        }
+    }
+}
+
+void connect(port_out *out, port_in *in)
+{
+    int i;
+    for(i=0; i<sizeof(out->buffers)/sizeof(fifo *); ++i) {
+        in->buffers[i]->dma = out->buffers[i]->dma;
+        out->buffers[i]->twin = in->buffers[i];
+        in->buffers[i]->twin = out->buffers[i];
+    }
+}
+
+#endif // USE_DOUBLE_BUFFER
+#endif // USE_DESTINATION_BUFFER
