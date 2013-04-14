@@ -22,7 +22,7 @@ int main(void) {
     in.buffer = address_from_coreid(mycoreid, &buffer);
     // local
     instance_b.in = address_from_coreid(mycoreid, &in);
-    core0_main(address_from_coreid(mycoreid, &instance_b));
+    core1_main(address_from_coreid(mycoreid, &instance_b));
     return 0;
 }
 #endif
@@ -37,7 +37,7 @@ int main(void) {
     in.buffers[1] = address_from_coreid(mycoreid, &b1);
     // local
     instance_b.in = address_from_coreid(mycoreid, &in);
-    core0_main(address_from_coreid(mycoreid, &instance_b));
+    core1_main(address_from_coreid(mycoreid, &instance_b));
     return 0;
 }
 #endif
