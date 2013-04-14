@@ -22,7 +22,7 @@ fifo buffer;
 dma_cfg dma;
 int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
-    buffer.dma_cfg = &dma;
+    buffer.dma = &dma;
     out.buffer = address_from_coreid(mycoreid, &buffer);
     // local
     instance_a.out = address_from_coreid(mycoreid, &out);
