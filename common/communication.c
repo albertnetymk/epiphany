@@ -81,12 +81,12 @@ inline static void dma_copy(e_dma_id_t chan, volatile void *dst, volatile void *
     e_dma_copy(chan, (void *)dst, (void *)src, bytes, align);
 }
 
-static void wait_till_dma_over(volatile fifo *b)
+static void wait_till_dma_over(fifo *b)
 {
     while(e_dma_busy(b->dma->id)) ;
 }
 
-static void do_flush(volatile fifo *b, uint size)
+static void do_flush(fifo *b, uint size)
 {
     while(! b->ready_to_dma) ;
     while(! b->twin->ready_to_dma) ;
