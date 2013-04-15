@@ -68,6 +68,7 @@ void core0_main(actor_a *a)
     for (i = 0; i < 10; ++i) {
         epiphany_write(a->out, i);
     }
+    flush(a->out);
     while(1) ;
 }
 
