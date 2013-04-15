@@ -110,7 +110,7 @@ static void try_flush(volatile fifo *b)
         if (b->ready_to_dma && b->twin->ready_to_dma) {
             if (try_dma(b->dma)) {
                 dma_copy(b->dma->id, b->twin->array, b->array,
-                        b->size, E_ALIGN_BYTE);
+                        sizeof(b->array), E_ALIGN_BYTE);
             }
         }
     }
@@ -143,7 +143,7 @@ void port_in_init(port_in *p)
 void epiphany_write(port_out *p, int v)
 {
     if (p->index == 0 && p->buffer->ready_to_dma) {
-        do_flush(p->buffer, p->buffer->size);
+        do_flush(p->buffer, sizeof(p->buffer->array));
     }
     p->buffer->array[p->index++] = v;
     if (p->index == p->buffer->size) {
@@ -173,10 +173,10 @@ int epiphany_read(port_in *p)
 void flush(port_out *p)
 {
     if (p->buffer->ready_to_dma) {
-        do_flush(p->buffer, p->buffer->size);
+        do_flush(p->buffer, sizeof(p->buffer->array));
     } else if (p->index > 0) {
         p->buffer->ready_to_dma = true;
-        do_flush(p->buffer, p->index);
+        do_flush(p->buffer, p->index*sizeof(int));
         p->index = 0;
     }
 }
@@ -218,7 +218,7 @@ void port_in_init(port_in *p)
 void epiphany_write(port_out *p, int v)
 {
     if (p->index == 0 && p->buffers[p->ping_pang]->ready_to_dma) {
-        do_flush(p->buffers[p->ping_pang], p->buffers[p->ping_pang]->size);
+        do_flush(p->buffers[p->ping_pang], sizeof(p->buffers[p->ping_pang]->array));
     } else {
         uchar other = 1-p->ping_pang;
         if (p->buffers[other]->ready_to_dma) {
@@ -255,19 +255,19 @@ void flush(port_out *p)
     if (p->buffers[p->ping_pang]->ready_to_dma) {
         // double buffer full
         current = p->ping_pang;
-        do_flush(p->buffers[current], p->buffers[current]->size);
+        do_flush(p->buffers[current], sizeof(p->buffers[current]->array));
         current = 1-p->ping_pang;
-        do_flush(p->buffers[current], p->buffers[current]->size);
+        do_flush(p->buffers[current], sizeof(p->buffers[current]->array));
     } else {
         if (p->buffers[1-p->ping_pang]->ready_to_dma){
             // only one buffer full
             current = 1-p->ping_pang;
-            do_flush(p->buffers[current], p->buffers[current]->size);
+            do_flush(p->buffers[current], sizeof(p->buffers[current]->array));
         }
         if (p->index > 0) {
             current = p->ping_pang;
             p->buffers[current]->ready_to_dma =true;
-            do_flush(p->buffers[current], p->index);
+            do_flush(p->buffers[current], p->index*sizeof(int));
             p->index = 0;
         }
     }
