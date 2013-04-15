@@ -97,7 +97,7 @@ static void do_flush(fifo *b, uint size)
                     size, E_ALIGN_BYTE);
         case DMA_ING:
             wait_till_dma_over(b);
-            break;
+            b->dma->status = DMA_IDLE;
         case DMA_IDLE:
             b->ready_to_dma = b->twin->ready_to_dma = false;
             break;
