@@ -49,6 +49,8 @@ typedef struct port_in_struct {
 typedef struct port_out_struct {
     uchar index;
     fifo *buffer;
+    port_in *(*dests)[];
+    uchar dest_index;
 } port_out;
 #endif // USE_BOTH_BUFFER
 

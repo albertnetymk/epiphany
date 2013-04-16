@@ -19,6 +19,7 @@ int main(void) {
 
 #ifdef USE_BOTH_BUFFER
 actor_a instance_a;
+port_in *dests[1];
 port_out out;
 fifo buffer;
 dma_cfg dma;
@@ -26,6 +27,7 @@ int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
     buffer.dma = &dma;
     out.buffer = address_from_coreid(mycoreid, &buffer);
+    out.dests = &dests;
     // local
     instance_a.out = address_from_coreid(mycoreid, &out);
     core0_main(e_address_from_coreid(mycoreid, &instance_a));

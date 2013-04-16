@@ -102,14 +102,13 @@ static void do_flush(fifo *b, uint size)
                     size, E_ALIGN_BYTE);
         case DMA_ING:
             wait_till_dma_over(b);
-            b->dma->status = DMA_IDLE;
         case DMA_IDLE:
-            b->ready_to_dma = b->twin->ready_to_dma = false;
+            b->twin->ready_to_dma = false;
             break;
     }
 }
 
-static void try_flush(volatile fifo *b)
+static void try_flush(fifo *b)
 {
     if (b->dma->status == DMA_PENDING) {
         if (b->ready_to_dma && b->twin->ready_to_dma) {
@@ -129,6 +128,8 @@ static void wait_till_ready_to_read(volatile fifo *b)
 #ifdef USE_BOTH_BUFFER
 void port_out_init(port_out *p)
 {
+    p->dest_index = 0;
+
     p->buffer->dma->status = DMA_IDLE;
 
     p->buffer->ready_to_dma = false;
@@ -148,13 +149,22 @@ void port_in_init(port_in *p)
 void epiphany_write(port_out *p, int v)
 {
     if (p->index == 0 && p->buffer->ready_to_dma) {
+        p->buffer->twin = (*p->dests)[0]->buffer;
         do_flush(p->buffer, sizeof(p->buffer->array));
+        int i;
+        for (i = 1; i < p->dest_index; ++i) {
+            p->buffer->dma->status = DMA_PENDING;
+            do_flush(p->buffer, sizeof(p->buffer->array));
+        }
+        p->buffer->ready_to_dma = false;
     }
     p->buffer->array[p->index++] = v;
     if (p->index == p->buffer->size) {
         p->index = 0;
         p->buffer->ready_to_dma = true;
         p->buffer->dma->status = DMA_PENDING;
+
+        p->buffer->twin = (*p->dests)[0]->buffer;
         try_flush(p->buffer);
     }
 }
@@ -177,19 +187,23 @@ int epiphany_read(port_in *p)
 
 void flush(port_out *p)
 {
+    int size = 0;
     if (p->buffer->ready_to_dma) {
-        do_flush(p->buffer, sizeof(p->buffer->array));
+        size = sizeof(p->buffer->array);
     } else if (p->index > 0) {
+        size = p->index*sizeof(int);
         p->buffer->ready_to_dma = true;
-        do_flush(p->buffer, p->index*sizeof(int));
+    }
+    if (size > 0) {
+        do_flush(p->buffer, size);
+        p->buffer->ready_to_dma = false;
         p->index = 0;
     }
 }
 
 void connect(port_out *out, port_in *in)
 {
-    out->buffer->twin = in->buffer;
-    in->buffer->twin = out->buffer;
+    (*out->dests)[out->dest_index++] = in;
 }
 #endif // USE_BOTH_BUFFER
 
