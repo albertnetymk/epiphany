@@ -65,6 +65,8 @@ typedef struct port_out_struct {
     volatile uchar index;
     uchar ping_pang;
     fifo *buffers[2];
+    port_in *(*dests)[];
+    uchar dest_index;
 } port_out;
 #endif // USE_DOUBLE_BUFFER
 

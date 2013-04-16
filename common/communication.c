@@ -208,7 +208,6 @@ void connect(port_out *out, port_in *in)
 #endif // USE_BOTH_BUFFER
 
 #ifdef USE_DOUBLE_BUFFER
-
 void port_out_init(port_out *p)
 {
     int i;
@@ -236,12 +235,29 @@ void port_in_init(port_in *p)
 
 void epiphany_write(port_out *p, int v)
 {
+    static uchar current_dest = 0;
     if (p->index == 0 && p->buffers[p->ping_pang]->ready_to_dma) {
         do_flush(p->buffers[p->ping_pang], sizeof(p->buffers[p->ping_pang]->array));
-    } else {
+        for (current_dest++; current_dest < p->dest_index; ++current_dest) {
+            p->buffers[p->ping_pang]->dma->status = DMA_PENDING;
+            do_flush(p->buffers[p->ping_pang],
+                    sizeof(p->buffers[p->ping_pang]->array));
+        }
+        p->buffers[p->ping_pang]->ready_to_dma = false;
+        current_dest = 0;
+
+    }
+    {
         uchar other = 1-p->ping_pang;
         if (p->buffers[other]->ready_to_dma) {
-            try_flush(p->buffers[other]);
+            if (p->buffers[other]->dma->status == DMA_PENDING) {
+                try_flush(p->buffers[other]);
+            } else if (current_dest < p->dest_index) {
+                p->buffers[other]->twin =
+                    (*p->dests)[++current_dest]->buffers[other];
+                p->buffers[other]->dma->status = DMA_PENDING;
+                try_flush(p->buffers[other]);
+            }
         }
     }
     p->buffers[p->ping_pang]->array[p->index++] = v;
@@ -249,6 +265,8 @@ void epiphany_write(port_out *p, int v)
         p->index = 0;
         p->buffers[p->ping_pang]->ready_to_dma = true;
         p->buffers[p->ping_pang]->dma->status = DMA_PENDING;
+        p->buffers[p->ping_pang]->twin =
+            (*p->dests)[0]->buffers[p->ping_pang];
         try_flush(p->buffers[p->ping_pang]);
         p->ping_pang ^= 1;
     }
@@ -294,13 +312,14 @@ void flush(port_out *p)
 
 void connect(port_out *out, port_in *in)
 {
-    int i;
-    for(i=0; i<sizeof(out->buffers)/sizeof(fifo *); ++i) {
-        in->buffers[i]->dma = out->buffers[i]->dma;
-        out->buffers[i]->twin = in->buffers[i];
-        in->buffers[i]->twin = out->buffers[i];
-    }
+    (*out->dests)[out->dest_index++] = in;
+    // int i;
+    // for(i=0; i<sizeof(out->buffers)/sizeof(fifo *); ++i) {
+    //     in->buffers[i]->dma = out->buffers[i]->dma;
+    //     out->buffers[i]->twin = in->buffers[i];
+    //     in->buffers[i]->twin = out->buffers[i];
+    // }
 }
-
 #endif // USE_DOUBLE_BUFFER
+
 #endif // USE_DESTINATION_BUFFER
