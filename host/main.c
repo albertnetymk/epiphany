@@ -1,15 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <e_host.h>
 #include "common_buffers.h"
+
+static char *error_color = "\x1B[0;31m";
+static char *success_color = "\x1B[0;32m";
+static char *reset = "\x1B[0m";
 
 unsigned int DRAM_BASE = 0x81000000;
 
 const char *servIP = "127.0.0.1";
 const unsigned short eServLoaderPort = 50999;
 FILE *fo;
+
+void ok(bool assertion, char *msg)
+{
+    if (!assertion) {
+        printf("\t%sError: '%s' is unsatisfied.%s\n", error_color, msg, reset);
+        exit(0);
+    } else {
+        printf("\t%sSuccess: %s.%s\n", success_color, msg, reset);
+    }
+}
 
 int main(void) {
     // Epiphany_t _epiphany, *epiphany = &_epiphany;
@@ -55,14 +70,26 @@ int main(void) {
     // printf("go is %d\n", Mailbox.core.go[i]);
     // }
 
+    char msg[50];
     for (i = 0; i < 10; ++i) {
         addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
         e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
         addr = DRAM_BASE + offsetof(shared_buf_t, debug[i]);
         e_read(addr, (void *) (&Mailbox.debug[i]), sizeof(int));
-        printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
-                i, Mailbox.debug[i]);
+        // printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
+        //         i, Mailbox.debug[i]);
+        sprintf(msg, "sink[i] should be %d, but %d is found", i, Mailbox.sink[i]);
+        ok(Mailbox.sink[i] == i, "sink ");
     }
+
+    // int should[10] = {};
+    // for (i = 0; i < 10; ++i) {
+    //     addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
+    //     e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
+    //     sprintf(msg, "sink[i] should be %d, but %d is found", should[i], Mailbox.sink[i]);
+    //     ok(Mailbox.sink[i] == should[i], msg);
+    // }
+
     // for (i=start; i<end; ++i) {
     //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
     //     // while (1) {
