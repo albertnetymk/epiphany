@@ -5,9 +5,11 @@
 // it's not necessary to use global address for non shared resources.
 #ifdef USE_DESTINATION_BUFFER
 actor_a instance_a;
+port_in *dests[1];
 port_out out;
 int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
+    out.dests = &dests;
     // this one to local?
     instance_a.out = address_from_coreid(mycoreid, &out);
     core0_main(address_from_coreid(mycoreid, &instance_a));

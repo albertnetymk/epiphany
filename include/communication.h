@@ -14,7 +14,8 @@ typedef volatile struct port_in_struct {
 } port_in;
 
 typedef struct port_out_struct {
-    port_in *dest;
+    port_in *(*dests)[];
+    uchar index;
 } port_out;
 
 #else // USE_DESTINATION_BUFFER

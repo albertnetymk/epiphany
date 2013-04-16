@@ -4,6 +4,7 @@
 #ifdef USE_DESTINATION_BUFFER
 void port_out_init(port_out *p)
 {
+    p->index = 0;
 }
 
 void port_in_init(port_in *p)
@@ -14,16 +15,20 @@ void port_in_init(port_in *p)
 
 void epiphany_write(port_out *p, int v)
 {
-    port_in *dest = p->dest;
-    if (dest->carrier) {
-        while (dest->write_index == dest->read_index) ;
-    }
-    dest->array[dest->write_index] = v;
-    if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
-        dest->carrier = true;
-        dest->write_index = 0;
-    } else {
-        dest->write_index++;
+    int i;
+    port_in *dest;
+    for (i = 0; i < p->index; ++i) {
+        dest = (*p->dests)[i];
+        if (dest->carrier) {
+            while (dest->write_index == dest->read_index) ;
+        }
+        dest->array[dest->write_index] = v;
+        if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
+            dest->carrier = true;
+            dest->write_index = 0;
+        } else {
+            dest->write_index++;
+        }
     }
 }
 
@@ -48,7 +53,7 @@ void flush(port_out *p)
 
 void connect(port_out *out, volatile port_in *in)
 {
-    out->dest = in;
+    (*out->dests)[out->index++] = in;
 }
 #else // USE_DESTINATION_BUFFER
 static dma_cfg *dma_pool[2];
