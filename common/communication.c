@@ -102,6 +102,7 @@ static void do_flush(fifo *b, uint size)
                     size, E_ALIGN_BYTE);
         case DMA_ING:
             wait_till_dma_over(b);
+            b->dma->status = DMA_IDLE;
         case DMA_IDLE:
             b->twin->ready_to_dma = false;
             break;
@@ -117,6 +118,8 @@ static void try_flush(fifo *b)
                         sizeof(b->array), E_ALIGN_BYTE);
             }
         }
+    } else if (b->dma->status == DMA_ING && ! e_dma_busy(b->dma->id)) {
+        b->dma->status = DMA_IDLE;
     }
 }
 
@@ -250,7 +253,7 @@ void epiphany_write(port_out *p, int v)
     {
         uchar other = 1-p->ping_pang;
         if (p->buffers[other]->ready_to_dma) {
-            if (p->buffers[other]->dma->status == DMA_PENDING) {
+            if (p->buffers[other]->dma->status != DMA_IDLE) {
                 try_flush(p->buffers[other]);
             } else if (current_dest < p->dest_index) {
                 p->buffers[other]->twin =
