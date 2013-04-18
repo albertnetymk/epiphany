@@ -78,7 +78,7 @@ int main(void) {
         // printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
         //         i, Mailbox.debug[i]);
         sprintf(msg, "sink[%d] should be %d, but %d is found", i,  i, Mailbox.sink[i]);
-        ok(Mailbox.sink[i] == i, "sink ");
+        ok(Mailbox.sink[i] == i, msg);
     }
 
     // int should[10] = {};
