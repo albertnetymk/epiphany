@@ -20,7 +20,6 @@ void ok(bool assertion, char *msg)
 {
     if (!assertion) {
         printf("\t%sError: '%s' is unsatisfied.%s\n", error_color, msg, reset);
-        exit(0);
     } else {
         printf("\t%sSuccess: %s.%s\n", success_color, msg, reset);
     }
@@ -78,7 +77,7 @@ int main(void) {
         e_read(addr, (void *) (&Mailbox.debug[i]), sizeof(int));
         // printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
         //         i, Mailbox.debug[i]);
-        sprintf(msg, "sink[i] should be %d, but %d is found", i, Mailbox.sink[i]);
+        sprintf(msg, "sink[%d] should be %d, but %d is found", i,  i, Mailbox.sink[i]);
         ok(Mailbox.sink[i] == i, "sink ");
     }
 
