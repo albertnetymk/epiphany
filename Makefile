@@ -64,7 +64,10 @@ else
   CC = e-gcc
   AR = e-ar
   CPPFLAGS = -I$(ROOT_DIR)/include \
-  -I${ESDK_NEW}/tools/gnu/epiphany-elf/sys-include
+    -I${ESDK_NEW}/tools/gnu/epiphany-elf/sys-include
+  ifneq ($(COM_FIFO),)
+  CPPFLAGS+=-D$(COM_FIFO)
+  endif
 
   CFLAGS = -O0 -g3 -Wall -c -fmessage-length=0 \
 		   -ffp-contract=fast -mlong-calls -mfp-mode=round-nearest
@@ -126,9 +129,9 @@ server-test :
 acceptance-test:
 	git checkout -b acceptance-test
 	cat /dev/null > $(ROOT_DIR)/include/flags.h
-	$(MAKE) -DUSE_DESTINATION_BUFFER load
-	$(MAKE) -DUSE_BOTH_BUFFER load
-	$(MAKE) -DUSE_DOUBLE_BUFFER load
+	$(MAKE) clean; $(MAKE) -e COM_FIFO=USE_DESTINATION_BUFFER load
+	$(MAKE) clean; $(MAKE) -e COM_FIFO=USE_BOTH_BUFFER load
+	$(MAKE) clean; $(MAKE) -e COM_FIFO=USE_DOUBLE_BUFFER load
 
 .PHONY: load
 load : main.srec
