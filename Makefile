@@ -121,6 +121,15 @@ server :
 .PHONY: server-test
 server-test :
 	e-server -xml ${ESDK}/bsps/emek3/emek3.xml
+
+.PHONY: acceptance-test
+acceptance-test:
+	git checkout -b acceptance-test
+	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	$(MAKE) -DUSE_DESTINATION_BUFFER load
+	$(MAKE) -DUSE_BOTH_BUFFER load
+	$(MAKE) -DUSE_DOUBLE_BUFFER load
+
 .PHONY: load
 load : main.srec
 	e-loader -run-target $< 1>/dev/null 2>/dev/null
