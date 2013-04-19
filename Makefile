@@ -129,9 +129,16 @@ server-test :
 acceptance-test:
 	git checkout -b acceptance-test
 	cat /dev/null > $(ROOT_DIR)/include/flags.h
-	$(MAKE) clean; $(MAKE) -e COM_FIFO=USE_DESTINATION_BUFFER load
-	$(MAKE) clean; $(MAKE) -e COM_FIFO=USE_BOTH_BUFFER load
-	$(MAKE) clean; $(MAKE) -e COM_FIFO=USE_DOUBLE_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. clean
+	echo 'Destination buffer'
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. clean
+	echo 'Both buffer'
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. clean
+	echo 'Double buffer'
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER load
+
 
 .PHONY: load
 load : main.srec
