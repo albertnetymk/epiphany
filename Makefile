@@ -42,8 +42,9 @@ ifneq (,$(findstring host,$(MAKECMDGOALS)))
 	-I${ESDK_NEW}/tools/host/x86_64/include
   CFLAGS = -O0 -g3 -Wall -c -fmessage-length=0
   program = host/host.elf
-  sources = $(notdir $(wildcard $(ROOT_DIR)/host/*.c))
+  sources = $(addprefix host/, $(notdir $(wildcard $(ROOT_DIR)/host/*.c)))
   objects = $(subst .c,.o,$(sources))
+  dependencies += $(subst .o,.d,$(objects))
 
 vpath %.c $(ROOT_DIR)
 $(shell mkdir -p host)
@@ -51,12 +52,12 @@ host-run : $(program)
 	./$^
 
 .PHONY: host-compile
-host-compile: $(addprefix host/, $(objects))
+host-compile: $(objects)
 
 .PHONY: host-build
 host-build : $(program)
 
-$(program) : $(addprefix host/, $(objects))
+$(program) : $(objects)
 	# $(CC) $^ -le-hal -le-loader -L${ESDK}/tools/host/armv7l/lib -o $@
 	$(CC) $^ -le_host -L${ESDK}/tools/host/x86_64/lib -o $@
 
@@ -66,7 +67,7 @@ else
   CPPFLAGS = -I$(ROOT_DIR)/include \
     -I${ESDK_NEW}/tools/gnu/epiphany-elf/sys-include
   ifneq ($(COM_FIFO),)
-  CPPFLAGS+=-D$(COM_FIFO)
+    CPPFLAGS+=-D$(COM_FIFO)
   endif
 
   CFLAGS = -O0 -g3 -Wall -c -fmessage-length=0 \
@@ -85,6 +86,7 @@ define make_library
   $2 : ;
   $(shell mkdir -p $(dir $1))
   objects += $(call source_to_object,$2)
+  dependencies += $(subst .o,.d,$(objects))
   $1 : $(call source_to_object,$2) common/common.a
 	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
 endef
@@ -95,6 +97,7 @@ $(foreach m, $(modules), \
 common_objects = $(addprefix common/, \
   $(call source_to_object, $(notdir $(wildcard $(ROOT_DIR)/common/*.c))))
 $(shell mkdir -p common)
+dependencies += $(subst .o,.d,$(common_objects))
 common/common.a: $(common_objects)
 	$(AR) r $@ $^ 2>/dev/null
 
@@ -148,12 +151,17 @@ endif
 
 define make_depend
 	$(CC) -MM $(CPPFLAGS) $1 | \
-	sed 's,\($$(notdir $2)\) *:,$$(dir $2) $3: ,' > $3.tmp
+	sed 's,\($(notdir $2)\) *:,$2 $3: ,' > $3.tmp
 	mv $3.tmp $3
 endef
 
 %.o: %.c
 	$(call make_depend,$<,$@,$(subst .o,.d,$@))
 	$(COMPILE.c) $(OUTPUT_OPTION) $< -o $@
+
+
+ifneq "$(strip $(MAKECMDGOALS))" "clean"
+-include $(dependencies)
+endif
 
 endif
