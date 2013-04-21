@@ -110,7 +110,7 @@ inline void core3_main(actor_double *a)
     Mailbox.core.go[core_num()] = 0;
 
     stage(1);
-    all.instance_double1 = a;
+    all.instance_double2 = a;
     actor_double_init(a);
 
     Mailbox.core.go[core_num()] = 2;
