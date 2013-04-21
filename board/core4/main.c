@@ -2,7 +2,7 @@
 #include "common.h"
 #include "flags.h"
 
-#ifdef USE_DESTINATION_addUFFER
+#ifdef USE_DESTINATION_BUFFER
 actor_add instance_add;
 port_in in1;
 port_in in2;
@@ -15,7 +15,7 @@ int main(void) {
 }
 #endif
 
-#ifdef USE_addOTH_addUFFER
+#ifdef USE_BOTH_BUFFER
 actor_add instance_add;
 port_in in1;
 port_in in2;
@@ -31,7 +31,7 @@ int main(void) {
 }
 #endif
 
-#ifdef USE_DOUBLE_addUFFER
+#ifdef USE_DOUBLE_BUFFER
 actor_add instance_add;
 port_in in1;
 port_in in2;
