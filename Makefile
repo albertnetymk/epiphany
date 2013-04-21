@@ -130,6 +130,20 @@ server :
 server-test :
 	e-server -xml ${ESDK}/bsps/emek3/emek3.xml
 
+.PHONY: static-test
+static-test:
+	git checkout -b static-test
+	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	$(MAKE) $(MFLAGS) -C .. clean
+	echo 'Destination buffer'
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER
+	$(MAKE) $(MFLAGS) -C .. clean
+	echo 'Both buffer'
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER
+	$(MAKE) $(MFLAGS) -C .. clean
+	echo 'Double buffer'
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER
+
 .PHONY: acceptance-test
 acceptance-test:
 	git checkout -b acceptance-test
