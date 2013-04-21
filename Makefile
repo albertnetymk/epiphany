@@ -78,7 +78,9 @@ source_to_object = $(subst .c,.o,$1)
 # modules := $(wildcard $(ROOT_DIR)/board/*)
 modules += $(ROOT_DIR)/board/core0
 modules += $(ROOT_DIR)/board/core1
-# modules += $(ROOT_DIR)/board/core2
+modules += $(ROOT_DIR)/board/core2
+modules += $(ROOT_DIR)/board/core3
+modules += $(ROOT_DIR)/board/core4
 vpath %.c $(ROOT_DIR)/board
 vpath %.c $(ROOT_DIR)
 define make_library
