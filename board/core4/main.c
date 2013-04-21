@@ -45,6 +45,7 @@ int main(void) {
 #endif
     instance_add.in1 = address_from_coreid(mycoreid, &in1);
     instance_add.in2 = address_from_coreid(mycoreid, &in2);
+    instance_add.out = address_from_coreid(mycoreid, &out);
     core4_main(address_from_coreid(mycoreid, &instance_add));
     return 0;
 }

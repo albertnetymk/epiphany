@@ -102,6 +102,7 @@ inline void core2_main(actor_double *a)
 
     stage(3);
     a->run(a);
+    flush(a->out);
     while(1) ;
 }
 
@@ -118,6 +119,7 @@ inline void core3_main(actor_double *a)
 
     stage(3);
     a->run(a);
+    flush(a->out);
     while(1) ;
 }
 
@@ -134,5 +136,6 @@ inline void core4_main(actor_add *a)
 
     stage(3);
     a->run(a);
+    flush(a->out);
     while(1) ;
 }
