@@ -18,7 +18,7 @@ void epiphany_write(port_out *p, int v)
 {
     int i;
     port_in *dest;
-    for (i = 0; i < p->index; ++i) {
+    for (i = 0; i < p->dest_index; ++i) {
         dest = (*p->dests)[i];
         if (dest->carrier) {
             while (dest->write_index == dest->read_index) ;
