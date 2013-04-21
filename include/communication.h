@@ -15,6 +15,7 @@ typedef volatile struct port_in_struct {
 
 typedef struct port_out_struct {
     port_in *(*dests)[];
+    uchar dest_index;
     uchar index;
 } port_out;
 

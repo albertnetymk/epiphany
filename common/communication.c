@@ -5,6 +5,7 @@
 void port_out_init(port_out *p)
 {
     p->index = 0;
+    p->dest_index = 0;
 }
 
 void port_in_init(port_in *p)
@@ -53,7 +54,7 @@ void flush(port_out *p)
 
 void connect(port_out *out, volatile port_in *in)
 {
-    (*out->dests)[out->index++] = in;
+    (*out->dests)[out->dest_index++] = in;
 }
 #else // USE_DESTINATION_BUFFER
 static dma_cfg *dma_pool[2];
@@ -213,6 +214,7 @@ void connect(port_out *out, port_in *in)
 #ifdef USE_DOUBLE_BUFFER
 void port_out_init(port_out *p)
 {
+    p->dest_index = 0;
     int i;
     fifo *b;
     for(i=0; i<sizeof(p->buffers)/sizeof(fifo *); ++i) {
