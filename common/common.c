@@ -120,3 +120,19 @@ inline void core3_main(actor_double *a)
     a->run(a);
     while(1) ;
 }
+
+inline void core4_main(actor_add *a)
+{
+    Mailbox.core.go[core_num()] = 0;
+
+    stage(1);
+    all.instance_add = a;
+    actor_add_init(a);
+
+    Mailbox.core.go[core_num()] = 2;
+    stage_all(2);
+
+    stage(3);
+    a->run(a);
+    while(1) ;
+}
