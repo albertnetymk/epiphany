@@ -153,10 +153,10 @@ void port_in_init(port_in *p)
 void epiphany_write(port_out *p, int v)
 {
     if (p->index == 0 && p->buffer->ready_to_dma) {
-        p->buffer->twin = (*p->dests)[0]->buffer;
         do_flush(p->buffer, sizeof(p->buffer->array));
         int i;
         for (i = 1; i < p->dest_index; ++i) {
+            p->buffer->twin = (*p->dests)[i]->buffer;
             p->buffer->dma->status = DMA_PENDING;
             do_flush(p->buffer, sizeof(p->buffer->array));
         }
@@ -199,7 +199,13 @@ void flush(port_out *p)
         p->buffer->ready_to_dma = true;
     }
     if (size > 0) {
+        int i;
         do_flush(p->buffer, size);
+        for (i=1; i<p->dest_index; ++i) {
+            p->buffer->twin = (*p->dests)[i]->buffer;
+            p->buffer->dma->status = DMA_PENDING;
+            do_flush(p->buffer, size);
+        }
         p->buffer->ready_to_dma = false;
         p->index = 0;
     }
@@ -242,8 +248,11 @@ void epiphany_write(port_out *p, int v)
 {
     static uchar current_dest = 0;
     if (p->index == 0 && p->buffers[p->ping_pang]->ready_to_dma) {
-        do_flush(p->buffers[p->ping_pang], sizeof(p->buffers[p->ping_pang]->array));
+        do_flush(p->buffers[p->ping_pang],
+                sizeof(p->buffers[p->ping_pang]->array));
         for (current_dest++; current_dest < p->dest_index; ++current_dest) {
+            p->buffers[p->ping_pang]->twin =
+                (*p->dests)[current_dest]->buffers[p->ping_pang];
             p->buffers[p->ping_pang]->dma->status = DMA_PENDING;
             do_flush(p->buffers[p->ping_pang],
                     sizeof(p->buffers[p->ping_pang]->array));
@@ -297,7 +306,11 @@ void flush(port_out *p)
     if (p->buffers[p->ping_pang]->ready_to_dma) {
         // double buffer full
         current = p->ping_pang;
-        do_flush(p->buffers[current], sizeof(p->buffers[current]->array));
+        // int i;
+        // for (i = 0; i < p->dest_index; ++i) {
+        //     p->buffers[current]->twin = (*p->dests)[i]->buffers[current];
+        //     do_flush(p->buffers[current], sizeof(p->buffers[current]->array));
+        // }
         current = 1-p->ping_pang;
         do_flush(p->buffers[current], sizeof(p->buffers[current]->array));
     } else {
