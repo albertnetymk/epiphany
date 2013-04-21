@@ -36,7 +36,7 @@ int main(void) {
 
     int i;
     int start = 0;
-    int end = 2;
+    int end = 5;
     puts("Host is running ...");
     fo = stdout;
     for (i=start; i<end; ++i) {

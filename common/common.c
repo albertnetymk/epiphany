@@ -24,7 +24,7 @@ void stage(uint s)
     while(Mailbox.core.go[core_num()] < s) ;
 }
 
-static const uint players = 4;
+static const uint players = 5;
 
 void stage_all(uint s)
 {
