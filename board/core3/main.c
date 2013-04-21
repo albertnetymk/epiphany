@@ -30,7 +30,7 @@ int main(void) {
     // local
     instance_double.in = address_from_coreid(mycoreid, &in);
     instance_double.out = address_from_coreid(mycoreid, &out);
-    core3_main(e_doubleddress_from_coreid(mycoreid, &instance_double));
+    core3_main(address_from_coreid(mycoreid, &instance_double));
     return 0;
 }
 #endif
