@@ -4,8 +4,9 @@
 #include "common_buffers.h"
 #include "common.h"
 
-unsigned core_num(e_coreid_t coreid)
+inline static unsigned core_num()
 {
+    e_coreid_t coreid = e_get_coreid();
     unsigned row, col;
 
     row = (coreid >> 6) & (E_ROWS_IN_CHIP - 1);
@@ -18,26 +19,17 @@ inline void *address_from_coreid(e_coreid_t coreid, volatile void *ptr)
     return e_address_from_coreid(coreid, (void *)ptr);
 }
 
-
-void dummy(int i, int v)
-{
-    Mailbox.core.go[i] = 1;
-    while(Mailbox.core.go[i] == 1) ;
-    // Mailbox.dummy[i] = v;
-    Mailbox.core.go[i] = 1;
-    while(1);
-}
-
 void stage(uint s)
 {
-    uint index = core_num(e_get_coreid());
-    while(Mailbox.core.go[index] < s) ;
+    while(Mailbox.core.go[core_num()] < s) ;
 }
+
+static const uint players = 4;
 
 void stage_all(uint s)
 {
     int i;
-    for (i=0; i<2; ++i) {
+    for (i=0; i<players; ++i) {
         while(Mailbox.core.go[i] < s) ;
     }
 }
@@ -45,7 +37,7 @@ void stage_all(uint s)
 void core0_main(actor_a *a)
 {
     int i;
-    Mailbox.core.go[0] = 0;
+    Mailbox.core.go[core_num()] = 0;
 
     for (i = 0; i < 10; ++i) {
         Mailbox.sink[i] = 0;
@@ -55,16 +47,20 @@ void core0_main(actor_a *a)
     all.instance_a = a;
     actor_a_init(a);
 
-    Mailbox.core.go[0] = 2;
+    Mailbox.core.go[core_num()] = 2;
     stage_all(2);
     // network
-    connect(all.instance_a->out, all.instance_b->in);
-    for(i=0; i<3; ++i) {
+    // connect(all.instance_a->out, all.instance_b->in);
+    connect(all.instance_a->out, all.instance_double1->in);
+    connect(all.instance_a->out, all.instance_double2->in);
+    connect(all.instance_double1->out, all.instance_add->in1);
+    connect(all.instance_double2->out, all.instance_add->in2);
+    connect(all.instance_add->out, all.instance_b->in);
+    for(i=0; i<players; ++i) {
         Mailbox.core.go[i] = 3;
     }
 
     stage(3);
-    while(Mailbox.core.go[0] < 3) ;
     for (i = 0; i < 10; ++i) {
         epiphany_write(a->out, i);
     }
@@ -72,7 +68,7 @@ void core0_main(actor_a *a)
     while(1) ;
 }
 
-void core1_main(actor_b *a)
+inline void core1_main(actor_b *a)
 {
     int i;
     Mailbox.core.go[1] = 0;
@@ -90,5 +86,37 @@ void core1_main(actor_b *a)
         value = epiphany_read(a->in);
         Mailbox.sink[i] = value;
     }
+    while(1) ;
+}
+
+inline void core2_main(actor_double *a)
+{
+    Mailbox.core.go[core_num()] = 0;
+
+    stage(1);
+    all.instance_double1 = a;
+    actor_double_init(a);
+
+    Mailbox.core.go[core_num()] = 2;
+    stage_all(2);
+
+    stage(3);
+    a->run(a);
+    while(1) ;
+}
+
+inline void core3_main(actor_double *a)
+{
+    Mailbox.core.go[core_num()] = 0;
+
+    stage(1);
+    all.instance_double1 = a;
+    actor_double_init(a);
+
+    Mailbox.core.go[core_num()] = 2;
+    stage_all(2);
+
+    stage(3);
+    a->run(a);
     while(1) ;
 }
