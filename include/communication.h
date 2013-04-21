@@ -13,7 +13,7 @@ typedef volatile struct port_in_struct {
     bool carrier;
 } port_in;
 
-typedef struct port_out_struct {
+typedef volatile struct port_out_struct {
     port_in *(*dests)[];
     uchar dest_index;
     uchar index;

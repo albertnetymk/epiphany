@@ -22,7 +22,7 @@ dma_cfg dma0, dma1;
 
 int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
-    out.dests = &dests;
+    out.dests = address_from_coreid(mycoreid, &dests);
 #ifdef USE_DESTINATION_BUFFER
 #endif
 #ifdef USE_BOTH_BUFFER
