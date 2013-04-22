@@ -246,11 +246,11 @@ void port_in_init(port_in *p)
 
 void epiphany_write(port_out *p, int v)
 {
-    static uchar current_dest = 0;
     if (p->index == 0 && p->buffers[p->ping_pang]->ready_to_dma) {
         do_flush(p->buffers[p->ping_pang],
                 sizeof(p->buffers[p->ping_pang]->array));
-        for (current_dest++; current_dest < p->dest_index; ++current_dest) {
+        uchar current_dest = p->current_dest_index[p->ping_pang];
+        for ( current_dest++; current_dest < p->dest_index; ++current_dest) {
             p->buffers[p->ping_pang]->twin =
                 (*p->dests)[current_dest]->buffers[p->ping_pang];
             p->buffers[p->ping_pang]->dma->status = DMA_PENDING;
@@ -258,7 +258,7 @@ void epiphany_write(port_out *p, int v)
                     sizeof(p->buffers[p->ping_pang]->array));
         }
         p->buffers[p->ping_pang]->ready_to_dma = false;
-        current_dest = 0;
+        p->current_dest_index[p->ping_pang] = 0;
 
     }
     {
@@ -266,9 +266,9 @@ void epiphany_write(port_out *p, int v)
         if (p->buffers[other]->ready_to_dma) {
             if (p->buffers[other]->dma->status != DMA_IDLE) {
                 try_flush(p->buffers[other]);
-            } else if (current_dest < p->dest_index) {
+            } else if (p->current_dest_index[other] < p->dest_index) {
                 p->buffers[other]->twin =
-                    (*p->dests)[++current_dest]->buffers[other];
+                  (*p->dests)[++p->current_dest_index[other]]->buffers[other];
                 p->buffers[other]->dma->status = DMA_PENDING;
                 try_flush(p->buffers[other]);
             }
@@ -279,8 +279,8 @@ void epiphany_write(port_out *p, int v)
         p->index = 0;
         p->buffers[p->ping_pang]->ready_to_dma = true;
         p->buffers[p->ping_pang]->dma->status = DMA_PENDING;
-        p->buffers[p->ping_pang]->twin =
-            (*p->dests)[0]->buffers[p->ping_pang];
+        p->current_dest_index[p->ping_pang] = 0;
+        p->buffers[p->ping_pang]->twin = (*p->dests)[0]->buffers[p->ping_pang];
         try_flush(p->buffers[p->ping_pang]);
         p->ping_pang ^= 1;
     }

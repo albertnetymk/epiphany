@@ -68,6 +68,7 @@ typedef struct port_out_struct {
     fifo *buffers[2];
     port_in *(*dests)[];
     uchar dest_index;
+    uchar current_dest_index[2];
 } port_out;
 #endif // USE_DOUBLE_BUFFER
 

@@ -143,6 +143,7 @@ static-test:
 	$(MAKE) $(MFLAGS) -C .. clean
 	echo 'Double buffer'
 	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER
+	git reset --hard
 
 .PHONY: acceptance-test
 acceptance-test:
