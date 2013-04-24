@@ -20,6 +20,14 @@ fifo out_b0, out_b1;
 dma_cfg dma0, dma1;
 #endif
 
+static api_t api;
+static inline api_t *init(void *a)
+{
+    all.instance_double1 = a;
+    actor_double_init(a);
+    api.run = (run_t *)all.instance_double1->run;
+    return &api;
+}
 int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
     out.dests = address_from_coreid(mycoreid, &dests);
