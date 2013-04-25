@@ -88,13 +88,14 @@ define make_library
   $2 : ;
   $(shell mkdir -p $(dir $1))
   objects += $(call source_to_object,$2)
-  dependencies += $(subst .o,.d,$(objects))
   $1 : $(call source_to_object,$2) common/common.a
 	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
 endef
 $(foreach m, $(modules), \
 	$(eval $(call make_library, $(notdir $(m))/main.elf, \
 			$(addprefix $(notdir $(m))/, $(notdir $(wildcard $(m)/*.c))))))
+
+dependencies += $(subst .o,.d,$(objects))
 
 common_objects = $(addprefix common/, \
   $(call source_to_object, $(notdir $(wildcard $(ROOT_DIR)/common/*.c))))
@@ -130,35 +131,28 @@ server :
 server-test :
 	e-server -xml ${ESDK}/bsps/emek3/emek3.xml
 
-.PHONY: static-test
-static-test:
-	git checkout -b static-test
+define switch-branch
+	-git branch -d $@
+	git checkout -b $@
 	cat /dev/null > $(ROOT_DIR)/include/flags.h
-	$(MAKE) $(MFLAGS) -C .. clean
 	echo 'Destination buffer'
 	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER
-	$(MAKE) $(MFLAGS) -C .. clean
+	cat /dev/null > $(ROOT_DIR)/include/flags.h
 	echo 'Both buffer'
 	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER
-	$(MAKE) $(MFLAGS) -C .. clean
+	cat /dev/null > $(ROOT_DIR)/include/flags.h
 	echo 'Double buffer'
 	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER
 	git reset --hard
+endef
+
+.PHONY: static-test
+static-test:
+	$(call switch-branch)
 
 .PHONY: acceptance-test
 acceptance-test:
-	git checkout -b acceptance-test
-	cat /dev/null > $(ROOT_DIR)/include/flags.h
-	$(MAKE) $(MFLAGS) -C .. clean
-	echo 'Destination buffer'
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. clean
-	echo 'Both buffer'
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. clean
-	echo 'Double buffer'
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER load
-
+	$(call switch-branch)
 
 .PHONY: load
 load : main.srec
