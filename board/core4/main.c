@@ -22,6 +22,16 @@ fifo out_b0, out_b1;
 dma_cfg dma0, dma1;
 #endif
 
+static api_t api;
+static inline api_t *init(void *a)
+{
+    all.instance_add = a;
+    actor_add_init(a);
+    api.run = (run_t *)all.instance_add->run;
+    api.end = (end_t *)all.instance_add->end;
+    api.not_finished = (not_finished_t *)all.instance_add->not_finished;
+    return &api;
+}
 int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
     out.dests = address_from_coreid(mycoreid, &dests);
@@ -46,6 +56,7 @@ int main(void) {
     instance_add.in1 = address_from_coreid(mycoreid, &in1);
     instance_add.in2 = address_from_coreid(mycoreid, &in2);
     instance_add.out = address_from_coreid(mycoreid, &out);
-    core4_main(address_from_coreid(mycoreid, &instance_add));
+    // core4_main(address_from_coreid(mycoreid, &instance_add));
+    core_main(address_from_coreid(mycoreid, &instance_add), &init);
     return 0;
 }
