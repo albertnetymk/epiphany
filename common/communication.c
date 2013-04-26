@@ -272,6 +272,21 @@ void connect(port_out *out, port_in *in)
 #endif // USE_BOTH_BUFFER
 
 #ifdef USE_DOUBLE_BUFFER
+static void do_distribute_end(port_out *p, uchar current, uint size)
+{
+    do_flush(p->buffers[current], size);
+    uchar current_dest = p->current_dest_index[current];
+    (*p->dests)[current_dest]->end = true;
+    for (current_dest++; current_dest < p->dest_index; ++current_dest) {
+        p->buffers[current]->twin =
+            (*p->dests)[current_dest]->buffers[current];
+        p->buffers[current]->dma->status = DMA_PENDING;
+        do_flush(p->buffers[current], size);
+        (*p->dests)[current_dest]->end = true;
+    }
+    p->buffers[current]->ready_to_dma = false;
+    p->current_dest_index[current] = 0;
+}
 static void do_distribute(port_out *p, uchar current, uint size)
 {
     do_flush(p->buffers[current], size);
@@ -309,6 +324,7 @@ void port_in_init(port_in *p)
         b->ready_to_dma = true;
         b->size = sizeof(b->array)/sizeof(int);
     }
+    p->end = false;
     p->index = p->ping_pang = 0;
 }
 
@@ -380,15 +396,44 @@ void flush(port_out *p)
     }
 }
 
+void end_port(port_out *p)
+{
+    uchar current;
+    if (p->buffers[p->ping_pang]->ready_to_dma) {
+        // double buffer full
+        current = p->ping_pang;
+        do_distribute_end(p, current, sizeof(p->buffers[current]->array));
+        do_distribute_end(p, 1-current, sizeof(p->buffers[1-current]->array));
+    } else {
+        if (p->buffers[1-p->ping_pang]->ready_to_dma){
+            // only one buffer full
+            current = 1-p->ping_pang;
+            do_distribute_end(p, current, sizeof(p->buffers[current]->array));
+        }
+        if (p->index > 0) {
+            current = p->ping_pang;
+            p->buffers[current]->ready_to_dma =true;
+            do_distribute_end(p, current, p->index*sizeof(int));
+            p->index = 0;
+        }
+    }
+}
+
 void connect(port_out *out, port_in *in)
 {
     (*out->dests)[out->dest_index++] = in;
-    // int i;
-    // for(i=0; i<sizeof(out->buffers)/sizeof(fifo *); ++i) {
-    //     in->buffers[i]->dma = out->buffers[i]->dma;
-    //     out->buffers[i]->twin = in->buffers[i];
-    //     in->buffers[i]->twin = out->buffers[i];
-    // }
+}
+
+bool has_input(port_in *p, uint n)
+{
+    if (p->buffers[p->ping_pang]->ready_to_dma) {
+        return false;
+    }
+    // TODO some optimization maybe, for p->index + 1 >= n is true
+    if (p->buffers[1-p->ping_pang]->ready_to_dma) {
+        return p->index + 1 >= n;
+    }
+    return p->buffers[1-p->ping_pang]->size+p->index+1 >= n;
 }
 #endif // USE_DOUBLE_BUFFER
 

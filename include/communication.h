@@ -62,6 +62,7 @@ typedef struct port_in_struct {
     volatile uchar index;
     uchar ping_pang;
     fifo *buffers[2];
+    bool end;
 } port_in;
 
 typedef struct port_out_struct {
