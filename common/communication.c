@@ -262,7 +262,7 @@ bool has_input(port_in *p, uint n)
     if (p->buffer->ready_to_dma) {
         return false;
     }
-    return p->index >= n;
+    return p->index + 1 >= n;
 }
 
 void connect(port_out *out, port_in *in)
