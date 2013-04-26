@@ -63,7 +63,7 @@ void core_source_main(actor_a *a)
     for (i = 0; i < 10; ++i) {
         epiphany_write(a->out, i);
     }
-    flush(a->out);
+    end_port(a->out);
     while(1) ;
 }
 
