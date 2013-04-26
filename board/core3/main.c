@@ -20,6 +20,16 @@ fifo out_b0, out_b1;
 dma_cfg dma0, dma1;
 #endif
 
+static api_t api;
+static inline api_t *init(void *a)
+{
+    all.instance_double2 = a;
+    actor_double_init(a);
+    api.run = (run_t *)all.instance_double2->run;
+    api.end = (end_t *)all.instance_double2->end;
+    api.not_finished = (not_finished_t *)all.instance_double2->not_finished;
+    return &api;
+}
 int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
     out.dests = address_from_coreid(mycoreid, &dests);
@@ -40,6 +50,6 @@ int main(void) {
 #endif
     instance_double.in = address_from_coreid(mycoreid, &in);
     instance_double.out = address_from_coreid(mycoreid, &out);
-    core3_main(address_from_coreid(mycoreid, &instance_double));
+    core_main(address_from_coreid(mycoreid, &instance_double), &init);
     return 0;
 }
