@@ -77,10 +77,6 @@ bool has_input(port_in *p, uint n)
     return write_index - p->read_index >= n;
 }
 
-bool might_has_input(port_in *p)
-{
-    return has_input(p, 1) || !p->end;
-}
 #else // USE_DESTINATION_BUFFER
 static dma_cfg *dma_pool[2];
 static bool try_dma(dma_cfg *dma)
@@ -172,6 +168,7 @@ void port_in_init(port_in *p)
     p->buffer->ready_to_dma = true;
     p->buffer->size = sizeof(p->buffer->array)/sizeof(int);
 
+    p->end = false;
     p->index = 0;
 }
 
@@ -234,6 +231,38 @@ void flush(port_out *p)
         p->buffer->ready_to_dma = false;
         p->index = 0;
     }
+}
+
+void end_port(port_out *p)
+{
+    int size = 0;
+    if (p->buffer->ready_to_dma) {
+        size = sizeof(p->buffer->array);
+    } else if (p->index > 0) {
+        size = p->index*sizeof(int);
+        p->buffer->ready_to_dma = true;
+    }
+    if (size > 0) {
+        int i;
+        do_flush(p->buffer, size);
+        (*p->dests)[0]->end = true;
+        for (i=1; i<p->dest_index; ++i) {
+            p->buffer->twin = (*p->dests)[i]->buffer;
+            p->buffer->dma->status = DMA_PENDING;
+            do_flush(p->buffer, size);
+            (*p->dests)[i]->end = true;
+        }
+        p->buffer->ready_to_dma = false;
+        p->index = 0;
+    }
+}
+
+bool has_input(port_in *p, uint n)
+{
+    if (p->buffer->ready_to_dma) {
+        return false;
+    }
+    return p->index >= n;
 }
 
 void connect(port_out *out, port_in *in)
@@ -364,3 +393,8 @@ void connect(port_out *out, port_in *in)
 #endif // USE_DOUBLE_BUFFER
 
 #endif // USE_DESTINATION_BUFFER
+
+bool might_has_input(port_in *p)
+{
+    return has_input(p, 1) || !p->end;
+}

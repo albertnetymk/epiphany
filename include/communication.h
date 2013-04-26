@@ -46,6 +46,7 @@ typedef volatile struct fifo_struct {
 typedef struct port_in_struct {
     uchar index;
     fifo *buffer;
+    bool end;
 } port_in;
 
 typedef struct port_out_struct {
