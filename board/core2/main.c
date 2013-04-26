@@ -26,6 +26,8 @@ static inline api_t *init(void *a)
     all.instance_double1 = a;
     actor_double_init(a);
     api.run = (run_t *)all.instance_double1->run;
+    api.end = (end_t *)all.instance_double1->end;
+    api.not_finished = (not_finished_t *)all.instance_double1->not_finished;
     return &api;
 }
 int main(void) {
@@ -48,6 +50,6 @@ int main(void) {
 #endif
     instance_double.in = address_from_coreid(mycoreid, &in);
     instance_double.out = address_from_coreid(mycoreid, &out);
-    core2_main(address_from_coreid(mycoreid, &instance_double));
+    core_main(address_from_coreid(mycoreid, &instance_double), &init);
     return 0;
 }

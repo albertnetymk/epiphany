@@ -55,6 +55,10 @@ void flush(port_out *p)
 
 void end_port(port_out *p)
 {
+    int i;
+    for (i = 0; i < p->dest_index; ++i) {
+        (*p->dests)[i]->end = true;
+    }
 }
 
 void connect(port_out *out, volatile port_in *in)
