@@ -3,13 +3,13 @@
 
 static void run(actor_double *self)
 {
-    int i, v;
-    for (i = 0; i < 10; ++i) {
-        v = epiphany_read(self->in);
-        epiphany_write(self->out, v*2);
-    }
-    // int v = epiphany_read(self->in);
-    // epiphany_write(self->out, v*2);
+    // int i, v;
+    // for (i = 0; i < 10; ++i) {
+    //     v = epiphany_read(self->in);
+    //     epiphany_write(self->out, v*2);
+    // }
+    int v = epiphany_read(self->in);
+    epiphany_write(self->out, v*2);
 }
 
 static bool not_finished(actor_double *self)

@@ -68,7 +68,13 @@ void connect(port_out *out, volatile port_in *in)
 
 bool has_input(port_in *p, uint n)
 {
-    return false;
+    uchar write_index;
+    if (p->carrier) {
+        write_index = p->write_index + sizeof(p->array)/sizeof(int);
+    } else {
+        write_index = p->write_index;
+    }
+    return write_index - p->read_index >= n;
 }
 
 bool might_has_input(port_in *p)

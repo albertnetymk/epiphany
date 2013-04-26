@@ -78,9 +78,9 @@ inline void core_main(void *a, init_t *init)
     stage_all(2);
 
     stage(3);
-    // while(!api->not_finished(a)) {
+    while(!api->not_finished(a)) {
         api->run(a);
-    // }
+    }
     api->end(a);
     while(1) ;
 }
