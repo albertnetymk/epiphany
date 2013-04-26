@@ -132,7 +132,7 @@ server-test :
 	e-server -xml ${ESDK}/bsps/emek3/emek3.xml
 
 define switch-branch
-	-git branch -d $@
+	-git branch -D $@
 	git checkout -b $@
 	cat /dev/null > $(ROOT_DIR)/include/flags.h
 	echo 'Destination buffer'
