@@ -8,8 +8,11 @@ static void run(actor_double *self)
     //     v = epiphany_read(self->in);
     //     epiphany_write(self->out, v*2);
     // }
-    int v = epiphany_read(self->in);
-    epiphany_write(self->out, v*2);
+    int v;
+    if (has_input(self->in, 1)) {
+        v = epiphany_read(self->in);
+        epiphany_write(self->out, v*2);
+    }
 }
 
 static bool not_finished(actor_double *self)
