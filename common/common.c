@@ -33,7 +33,7 @@ void stage_all(uint s)
     }
 }
 
-void core0_main(actor_a *a)
+void core_source_main(actor_a *a)
 {
     int i;
     Mailbox.core.go[core_num()] = 0;
@@ -78,14 +78,14 @@ inline void core_main(void *a, init_t *init)
     stage_all(2);
 
     stage(3);
-    while(api->runnable(a)) {
+    // while(!api->not_finished(a)) {
         api->run(a);
-    }
+    // }
     api->end(a);
     while(1) ;
 }
 
-inline void core1_main(actor_b *a)
+inline void core_sink_main(actor_b *a)
 {
     int i;
     Mailbox.core.go[1] = 0;

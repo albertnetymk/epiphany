@@ -26,6 +26,6 @@ int main(void) {
 #endif
     // this one to local?
     instance_b.in = address_from_coreid(mycoreid, &in);
-    core1_main(address_from_coreid(mycoreid, &instance_b));
+    core_sink_main(address_from_coreid(mycoreid, &instance_b));
     return 0;
 }

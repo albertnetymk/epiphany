@@ -11,6 +11,7 @@ typedef volatile struct port_in_struct {
     uchar write_index;
     int array[10];
     bool carrier;
+    bool end;
 } port_in;
 
 typedef volatile struct port_out_struct {
@@ -79,6 +80,9 @@ void port_in_init(port_in *p);
 void epiphany_write(port_out *p, int v);
 int epiphany_read(port_in *p);
 void flush(port_out *p);
+void end_port(port_out *p);
 void connect(port_out *out, port_in *in);
+bool has_input(port_in *p, uint n);
+bool might_has_input(port_in *p);
 
 #endif /* end of include guard: _COMMUNICATION_H */

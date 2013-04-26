@@ -34,6 +34,6 @@ int main(void) {
 #endif
     // this one to local?
     instance_a.out = address_from_coreid(mycoreid, &out);
-    core0_main(address_from_coreid(mycoreid, &instance_a));
+    core_source_main(address_from_coreid(mycoreid, &instance_a));
     return 0;
 }

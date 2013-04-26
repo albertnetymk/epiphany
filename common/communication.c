@@ -12,6 +12,7 @@ void port_in_init(port_in *p)
 {
     p->read_index = p->write_index = 0;
     p->carrier = false;
+    p->end = false;
 }
 
 void epiphany_write(port_out *p, int v)
@@ -52,9 +53,23 @@ void flush(port_out *p)
 {
 }
 
+void end_port(port_out *p)
+{
+}
+
 void connect(port_out *out, volatile port_in *in)
 {
     (*out->dests)[out->dest_index++] = in;
+}
+
+bool has_input(port_in *p, uint n)
+{
+    return false;
+}
+
+bool might_has_input(port_in *p)
+{
+    return has_input(p, 1) || !p->end;
 }
 #else // USE_DESTINATION_BUFFER
 static dma_cfg *dma_pool[2];
