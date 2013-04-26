@@ -3,12 +3,6 @@
 
 static void run(actor_add *self)
 {
-    // int i, l, r;
-    // for (i = 0; i < 10; ++i) {
-    //     l = epiphany_read(self->in1);
-    //     r = epiphany_read(self->in2);
-    //     epiphany_write(self->out, l+r);
-    // }
     int l, r;
     if (has_input(self->in1, 1)) {
         if (has_input(self->in2, 1)) {

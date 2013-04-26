@@ -3,11 +3,6 @@
 
 static void run(actor_double *self)
 {
-    // int i, v;
-    // for (i = 0; i < 10; ++i) {
-    //     v = epiphany_read(self->in);
-    //     epiphany_write(self->out, v*2);
-    // }
     int v;
     if (has_input(self->in, 1)) {
         v = epiphany_read(self->in);
