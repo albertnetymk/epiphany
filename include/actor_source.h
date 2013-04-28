@@ -1,0 +1,10 @@
+#ifndef ACTOR_SOURCE_H
+#define ACTOR_SOURCE_H
+
+#include "communication.h"
+typedef struct actor_source_struct {
+    port_out *out;
+} actor_source;
+void actor_source_init(actor_source *a);
+
+#endif /* end of include guard: ACTOR_SOURCE_H */

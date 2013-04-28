@@ -13,11 +13,16 @@ typedef struct api_t_struct {
     not_finished_t *not_finished;
 } api_t;
 
+typedef void connect_network_t (void);
+typedef struct actor_source_api_t_struct {
+    connect_network_t *connect_network;
+} actor_source_api_t;
+
 typedef api_t *init_t (void *);
 inline void core_main(void *a, init_t *init);
 
 inline void *address_from_coreid(e_coreid_t coreid, volatile void *ptr);
-inline void core_source_main(actor_a *a);
+inline void core_source_main(actor_source *a);
 inline void core_sink_main(actor_b *a);
 inline void core2_main(actor_double *a);
 inline void core3_main(actor_double *a);

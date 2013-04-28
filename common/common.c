@@ -33,7 +33,7 @@ void stage_all(uint s)
     }
 }
 
-void core_source_main(actor_a *a)
+void core_source_main(actor_source *a)
 {
     int i;
     Mailbox.core.go[core_num()] = 0;
@@ -44,7 +44,7 @@ void core_source_main(actor_a *a)
 
     stage(1);
     all.instance_source = a;
-    actor_a_init(a);
+    actor_source_init(a);
 
     Mailbox.core.go[core_num()] = 2;
     stage_all(2);

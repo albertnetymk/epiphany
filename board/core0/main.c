@@ -3,7 +3,7 @@
 #include "flags.h"
 
 // it's not necessary to use global address for non shared resources.
-actor_a instance;
+actor_source instance;
 port_out out;
 port_in *dests[2];
 #ifdef USE_DESTINATION_BUFFER
