@@ -27,7 +27,9 @@ static void connect_network()
 }
 static void prepare_data()
 {
+    // TODO access mailbox
 }
+
 static source_api_t api;
 static inline source_api_t *init(void *a)
 {
@@ -35,6 +37,7 @@ static inline source_api_t *init(void *a)
     actor_source_init(a);
     api.connect_network = &connect_network;
     api.prepare_data = &prepare_data;
+    api.end = (end_t *)all.instance_source->end;
     return &api;
 }
 int main(void) {

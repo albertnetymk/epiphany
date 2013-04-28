@@ -18,6 +18,7 @@ typedef void prepare_data_t (void);
 typedef struct source_api_t_struct {
     connect_network_t *connect_network;
     prepare_data_t *prepare_data;
+    end_t *end;
 } source_api_t;
 typedef source_api_t *source_init_t (void *);
 
