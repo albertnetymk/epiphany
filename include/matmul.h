@@ -48,6 +48,7 @@ typedef struct {
     // float  A[_Smtx * _Smtx]; // Global A matrix 
     // float  B[_Smtx * _Smtx]; // Global B matrix 
     // float  C[_Smtx * _Smtx]; // Global C matrix
+    // TODO why have to even?
     int dummy;
     int players;
     int source[10];
