@@ -5,7 +5,7 @@
 // it's not necessary to use global address for non shared resources.
 actor_source instance;
 port_out out;
-port_in *dests[2];
+port_in *dests[1];
 #ifdef USE_DESTINATION_BUFFER
 #endif
 #ifdef USE_BOTH_BUFFER
@@ -19,8 +19,9 @@ dma_cfg dma0, dma1;
 
 static void connect_network()
 {
-    connect(all.instance_source->out, all.instance_double1->in);
-    connect(all.instance_source->out, all.instance_double2->in);
+    connect(all.instance_source->out, all.instance_distributor->in);
+    connect(all.instance_distributor->out, all.instance_double1->in);
+    connect(all.instance_distributor->out, all.instance_double2->in);
     connect(all.instance_double1->out, all.instance_add->in1);
     connect(all.instance_double2->out, all.instance_add->in2);
     connect(all.instance_add->out, all.instance_sink->in);

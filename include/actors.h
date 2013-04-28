@@ -3,11 +3,13 @@
 
 #include "actor_source.h"
 #include "actor_sink.h"
+#include "actor_distributor.h"
 #include "actor_double.h"
 #include "actor_add.h"
 
 typedef struct actors_struct {
     actor_source *instance_source;
+    actor_distributor *instance_distributor;
     actor_double *instance_double1;
     actor_double *instance_double2;
     actor_add *instance_add;
