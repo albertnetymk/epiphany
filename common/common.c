@@ -43,9 +43,7 @@ void core_source_main(actor_source *a, source_init_t *init)
     }
 
     stage(1);
-    all.instance_source = a;
-    actor_source_init(a);
-    // source_api_t *apiinit(a);
+    source_api_t *api = init(a);
 
     Mailbox.core.go[core_num()] = 2;
     stage_all(2);
