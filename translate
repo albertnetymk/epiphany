@@ -7,5 +7,5 @@ for elf in $@; do
         "${core_id[i]}" "$elf" "$elf".srec
     # echo ${core_id[i]}
     let i++
-# echo 'inside translate'
+    true # to surpass error status on only one core
 done
