@@ -15,6 +15,7 @@ fifo b0, b1;
 
 static inline void fetch_data(void)
 {
+    // TODO use mailbox
 }
 
 static sink_api_t api;
