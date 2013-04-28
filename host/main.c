@@ -86,7 +86,8 @@ int main(void) {
         e_read(addr, (void *) (&Mailbox.debug[i]), sizeof(int));
         // printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
         //         i, Mailbox.debug[i]);
-        sprintf(msg, "sink[%d] should be %d, but %d is found", i,  4*i, Mailbox.sink[i]);
+        sprintf(msg, "sink[%d] should be %d, but %d is found", i,
+                4*Mailbox.source[i], Mailbox.sink[i]);
         ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
     }
 
