@@ -45,7 +45,7 @@ int main(void) {
 
     int data_size = 10;
     for (i=0; i<data_size; ++i) {
-        Mailbox.source[i] = i;
+        Mailbox.source[i] = 2*i;
     }
 
     // for (i=start; i<end; ++i) {
