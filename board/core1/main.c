@@ -2,7 +2,7 @@
 #include "common.h"
 #include "flags.h"
 
-actor_b instance;
+actor_sink instance;
 port_in in;
 #ifdef USE_DESTINATION_BUFFER
 #endif

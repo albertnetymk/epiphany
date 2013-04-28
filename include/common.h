@@ -22,12 +22,18 @@ typedef struct source_api_t_struct {
 } source_api_t;
 typedef source_api_t *source_init_t (void *);
 
+typedef void fetch_data_t (void);
+typedef struct sink_api_t_struct {
+    fetch_data_t *fetch_data;
+} sink_api_t;
+typedef sink_api_t *sink_init_t (void *);
+
 typedef api_t *init_t (void *);
 inline void core_main(void *a, init_t *init);
 
 inline void *address_from_coreid(e_coreid_t coreid, volatile void *ptr);
 inline void core_source_main(actor_source *a, source_init_t *init);
-inline void core_sink_main(actor_b *a);
+inline void core_sink_main(actor_sink *a);
 inline void core2_main(actor_double *a);
 inline void core3_main(actor_double *a);
 inline void core4_main(actor_add *a);

@@ -80,14 +80,14 @@ inline void core_main(void *a, init_t *init)
     while(1) ;
 }
 
-inline void core_sink_main(actor_b *a)
+inline void core_sink_main(actor_sink *a)
 {
     int i;
     Mailbox.core.go[1] = 0;
 
     stage(1);
     all.instance_sink = a;
-    actor_b_init(a);
+    actor_sink_init(a);
 
     Mailbox.core.go[1] = 2;
     stage_all(2);

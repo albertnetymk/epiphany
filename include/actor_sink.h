@@ -2,11 +2,11 @@
 #define _ACTOR_B_H
 
 #include "communication.h"
-typedef struct actor_b_struct {
+typedef struct actor_sink_struct {
     port_in *in;
-} actor_b;
+} actor_sink;
 
-void actor_b_init(actor_b *a);
+void actor_sink_init(actor_sink *a);
 
 #endif /* end of include guard: _ACTOR_B_H */
 
