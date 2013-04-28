@@ -3,7 +3,7 @@
 #include "flags.h"
 
 // it's not necessary to use global address for non shared resources.
-actor_a instance_a;
+actor_a instance;
 port_out out;
 port_in *dests[2];
 #ifdef USE_DESTINATION_BUFFER
@@ -33,7 +33,7 @@ int main(void) {
     out.buffers[1] = address_from_coreid(mycoreid, &b1);
 #endif
     // this one to local?
-    instance_a.out = address_from_coreid(mycoreid, &out);
-    core_source_main(address_from_coreid(mycoreid, &instance_a));
+    instance.out = address_from_coreid(mycoreid, &out);
+    core_source_main(address_from_coreid(mycoreid, &instance));
     return 0;
 }

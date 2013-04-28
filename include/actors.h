@@ -7,11 +7,11 @@
 #include "actor_b.h"
 
 typedef struct actors_struct {
-    actor_a *instance_a;
+    actor_a *instance_source;
     actor_double *instance_double1;
     actor_double *instance_double2;
     actor_add *instance_add;
-    actor_b *instance_b;
+    actor_b *instance_sink;
 } actors;
 
 #endif /* end of include guard: _ACTORS_H */

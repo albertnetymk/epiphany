@@ -43,18 +43,17 @@ void core_source_main(actor_a *a)
     }
 
     stage(1);
-    all.instance_a = a;
+    all.instance_source = a;
     actor_a_init(a);
 
     Mailbox.core.go[core_num()] = 2;
     stage_all(2);
     // network
-    // connect(all.instance_a->out, all.instance_b->in);
-    connect(all.instance_a->out, all.instance_double1->in);
-    connect(all.instance_a->out, all.instance_double2->in);
+    connect(all.instance_source->out, all.instance_double1->in);
+    connect(all.instance_source->out, all.instance_double2->in);
     connect(all.instance_double1->out, all.instance_add->in1);
     connect(all.instance_double2->out, all.instance_add->in2);
-    connect(all.instance_add->out, all.instance_b->in);
+    connect(all.instance_add->out, all.instance_sink->in);
     for(i=0; i<players; ++i) {
         Mailbox.core.go[i] = 3;
     }
@@ -91,7 +90,7 @@ inline void core_sink_main(actor_b *a)
     Mailbox.core.go[1] = 0;
 
     stage(1);
-    all.instance_b = a;
+    all.instance_sink = a;
     actor_b_init(a);
 
     Mailbox.core.go[1] = 2;

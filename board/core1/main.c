@@ -2,7 +2,7 @@
 #include "common.h"
 #include "flags.h"
 
-actor_b instance_b;
+actor_b instance;
 port_in in;
 #ifdef USE_DESTINATION_BUFFER
 #endif
@@ -25,7 +25,7 @@ int main(void) {
     in.buffers[1] = address_from_coreid(mycoreid, &b1);
 #endif
     // this one to local?
-    instance_b.in = address_from_coreid(mycoreid, &in);
-    core_sink_main(address_from_coreid(mycoreid, &instance_b));
+    instance.in = address_from_coreid(mycoreid, &in);
+    core_sink_main(address_from_coreid(mycoreid, &instance));
     return 0;
 }
