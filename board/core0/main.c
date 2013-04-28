@@ -26,6 +26,7 @@ static void connect_network()
     connect(all.instance_double2->out, all.instance_add->in2);
     connect(all.instance_add->out, all.instance_sink->in);
 }
+
 static void prepare_data()
 {
     // TODO access mailbox
