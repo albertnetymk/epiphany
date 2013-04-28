@@ -43,6 +43,11 @@ int main(void) {
         Mailbox.core.go[i] = 1;
     }
 
+    int data_size = 10;
+    for (i=0; i<data_size; ++i) {
+        Mailbox.source[i] = i;
+    }
+
     // for (i=start; i<end; ++i) {
     // printf("go is %d\n", Mailbox.core.go[i]);
     // }
@@ -53,6 +58,10 @@ int main(void) {
     }
 
     unsigned int addr;
+
+    // Prepare input data.
+    addr = DRAM_BASE + offsetof(shared_buf_t, source);
+    e_write(addr, (void *) Mailbox.source, sizeof(int)*data_size);
 
     addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
     e_write(addr, (void *) (&Mailbox.core.go[0]), sizeof(int)*end);

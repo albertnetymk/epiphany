@@ -49,6 +49,7 @@ void core_source_main(actor_source *a, source_init_t *init)
     stage_all(2);
     // network
     api->connect_network();
+
     for(i=0; i<players; ++i) {
         Mailbox.core.go[i] = 3;
     }

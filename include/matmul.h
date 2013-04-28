@@ -48,6 +48,7 @@ typedef struct {
     // float  A[_Smtx * _Smtx]; // Global A matrix 
     // float  B[_Smtx * _Smtx]; // Global B matrix 
     // float  C[_Smtx * _Smtx]; // Global C matrix
+    int source[10];
     int sink[10];
     int debug[10];
     mbox_t core;
