@@ -28,8 +28,8 @@ static void connect_network()
 static void prepare_data()
 {
 }
-static actor_source_api_t api;
-static inline actor_source_api_t *init(void *a)
+static source_api_t api;
+static inline source_api_t *init(void *a)
 {
     all.instance_source = a;
     actor_source_init(a);

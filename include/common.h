@@ -15,11 +15,11 @@ typedef struct api_t_struct {
 
 typedef void connect_network_t (void);
 typedef void prepare_data_t (void);
-typedef struct actor_source_api_t_struct {
+typedef struct source_api_t_struct {
     connect_network_t *connect_network;
     prepare_data_t *prepare_data;
-} actor_source_api_t;
-typedef actor_source_api_t *source_init_t (void *);
+} source_api_t;
+typedef source_api_t *source_init_t (void *);
 
 typedef api_t *init_t (void *);
 inline void core_main(void *a, init_t *init);
