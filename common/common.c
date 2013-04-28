@@ -28,7 +28,7 @@ static const uint players = 6;
 void stage_all(uint s)
 {
     int i;
-    for (i=0; i<players; ++i) {
+    for (i=0; i<Mailbox.players; ++i) {
         while(Mailbox.core.go[i] < s) ;
     }
 }
@@ -50,7 +50,7 @@ void core_source_main(actor_source *a, source_init_t *init)
     // network
     api->connect_network();
 
-    for(i=0; i<players; ++i) {
+    for(i=0; i<Mailbox.players; ++i) {
         Mailbox.core.go[i] = 3;
     }
 
