@@ -56,7 +56,7 @@ void core_source_main(actor_source *a, source_init_t *init)
 
     stage(3);
     for (i = 0; i < 10; ++i) {
-        epiphany_write(a->out, i);
+        epiphany_write(a->out, Mailbox.source[i]);
     }
     end_port(a->out);
     while(1) ;
