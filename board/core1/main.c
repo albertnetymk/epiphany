@@ -13,6 +13,19 @@ fifo buffer;
 fifo b0, b1;
 #endif
 
+static inline void fetch_data(void)
+{
+}
+
+static sink_api_t api;
+static inline sink_api_t *init(void *a)
+{
+    all.instance_sink = a;
+    actor_sink_init(a);
+    api.fetch_data = &fetch_data;
+    return &api;
+}
+
 int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
 #ifdef USE_DESTINATION_BUFFER
@@ -26,6 +39,6 @@ int main(void) {
 #endif
     // this one to local?
     instance.in = address_from_coreid(mycoreid, &in);
-    core_sink_main(address_from_coreid(mycoreid, &instance));
+    core_sink_main(address_from_coreid(mycoreid, &instance), &init);
     return 0;
 }

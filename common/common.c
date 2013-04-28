@@ -80,7 +80,7 @@ inline void core_main(void *a, init_t *init)
     while(1) ;
 }
 
-inline void core_sink_main(actor_sink *a)
+inline void core_sink_main(actor_sink *a, sink_init_t *init)
 {
     int i;
     Mailbox.core.go[1] = 0;
