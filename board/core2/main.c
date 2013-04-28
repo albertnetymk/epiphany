@@ -3,7 +3,7 @@
 #include "flags.h"
 
 // it's not necessary to use global address for non shared resources.
-actor_double instance_double;
+actor_double instance;
 port_in in;
 port_out out;
 port_in *dests[1];
@@ -48,8 +48,8 @@ int main(void) {
     in.buffers[0] = address_from_coreid(mycoreid, &in_b0);
     in.buffers[1] = address_from_coreid(mycoreid, &in_b1);
 #endif
-    instance_double.in = address_from_coreid(mycoreid, &in);
-    instance_double.out = address_from_coreid(mycoreid, &out);
-    core_main(address_from_coreid(mycoreid, &instance_double), &init);
+    instance.in = address_from_coreid(mycoreid, &in);
+    instance.out = address_from_coreid(mycoreid, &out);
+    core_main(address_from_coreid(mycoreid, &instance), &init);
     return 0;
 }
