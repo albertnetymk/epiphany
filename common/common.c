@@ -23,8 +23,6 @@ void stage(uint s)
     while(Mailbox.core.go[core_num()] < s) ;
 }
 
-static const uint players = 6;
-
 void stage_all(uint s)
 {
     int i;
