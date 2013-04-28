@@ -61,8 +61,8 @@ int main(void) {
 
     unsigned int addr;
     // Decide how many cores are used.
-    addr = DRAM_BASE + offsetof(shared_buf_t, players);
-    e_write(addr, (void *) &(Mailbox.players), sizeof(int));
+    // addr = DRAM_BASE + offsetof(shared_buf_t, players);
+    // e_write(addr, (void *) &(Mailbox.players), sizeof(int));
 
     // Prepare input data.
     addr = DRAM_BASE + offsetof(shared_buf_t, source);
