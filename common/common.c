@@ -33,7 +33,7 @@ void stage_all(uint s)
     }
 }
 
-void core_source_main(actor_source *a)
+void core_source_main(actor_source *a, source_init_t *init)
 {
     int i;
     Mailbox.core.go[core_num()] = 0;

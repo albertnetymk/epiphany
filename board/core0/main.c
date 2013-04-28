@@ -17,6 +17,26 @@ fifo b0, b1;
 dma_cfg dma0, dma1;
 #endif
 
+static void connect_network()
+{
+    connect(all.instance_source->out, all.instance_double1->in);
+    connect(all.instance_source->out, all.instance_double2->in);
+    connect(all.instance_double1->out, all.instance_add->in1);
+    connect(all.instance_double2->out, all.instance_add->in2);
+    connect(all.instance_add->out, all.instance_sink->in);
+}
+static void prepare_data()
+{
+}
+static actor_source_api_t api;
+static inline actor_source_api_t *init(void *a)
+{
+    all.instance_source = a;
+    actor_source_init(a);
+    api.connect_network = &connect_network;
+    api.prepare_data = &prepare_data;
+    return &api;
+}
 int main(void) {
     e_coreid_t mycoreid = e_get_coreid();
     out.dests = address_from_coreid(mycoreid, &dests);
@@ -34,6 +54,6 @@ int main(void) {
 #endif
     // this one to local?
     instance.out = address_from_coreid(mycoreid, &out);
-    core_source_main(address_from_coreid(mycoreid, &instance));
+    core_source_main(address_from_coreid(mycoreid, &instance), &init);
     return 0;
 }
