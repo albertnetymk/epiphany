@@ -43,6 +43,8 @@ int main(void) {
         Mailbox.core.go[i] = 1;
     }
 
+    Mailbox.players = end;
+
     int data_size = 10;
     for (i=0; i<data_size; ++i) {
         Mailbox.source[i] = 2*i;
@@ -58,6 +60,9 @@ int main(void) {
     }
 
     unsigned int addr;
+    // Decide how many cores are used.
+    addr = DRAM_BASE + offsetof(shared_buf_t, players);
+    e_write(addr, (void *) Mailbox.players, sizeof(int));
 
     // Prepare input data.
     addr = DRAM_BASE + offsetof(shared_buf_t, source);
