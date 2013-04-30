@@ -37,17 +37,16 @@ typedef struct {
 } core_t;
 
 
+#include "types.h"
 typedef struct {
     int    ready[_Ncores]; // Core is ready after reset
     int    go[_Ncores];    // Call for matmul function
     int    cycles[_Ncores];
+    uint    clocks[_Ncores];
 } mbox_t;
 
 
 typedef struct {
-    // float  A[_Smtx * _Smtx]; // Global A matrix 
-    // float  B[_Smtx * _Smtx]; // Global B matrix 
-    // float  C[_Smtx * _Smtx]; // Global C matrix
     // TODO why have to even?
     int dummy;
     int players;
@@ -56,8 +55,5 @@ typedef struct {
     int debug[10];
     mbox_t core;
 } shared_buf_t;
-
-int timer_count;
-int total_cycles;
 
 #endif // __MATMUL_H__

@@ -2,6 +2,7 @@
 #include "types.h"
 #include "common.h"
 #include "common_buffers.h"
+#include "timers.h"
 
 inline static unsigned core_num()
 {
@@ -71,10 +72,12 @@ inline void core_main(void *a, init_t *init)
     stage_all(2);
 
     stage(3);
+    init_clock();
     while(api->not_finished(a)) {
         api->run(a);
     }
     api->end(a);
+    Mailbox.core.clocks[core_num()] = get_clock();
     while(1) ;
 }
 
