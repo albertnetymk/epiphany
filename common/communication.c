@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include "communication.h"
+#include "timers.h"
+
 
 #ifdef USE_DESTINATION_BUFFER
 void port_out_init(port_out *p)
@@ -22,7 +24,9 @@ void epiphany_write(port_out *p, int v)
     for (i = 0; i < p->dest_index; ++i) {
         dest = (*p->dests)[i];
         if (dest->carrier) {
+            timer_resume();
             while (dest->write_index == dest->read_index) ;
+            timer_pause();
         }
         dest->array[dest->write_index] = v;
         if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
@@ -47,6 +51,14 @@ int epiphany_read(port_in *p)
         p->read_index++;
     }
     return result;
+}
+
+int epiphany_peek(port_in *p)
+{
+    if (!p->carrier) {
+        while (p->read_index == p->write_index) ;
+    }
+    return p->array[p->read_index];
 }
 
 void flush(port_out *p)
@@ -110,16 +122,24 @@ inline static void dma_copy(e_dma_id_t chan, volatile void *dst, volatile void *
 
 static void wait_till_dma_over(fifo *b)
 {
+    timer_resume();
     while(e_dma_busy(b->dma->id)) ;
+    timer_pause();
 }
 
 static void do_flush(fifo *b, uint size)
 {
+    timer_resume();
     while(! b->ready_to_dma) ;
+    timer_pause();
+    timer_resume();
     while(! b->twin->ready_to_dma) ;
+    timer_pause();
     switch (b->dma->status) {
         case DMA_PENDING:
+            timer_resume();
             while(! try_dma(b->dma)) ;
+            timer_pause();
             dma_copy(b->dma->id, b->twin->array, b->array,
                     size, E_ALIGN_BYTE);
         case DMA_ING:
@@ -147,7 +167,9 @@ static void try_flush(fifo *b)
 
 static void wait_till_ready_to_read(volatile fifo *b)
 {
+    timer_resume();
     while(b->ready_to_dma) ;
+    timer_pause();
 }
 
 #ifdef USE_BOTH_BUFFER
@@ -209,6 +231,17 @@ int epiphany_read(port_in *p)
         p->buffer->ready_to_dma = true;
     }
     return result;
+}
+
+int epiphany_peek(port_in *p)
+{
+    if (p->index == 0) {
+        // TODO
+        // signal sender to start the dma using interrupt
+        // or using push, pull combined strategy, which need mutex
+        wait_till_ready_to_read(p->buffer);
+    }
+    return p->buffer->array[p->index];
 }
 
 void flush(port_out *p)
@@ -373,6 +406,14 @@ int epiphany_read(port_in *p)
     return result;
 }
 
+int epiphany_peek(port_in *p)
+{
+    if (p->index == 0) {
+        wait_till_ready_to_read(p->buffers[p->ping_pang]);
+    }
+    return p->buffers[p->ping_pang]->array[p->index];
+}
+
 void flush(port_out *p)
 {
     uchar current;
@@ -442,4 +483,20 @@ bool has_input(port_in *p, uint n)
 bool might_has_input(port_in *p)
 {
     return has_input(p, 1) || !p->end;
+}
+
+int read(port_in *p)
+{
+    timer_pause();
+    return epiphany_read(p);
+}
+
+void write(port_out *p, int v)
+{
+    epiphany_write(p, v);
+}
+
+int peek(port_in *p)
+{
+    return epiphany_peek(p);
 }

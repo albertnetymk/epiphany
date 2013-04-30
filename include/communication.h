@@ -79,8 +79,12 @@ typedef struct port_out_struct {
 
 void port_out_init(port_out *p);
 void port_in_init(port_in *p);
+void write(port_out *p, int v);
+int read(port_in *p);
+int peek(port_in *p);
 void epiphany_write(port_out *p, int v);
 int epiphany_read(port_in *p);
+int epiphany_peek(port_in *p);
 void flush(port_out *p);
 void end_port(port_out *p);
 void connect(port_out *out, port_in *in);
