@@ -95,6 +95,11 @@ int main(void) {
                 4*Mailbox.source[i], Mailbox.sink[i]);
         ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
     }
+    for (i = 0; i < end; ++i) {
+        addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks[i]);
+        e_read(addr, (void *) (&Mailbox.core.clocks[i]), sizeof(int));
+        printf("clock for %d is %d\n", i, Mailbox.core.clocks[i]);
+    }
 
     // int should[10] = {};
     // for (i = 0; i < 10; ++i) {
