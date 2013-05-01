@@ -34,7 +34,7 @@ int main(void) {
 
     // rv = e_load("../epiphany/main.srec", 1, 1, 0);
 
-    int i;
+    int i, j;
     int start = 0;
     int end = 6;
     puts("Host is running ...");
@@ -100,14 +100,21 @@ int main(void) {
         ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
     }
 
-    for (i = 0; i < end; ++i) {
-        addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks[i]);
-        e_read(addr, (void *) (&Mailbox.core.clocks[i]), sizeof(int));
-        addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles[i]);
-        e_read(addr, (void *) (&Mailbox.core.cycles[i]), sizeof(int));
+    // for (i = 0; i < end; ++i) {
+    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks[i]);
+    //     e_read(addr, (void *) (&Mailbox.core.clocks[i]), sizeof(int));
+    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles[i]);
+    //     e_read(addr, (void *) (&Mailbox.core.cycles[i]), sizeof(int));
 
-        printf("pending/clock for %d is %d/%d\n", i,
-                Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
+    //     printf("pending/clock for %d is %d/%d\n", i,
+    //             Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
+    // }
+    for (i = 0; i < end; ++i) {
+        for (j = 0; j < data_size; j += 1) {
+            addr = DRAM_BASE + offsetof(shared_buf_t, core.debug_line[i][j]);
+            e_read(addr, (void *) (&Mailbox.core.debug_line[i][j]), sizeof(int));
+            printf("core %d, %d\n", i, Mailbox.core.debug_line[i][j]);
+        }
     }
 
     // int should[10] = {};
