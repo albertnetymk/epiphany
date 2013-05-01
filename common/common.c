@@ -77,6 +77,7 @@ inline void core_main(void *a, init_t *init)
         api->run(a);
     }
     api->end(a);
+    Mailbox.core.cycles[core_num()] = get_time();
     Mailbox.core.clocks[core_num()] = get_clock();
     while(1) ;
 }
