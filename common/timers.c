@@ -17,21 +17,21 @@ uint get_clock()
 
 void init_timer()
 {
-    // initialized = true;
-    // e_ctimer_set(E_CTIMER_1, E_CTIMER_CLK, E_CTIMER_MAX);
+    initialized = true;
+    e_ctimer_set(E_CTIMER_1, E_CTIMER_CLK, E_CTIMER_MAX);
 }
 
 void timer_resume()
 {
-    // if (!initialized) {
-    //     init_timer();
-    // }
-    // e_ctimer_start(E_CTIMER_1, E_CTIMER_CLK);
+    if (!initialized) {
+        init_timer();
+    }
+    e_ctimer_start(E_CTIMER_1, E_CTIMER_CLK);
 }
 
 void timer_pause()
 {
-    // e_ctimer_stop(E_CTIMER_1);
+    e_ctimer_stop(E_CTIMER_1);
 }
 
 uint get_time()
