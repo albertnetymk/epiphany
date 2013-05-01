@@ -38,17 +38,14 @@ typedef struct {
 
 
 #include "types.h"
-typedef struct {
-    int debug[20];
-    int index;
-} debug_line;
 
 typedef struct {
     int    ready[_Ncores]; // Core is ready after reset
     int    go[_Ncores];    // Call for matmul function
     uint    cycles[_Ncores];
     uint    clocks[_Ncores];
-    debug_line line[_Ncores];
+    uint debug_index[_Ncores];
+    int debug_line[_Ncores][10];
 } mbox_t;
 
 

@@ -64,7 +64,7 @@ void core_source_main(actor_source *a, source_init_t *init)
 inline void core_main(void *a, init_t *init)
 {
     Mailbox.core.go[core_num()] = 0;
-    Mailbox.core.line[core_num()].index = 0;
+    // Mailbox.core.line[core_num()].index = 0;
 
     stage(1);
     api_t *api = init(a);
