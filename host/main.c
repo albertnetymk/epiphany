@@ -45,7 +45,8 @@ int main(void) {
 
     Mailbox.players = end;
 
-    int data_size = sizeof(Mailbox.source)/sizeof(int);
+    int data_size = 10;
+    Mailbox.data_size = data_size;
     for (i=0; i<data_size; ++i) {
         Mailbox.source[i] = 2*i;
     }
@@ -67,6 +68,9 @@ int main(void) {
     // Prepare input data.
     addr = DRAM_BASE + offsetof(shared_buf_t, source);
     e_write(addr, (void *) Mailbox.source, sizeof(int)*data_size);
+
+    addr = DRAM_BASE + offsetof(shared_buf_t, data_size);
+    e_write(addr, (void *) &(Mailbox.data_size), sizeof(int));
 
     addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
     e_write(addr, (void *) (&Mailbox.core.go[0]), sizeof(int)*end);
