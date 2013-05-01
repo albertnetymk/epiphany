@@ -54,7 +54,7 @@ void core_source_main(actor_source *a, source_init_t *init)
     }
 
     stage(3);
-    for (i = 0; i < sizeof(Mailbox.source)/sizeof(int); ++i) {
+    for (i = 0; i < Mailbox.data_size; ++i) {
         epiphany_write(a->out, Mailbox.source[i]);
     }
     api->end(a);
@@ -95,7 +95,7 @@ inline void core_sink_main(actor_sink *a, sink_init_t *init)
 
     stage(3);
     int value;
-    for (i = 0; i < sizeof(Mailbox.sink)/sizeof(int); ++i) {
+    for (i = 0; i < Mailbox.data_size; ++i) {
         value = epiphany_read(a->in);
         Mailbox.sink[i] = value;
     }
