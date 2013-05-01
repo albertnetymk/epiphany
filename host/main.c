@@ -102,8 +102,8 @@ int main(void) {
         addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles[i]);
         e_read(addr, (void *) (&Mailbox.core.cycles[i]), sizeof(int));
 
-        printf("pending cycle for %d is %d\n", i, Mailbox.core.cycles[i]);
-        printf("total clock for %d is %d\n", i, Mailbox.core.clocks[i]);
+        printf("pending/clock for %d is %d/%d\n", i,
+                Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
     }
 
     // int should[10] = {};
