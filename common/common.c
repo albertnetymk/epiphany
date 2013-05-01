@@ -95,7 +95,7 @@ inline void core_sink_main(actor_sink *a, sink_init_t *init)
 
     stage(3);
     int value;
-    for (i = 0; i < 10; ++i) {
+    for (i = 0; i < sizeof(Mailbox.sink)/sizeof(int); ++i) {
         value = epiphany_read(a->in);
         Mailbox.sink[i] = value;
     }
