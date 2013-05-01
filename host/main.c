@@ -45,7 +45,7 @@ int main(void) {
 
     Mailbox.players = end;
 
-    int data_size = 10;
+    int data_size = sizeof(Mailbox.source)/sizeof(int);
     for (i=0; i<data_size; ++i) {
         Mailbox.source[i] = 2*i;
     }
