@@ -2,6 +2,7 @@
 #include "matmul.h"
 #include "timers.h"
 
+extern unsigned core_num();
 
 #ifdef USE_DESTINATION_BUFFER
 void port_out_init(port_out *p)
@@ -29,6 +30,9 @@ void epiphany_write(port_out *p, int v)
             timer_pause();
         }
         dest->array[dest->write_index] = v;
+        Mailbox.core.line[core_num()].debug[
+            Mailbox.core.line[core_num()].index++
+            ] = v;
         if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
             dest->carrier = true;
             dest->write_index = 0;

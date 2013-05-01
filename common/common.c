@@ -4,7 +4,7 @@
 #include "common_buffers.h"
 #include "timers.h"
 
-inline static unsigned core_num()
+inline unsigned core_num()
 {
     e_coreid_t coreid = e_get_coreid();
     unsigned row, col;
