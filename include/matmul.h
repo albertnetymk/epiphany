@@ -43,6 +43,7 @@ typedef struct {
     int    go[_Ncores];    // Call for matmul function
     uint    cycles[_Ncores];
     uint    clocks[_Ncores];
+    int debug[_Ncores][20];
 } mbox_t;
 
 
@@ -55,5 +56,7 @@ typedef struct {
     int debug[10];
     mbox_t core;
 } shared_buf_t;
+
+extern volatile shared_buf_t Mailbox;
 
 #endif // __MATMUL_H__

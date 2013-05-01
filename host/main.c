@@ -88,7 +88,7 @@ int main(void) {
     // }
 
     char msg[50];
-    for (i = 0; i < data_size; i += 10) {
+    for (i = 0; i < data_size; i += 1) {
         addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
         e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
         addr = DRAM_BASE + offsetof(shared_buf_t, debug[i]);

@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include "communication.h"
+#include "matmul.h"
 #include "timers.h"
 
 
