@@ -50,8 +50,8 @@ typedef struct {
     // TODO why have to even?
     int dummy;
     int players;
-    int source[10];
-    int sink[10];
+    int source[100];
+    int sink[100];
     int debug[10];
     mbox_t core;
 } shared_buf_t;
