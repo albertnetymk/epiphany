@@ -41,7 +41,7 @@ typedef struct {
 typedef struct {
     int    ready[_Ncores]; // Core is ready after reset
     int    go[_Ncores];    // Call for matmul function
-    int    cycles[_Ncores];
+    uint    cycles[_Ncores];
     uint    clocks[_Ncores];
 } mbox_t;
 

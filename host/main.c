@@ -95,10 +95,15 @@ int main(void) {
                 4*Mailbox.source[i], Mailbox.sink[i]);
         ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
     }
+
     for (i = 0; i < end; ++i) {
         addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks[i]);
         e_read(addr, (void *) (&Mailbox.core.clocks[i]), sizeof(int));
-        printf("clock for %d is %d\n", i, Mailbox.core.clocks[i]);
+        addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles[i]);
+        e_read(addr, (void *) (&Mailbox.core.cycles[i]), sizeof(int));
+
+        printf("pending cycle for %d is %d\n", i, Mailbox.core.cycles[i]);
+        printf("total clock for %d is %d\n", i, Mailbox.core.clocks[i]);
     }
 
     // int should[10] = {};
