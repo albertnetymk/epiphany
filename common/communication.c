@@ -30,9 +30,11 @@ void epiphany_write(port_out *p, int v)
             timer_pause();
         }
         dest->array[dest->write_index] = v;
-        // Mailbox.core.line[core_num()].debug[
-        //     Mailbox.core.line[core_num()].index++
-        //     ] = v;
+        if (i==0) {
+            uint index = Mailbox.core.debug_index[core_num()];
+            Mailbox.core.debug_line[core_num()][index] = v;
+            Mailbox.core.debug_index[core_num()]++;
+        }
         if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
             dest->carrier = true;
             dest->write_index = 0;
