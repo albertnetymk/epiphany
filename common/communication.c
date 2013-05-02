@@ -168,7 +168,7 @@ static void try_flush(fifo *b)
 static void wait_till_ready_to_read(volatile fifo *b)
 {
     timer_resume();
-    while(b->total > 0) ;
+    while(! b->total > 0) ;
     timer_pause();
 }
 
