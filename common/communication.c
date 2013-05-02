@@ -420,10 +420,14 @@ void flush(port_out *p)
             current = 1-p->ping_pang;
             do_distribute(p, current, sizeof(p->buffers[current]->array));
         }
-        if (p->index > 0) {
+        if (p->buffers[p->ping_pang]->total > 0) {
             current = p->ping_pang;
-            p->buffers[current]->total = p->index;
-            do_distribute(p, current, p->index*sizeof(int));
+            if ( p->buffers[current]->total != p->buffers[current]->size ) {
+                p->buffers[current]->dma->status = DMA_PENDING;
+                p->current_dest_index[current] = 0;
+                p->buffers[current]->twin = (*p->dests)[0]->buffers[current];
+            }
+            do_distribute(p, current, p->buffers[current]->total*sizeof(int));
             p->index = p->buffers[current]->total = 0;
         }
     }
@@ -444,10 +448,15 @@ void end_port(port_out *p)
             current = 1-p->ping_pang;
             do_distribute_end(p, current, sizeof(p->buffers[current]->array));
         }
-        if (p->index > 0) {
+        if (p->buffers[p->ping_pang]->total > 0) {
             current = p->ping_pang;
-            p->buffers[current]->total = p->index;
-            do_distribute_end(p, current, p->index*sizeof(int));
+            if ( p->buffers[current]->total != p->buffers[current]->size ) {
+                p->buffers[current]->dma->status = DMA_PENDING;
+                p->current_dest_index[current] = 0;
+                p->buffers[current]->twin = (*p->dests)[0]->buffers[current];
+            }
+            do_distribute_end(p, current,
+                    p->buffers[current]->total*sizeof(int));
             p->index = p->buffers[current]->total = 0;
         }
     }
