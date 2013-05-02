@@ -457,7 +457,7 @@ void end_port(port_out *p)
             }
             do_distribute_end(p, current,
                     p->buffers[current]->total*sizeof(int));
-            p->index = p->buffers[current]->total = 0;
+            p->index = 0;
         }
     }
 }
@@ -473,7 +473,7 @@ bool has_input(port_in *p, uint n)
     int i;
     for (i = 0; i < sizeof(p->buffers)/sizeof(fifo *); ++i) {
         total += p->buffers[i]->total;
-        if (total > n) {
+        if (total >= n) {
             return true;
         }
     }
@@ -514,8 +514,9 @@ void epiphany_write(port_out *p, int v)
 
 int epiphany_read(port_in *p)
 {
+    // int result = internal_epiphany_read(p)
     // uint index = Mailbox.core.debug_index[core_num()];
-    // Mailbox.core.debug_line[core_num()][index] = -1;
+    // Mailbox.core.debug_line[core_num()][index] = result;
     // Mailbox.core.debug_index[core_num()]++;
     return internal_epiphany_read(p);
 }

@@ -53,8 +53,8 @@ typedef struct {
     // TODO why have to even?
     int data_size;
     int players;
-    int source[12];
-    int sink[12];
+    int source[20];
+    int sink[20];
     int debug[10];
     mbox_t core;
 } shared_buf_t;
