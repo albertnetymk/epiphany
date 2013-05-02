@@ -25,7 +25,7 @@ void ok(bool assertion, char *msg)
     }
 }
 
-int main(void) {
+int main(int argc, char **argv) {
     // Epiphany_t _epiphany, *epiphany = &_epiphany;
     // int rv;
 
@@ -45,7 +45,14 @@ int main(void) {
 
     Mailbox.players = end;
 
-    int data_size = 10;
+    int data_size;
+    if ( argc > 1 ) {
+        data_size = atoi(argv[1]);
+    } else {
+        data_size = 9;
+
+    }
+
     Mailbox.data_size = data_size;
     for (i=0; i<data_size; ++i) {
         Mailbox.source[i] = 2*i;

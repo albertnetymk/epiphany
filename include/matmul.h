@@ -45,7 +45,7 @@ typedef struct {
     uint    cycles[_Ncores];
     uint    clocks[_Ncores];
     uint debug_index[_Ncores];
-    int debug_line[_Ncores][10];
+    int debug_line[_Ncores][20];
 } mbox_t;
 
 
@@ -53,8 +53,8 @@ typedef struct {
     // TODO why have to even?
     int data_size;
     int players;
-    int source[10];
-    int sink[10];
+    int source[12];
+    int sink[12];
     int debug[10];
     mbox_t core;
 } shared_buf_t;

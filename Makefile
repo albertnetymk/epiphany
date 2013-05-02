@@ -26,7 +26,7 @@ default: compile
 ESDK_NEW := /home/albert/tmp
 ESDK := /home/albert/tmp
 else
-default: load
+default: load-run
 ESDK_NEW := /opt/adapteva/esdk.3.12.03.29
 ESDK := /opt/adapteva/esdk
 endif
@@ -36,28 +36,29 @@ all :
 COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 	# -I${ESDK}/tools/host/armv7l/include
 
+host_program = host/host.elf
+
 ifneq (,$(findstring host,$(MAKECMDGOALS)))
   CC = gcc
   CPPFLAGS = -D__HOST__ -I$(ROOT_DIR)/include \
 	-I${ESDK_NEW}/tools/host/x86_64/include
   CFLAGS = -O0 -g3 -Wall -c -fmessage-length=0
-  program = host/host.elf
   sources = $(addprefix host/, $(notdir $(wildcard $(ROOT_DIR)/host/*.c)))
   objects = $(subst .c,.o,$(sources))
   dependencies += $(subst .o,.d,$(objects))
 
 vpath %.c $(ROOT_DIR)
 $(shell mkdir -p host)
-host-run : $(program)
+host-run : $(host_program)
 	./$^
 
 .PHONY: host-compile
 host-compile: $(objects)
 
 .PHONY: host-build
-host-build : $(program)
+host-build : $(host_program)
 
-$(program) : $(objects)
+$(host_program) : $(objects)
 	# $(CC) $^ -le-hal -le-loader -L${ESDK}/tools/host/armv7l/lib -o $@
 	$(CC) $^ -le_host -L${ESDK}/tools/host/x86_64/lib -o $@
 
@@ -153,10 +154,43 @@ static-test:
 
 .PHONY: acceptance-test
 acceptance-test:
-	$(call switch-branch)
+	-git branch -D $@
+	git checkout -b $@
+	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	echo 'Destination buffer'
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. host-build
+	./$(host_program) 9
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. host-build
+	./$(host_program) 10
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. host-build
+	./$(host_program) 11
+
+	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	echo 'Both buffer'
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. host-build
+	./$(host_program) 9
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. host-build
+	./$(host_program) 10
+	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load
+	$(MAKE) $(MFLAGS) -C .. host-build
+	./$(host_program) 11
+
+	# cat /dev/null > $(ROOT_DIR)/include/flags.h
+	# echo 'Double buffer'
+	# $(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER
+	git reset --hard
 
 .PHONY: load
 load : main.srec
+	e-loader -run-target $< 1>/dev/null 2>/dev/null
+
+.PHONY: load-run
+load-run : main.srec
 	e-loader -run-target $< 1>/dev/null 2>/dev/null
 	@$(MAKE) $(MFLAGS) -f ../Makefile ROOT_DIR=.. host-run
 endif
