@@ -17,7 +17,6 @@ typedef volatile struct port_in_struct {
 typedef volatile struct port_out_struct {
     port_in *(*dests)[];
     uchar dest_index;
-    uchar index;
 } port_out;
 
 #else // USE_DESTINATION_BUFFER
@@ -35,7 +34,7 @@ typedef volatile struct dma_cfg_struct {
 } dma_cfg;
 
 typedef volatile struct fifo_struct {
-    bool ready_to_dma;
+    uchar total;
     int array[10];
     uchar size;
     volatile struct fifo_struct *twin;
@@ -59,14 +58,14 @@ typedef struct port_out_struct {
 
 #ifdef USE_DOUBLE_BUFFER
 typedef struct port_in_struct {
-    volatile uchar index;
+    uchar index;
     uchar ping_pang;
     fifo *buffers[2];
     bool end;
 } port_in;
 
 typedef struct port_out_struct {
-    volatile uchar index;
+    uchar index;
     uchar ping_pang;
     fifo *buffers[2];
     port_in *(*dests)[];
