@@ -207,9 +207,10 @@ void internal_epiphany_write(port_out *p, int v)
         p->buffer->total = 0;
     }
     p->buffer->array[p->index++] = v;
+    p->buffer->total++;
+
     if (p->index == p->buffer->size) {
         p->index = 0;
-        p->buffer->total = p->buffer->size;
         p->buffer->dma->status = DMA_PENDING;
 
         p->buffer->twin = (*p->dests)[0]->buffer;
@@ -365,10 +366,12 @@ void internal_epiphany_write(port_out *p, int v)
             }
         }
     }
+
     p->buffers[p->ping_pang]->array[p->index++] = v;
+    p->buffers[p->ping_pang]->total++;
+
     if (p->index == p->buffers[p->ping_pang]->size) {
         p->index = 0;
-        p->buffers[p->ping_pang]->total = p->buffers[p->ping_pang]->size;
         p->buffers[p->ping_pang]->dma->status = DMA_PENDING;
         p->current_dest_index[p->ping_pang] = 0;
         p->buffers[p->ping_pang]->twin = (*p->dests)[0]->buffers[p->ping_pang];
