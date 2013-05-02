@@ -17,7 +17,7 @@ void port_in_init(port_in *p)
     p->end = false;
 }
 
-void epiphany_write(port_out *p, int v)
+void internal_epiphany_write(port_out *p, int v)
 {
     int i;
     port_in *dest;
@@ -29,11 +29,6 @@ void epiphany_write(port_out *p, int v)
             timer_pause();
         }
         dest->array[dest->write_index] = v;
-        // if (i==0) {
-        //     uint index = Mailbox.core.debug_index[core_num()];
-        //     Mailbox.core.debug_line[core_num()][index] = v;
-        //     Mailbox.core.debug_index[core_num()]++;
-        // }
         if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
             dest->carrier = true;
             dest->write_index = 0;
@@ -199,7 +194,7 @@ void port_in_init(port_in *p)
     p->index = 0;
 }
 
-void epiphany_write(port_out *p, int v)
+void internal_epiphany_write(port_out *p, int v)
 {
     if (p->index == 0 && p->buffer->total == p->buffer->size) {
         do_flush(p->buffer, sizeof(p->buffer->array));
@@ -349,7 +344,7 @@ void port_in_init(port_in *p)
     p->index = p->ping_pang = 0;
 }
 
-void epiphany_write(port_out *p, int v)
+void internal_epiphany_write(port_out *p, int v)
 {
     if (p->index == 0 &&
             p->buffers[p->ping_pang]->total
@@ -485,10 +480,18 @@ int read(port_in *p)
 
 void write(port_out *p, int v)
 {
-    epiphany_write(p, v);
+    internal_epiphany_write(p, v);
 }
 
 int peek(port_in *p)
 {
     return epiphany_peek(p);
+}
+
+void epiphany_write(port_out *p, int v)
+{
+    internal_epiphany_write(p, v);
+    uint index = Mailbox.core.debug_index[core_num()];
+    Mailbox.core.debug_line[core_num()][index] = v;
+    Mailbox.core.debug_index[core_num()]++;
 }
