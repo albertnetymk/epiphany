@@ -184,7 +184,7 @@ void port_out_init(port_out *p)
 
     p->buffer->dma->status = DMA_IDLE;
 
-    p->buffer->ready_to_dma = false;
+    p->buffer->total = 0;
     p->buffer->size = sizeof(p->buffer->array)/sizeof(int);
 
     p->index = 0;
@@ -192,7 +192,7 @@ void port_out_init(port_out *p)
 
 void port_in_init(port_in *p)
 {
-    p->buffer->ready_to_dma = true;
+    p->buffer->total = 0;
     p->buffer->size = sizeof(p->buffer->array)/sizeof(int);
 
     p->end = false;
@@ -201,7 +201,7 @@ void port_in_init(port_in *p)
 
 void epiphany_write(port_out *p, int v)
 {
-    if (p->index == 0 && p->buffer->ready_to_dma) {
+    if (p->index == 0 && p->buffer->total == p->buffer->size) {
         do_flush(p->buffer, sizeof(p->buffer->array));
         int i;
         for (i = 1; i < p->dest_index; ++i) {
@@ -209,12 +209,12 @@ void epiphany_write(port_out *p, int v)
             p->buffer->dma->status = DMA_PENDING;
             do_flush(p->buffer, sizeof(p->buffer->array));
         }
-        p->buffer->ready_to_dma = false;
+        p->buffer->total = 0;
     }
     p->buffer->array[p->index++] = v;
     if (p->index == p->buffer->size) {
         p->index = 0;
-        p->buffer->ready_to_dma = true;
+        p->buffer->total = p->buffer->size;
         p->buffer->dma->status = DMA_PENDING;
 
         p->buffer->twin = (*p->dests)[0]->buffer;
@@ -231,9 +231,8 @@ int epiphany_read(port_in *p)
         wait_till_ready_to_read(p->buffer);
     }
     int result = p->buffer->array[p->index++];
-    if (p->index == p->buffer->size) {
-        p->index = 0;
-        p->buffer->ready_to_dma = true;
+    if (p->index == p->buffer->total) {
+        p->index = p->buffer->total = 0;
     }
     return result;
 }
@@ -251,13 +250,7 @@ int epiphany_peek(port_in *p)
 
 void flush(port_out *p)
 {
-    int size = 0;
-    if (p->buffer->ready_to_dma) {
-        size = sizeof(p->buffer->array);
-    } else if (p->index > 0) {
-        size = p->index*sizeof(int);
-        p->buffer->ready_to_dma = true;
-    }
+    int size = p->buffer->total * sizeof(int);
     if (size > 0) {
         int i;
         do_flush(p->buffer, size);
@@ -266,20 +259,14 @@ void flush(port_out *p)
             p->buffer->dma->status = DMA_PENDING;
             do_flush(p->buffer, size);
         }
-        p->buffer->ready_to_dma = false;
+        p->buffer->total = 0;
         p->index = 0;
     }
 }
 
 void end_port(port_out *p)
 {
-    int size = 0;
-    if (p->buffer->ready_to_dma) {
-        size = sizeof(p->buffer->array);
-    } else if (p->index > 0) {
-        size = p->index*sizeof(int);
-        p->buffer->ready_to_dma = true;
-    }
+    int size = p->buffer->total * sizeof(int);
     if (size > 0) {
         int i;
         do_flush(p->buffer, size);
@@ -290,17 +277,13 @@ void end_port(port_out *p)
             do_flush(p->buffer, size);
             (*p->dests)[i]->end = true;
         }
-        p->buffer->ready_to_dma = false;
-        p->index = 0;
+        p->index = p->buffer->total = 0;
     }
 }
 
 bool has_input(port_in *p, uint n)
 {
-    if (p->buffer->ready_to_dma) {
-        return false;
-    }
-    return p->index + 1 >= n;
+    return p->buffer->total - p->index  >= n;
 }
 
 void connect(port_out *out, port_in *in)
