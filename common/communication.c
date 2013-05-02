@@ -135,10 +135,10 @@ static void wait_till_dma_over(fifo *b)
 static void do_flush(fifo *b, uint size)
 {
     timer_resume();
-    while(! b->ready_to_dma) ;
+    while(! b->total > 0) ;
     timer_pause();
     timer_resume();
-    while(! b->twin->ready_to_dma) ;
+    while(! b->twin->total == 0) ;
     timer_pause();
     switch (b->dma->status) {
         case DMA_PENDING:
@@ -151,7 +151,7 @@ static void do_flush(fifo *b, uint size)
             wait_till_dma_over(b);
             b->dma->status = DMA_IDLE;
         case DMA_IDLE:
-            b->twin->ready_to_dma = false;
+            b->twin->total = size/sizeof(int);
             break;
     }
 }
@@ -159,7 +159,7 @@ static void do_flush(fifo *b, uint size)
 static void try_flush(fifo *b)
 {
     if (b->dma->status == DMA_PENDING) {
-        if (b->ready_to_dma && b->twin->ready_to_dma) {
+        if (b->total > 0 && b->twin->total == 0) {
             if (try_dma(b->dma)) {
                 dma_copy(b->dma->id, b->twin->array, b->array,
                         sizeof(b->array), E_ALIGN_BYTE);
@@ -173,7 +173,7 @@ static void try_flush(fifo *b)
 static void wait_till_ready_to_read(volatile fifo *b)
 {
     timer_resume();
-    while(b->ready_to_dma) ;
+    while(b->total > 0) ;
     timer_pause();
 }
 
