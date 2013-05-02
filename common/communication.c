@@ -265,6 +265,10 @@ void end_port(port_out *p)
     int size = p->buffer->total * sizeof(int);
     if (size > 0) {
         int i;
+        if ( p->buffer->total != p->buffer->size ) {
+            p->buffer->twin = (*p->dests)[0]->buffer;
+            p->buffer->dma->status = DMA_PENDING;
+        }
         do_flush(p->buffer, size);
         (*p->dests)[0]->end = true;
         for (i=1; i<p->dest_index; ++i) {
@@ -501,8 +505,8 @@ void epiphany_write(port_out *p, int v)
 
 int epiphany_read(port_in *p)
 {
-    uint index = Mailbox.core.debug_index[core_num()];
-    Mailbox.core.debug_line[core_num()][index] = -1;
-    Mailbox.core.debug_index[core_num()]++;
+    // uint index = Mailbox.core.debug_index[core_num()];
+    // Mailbox.core.debug_line[core_num()][index] = -1;
+    // Mailbox.core.debug_index[core_num()]++;
     return internal_epiphany_read(p);
 }

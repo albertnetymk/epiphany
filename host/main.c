@@ -109,13 +109,13 @@ int main(void) {
     //     printf("pending/clock for %d is %d/%d\n", i,
     //             Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
     // }
-    for (i = 2; i < end; ++i) {
-        for (j = 0; j < data_size; j += 1) {
-            addr = DRAM_BASE + offsetof(shared_buf_t, core.debug_line[i][j]);
-            e_read(addr, (void *) (&Mailbox.core.debug_line[i][j]), sizeof(int));
-            printf("core %d, %d\n", i, Mailbox.core.debug_line[i][j]);
-        }
-    }
+    // for (i = 2; i < end; ++i) {
+    //     for (j = 0; j < data_size; j += 1) {
+    //         addr = DRAM_BASE + offsetof(shared_buf_t, core.debug_line[i][j]);
+    //         e_read(addr, (void *) (&Mailbox.core.debug_line[i][j]), sizeof(int));
+    //         printf("core %d, %d\n", i, Mailbox.core.debug_line[i][j]);
+    //     }
+    // }
 
     // int should[10] = {};
     // for (i = 0; i < 10; ++i) {
