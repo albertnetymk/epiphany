@@ -92,6 +92,7 @@ define make_library
   objects += $(call source_to_object,$2)
   $1 : $(call source_to_object,$2) common/common.a
 	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
+	$(ROOT_DIR)/checksize.sh $$@
 endef
 $(foreach m, $(modules), \
 	$(eval $(call make_library, $(notdir $(m))/main.elf, \
