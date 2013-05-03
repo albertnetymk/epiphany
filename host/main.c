@@ -139,8 +139,10 @@ int main(int argc, char **argv) {
     // }
 
     for (j = 0; j < data_size; j += 1) {
-        addr = DRAM_BASE + offsetof(shared_buf_t, core.debug_line[i][j]);
-        e_read(addr, (void *) (&Mailbox.core.debug_line[i][j]), sizeof(int));
+        for (i = 2; i < 6; ++i) {
+            addr = DRAM_BASE + offsetof(shared_buf_t, core.debug_line[i][j]);
+            e_read(addr, (void *) (&Mailbox.core.debug_line[i][j]), sizeof(int));
+        }
         printf("line %d,\
                 core %d, %d\t, \
                 core %d, %d\t, \
@@ -151,7 +153,7 @@ int main(int argc, char **argv) {
                 3, Mailbox.core.debug_line[3][j],
                 4, Mailbox.core.debug_line[4][j],
                 5, Mailbox.core.debug_line[5][j]
-                );
+              );
     }
 
     // int should[10] = {};
