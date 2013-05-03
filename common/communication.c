@@ -129,15 +129,11 @@ static void wait_till_dma_over(fifo *b)
 
 static void do_flush(fifo *b, uint size)
 {
-    timer_resume();
-    while(! b->total > 0) ;
-    timer_pause();
-    timer_resume();
-    while(! b->twin->total == 0) ;
-    timer_pause();
     switch (b->dma->status) {
         case DMA_PENDING:
             timer_resume();
+            while(! b->total > 0) ;
+            while(! b->twin->total == 0) ;
             while(! try_dma(b->dma)) ;
             timer_pause();
             dma_copy(b->dma->id, b->twin->array, b->array,
@@ -145,9 +141,9 @@ static void do_flush(fifo *b, uint size)
         case DMA_ING:
             wait_till_dma_over(b);
             b->dma->status = DMA_IDLE;
-        case DMA_IDLE:
             b->twin->total = size/sizeof(int);
-            break;
+        case DMA_IDLE:
+            ;
     }
 }
 
@@ -162,6 +158,7 @@ static void try_flush(fifo *b)
         }
     } else if (b->dma->status == DMA_ING && ! e_dma_busy(b->dma->id)) {
         b->dma->status = DMA_IDLE;
+        b->twin->total = sizeof(b->array)/sizeof(int);
     }
 }
 
