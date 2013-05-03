@@ -319,6 +319,20 @@ static void do_distribute(port_out *p, uchar current, uint size)
     p->current_dest_index[current] = 0;
 }
 
+static void try_distribute(port_out *p, uchar current)
+{
+    if (p->buffers[current]->dma->status != DMA_IDLE) {
+        try_flush(p->buffers[current]);
+    } else {
+        if (++p->current_dest_index[current] < p->dest_index) {
+            p->buffers[current]->twin =
+                (*p->dests)[p->current_dest_index[current]]->buffers[current];
+            p->buffers[current]->dma->status = DMA_PENDING;
+            try_flush(p->buffers[current]);
+        }
+    }
+}
+
 void port_out_init(port_out *p)
 {
     p->dest_index = 0;
@@ -354,18 +368,9 @@ void internal_epiphany_write(port_out *p, int v)
         do_distribute(p, p->ping_pang,
                 sizeof(p->buffers[p->ping_pang]->array));
     }
-    {
-        uchar other = 1-p->ping_pang;
-        if (p->buffers[other]->total == p->buffers[other]->size) {
-            if (p->buffers[other]->dma->status != DMA_IDLE) {
-                try_flush(p->buffers[other]);
-            } else if (p->current_dest_index[other] < p->dest_index) {
-                p->buffers[other]->twin =
-                  (*p->dests)[++p->current_dest_index[other]]->buffers[other];
-                p->buffers[other]->dma->status = DMA_PENDING;
-                try_flush(p->buffers[other]);
-            }
-        }
+
+    if (p->buffers[1-p->ping_pang]->total == p->buffers[1-p->ping_pang]->size) {
+        try_distribute(p, 1-p->ping_pang);
     }
 
     p->buffers[p->ping_pang]->array[p->index++] = v;
@@ -470,7 +475,7 @@ bool has_input(port_in *p, uint n)
     int i;
     for (i = 0; i < sizeof(p->buffers)/sizeof(fifo *); ++i) {
         total += p->buffers[i]->total;
-        if (total >= n) {
+        if (total - p->index >= n) {
             return true;
         }
     }
