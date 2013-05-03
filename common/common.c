@@ -80,6 +80,7 @@ inline void core_main(void *a, init_t *init)
     api->end(a);
     Mailbox.core.cycles[core_num()] = get_time();
     Mailbox.core.clocks[core_num()] = get_clock();
+    Mailbox.core.go[core_num()] = 4;
     while(1) ;
 }
 
