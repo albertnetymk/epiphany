@@ -5,4 +5,5 @@ if (( $s > 0xffff )); then
     false
 else
     # echo "$1" is ok, with size "$s"
+    true
 fi
