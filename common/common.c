@@ -57,8 +57,9 @@ void core_source_main(actor_source *a, source_init_t *init)
     for (i = 0; i < Mailbox.data_size; ++i) {
         epiphany_write(a->out, Mailbox.source[i]);
     }
-    api->end(a);
     Mailbox.core.go[0] = 4;
+    api->end(a);
+    Mailbox.core.go[0] = 5;
     while(1) ;
 }
 
@@ -78,10 +79,18 @@ inline void core_main(void *a, init_t *init)
     while(api->not_finished(a)) {
         api->run(a);
     }
+    Mailbox.core.go[core_num()] = 4;
     api->end(a);
     Mailbox.core.cycles[core_num()] = get_time();
     Mailbox.core.clocks[core_num()] = get_clock();
-    Mailbox.core.go[core_num()] = 4;
+    Mailbox.core.go[core_num()] = 5;
+    if (core_num() == 5) {
+        Mailbox.core.debug_line[5][0] = -1;
+        Mailbox.core.debug_line[5][1] = all.instance_double1->in->buffers[0]->total;
+        Mailbox.core.debug_line[5][2] = all.instance_double1->in->buffers[1]->total;
+        Mailbox.core.debug_line[5][3] = all.instance_double2->in->buffers[0]->total;
+        Mailbox.core.debug_line[5][4] = all.instance_double2->in->buffers[1]->total;
+    }
     while(1) ;
 }
 
