@@ -113,6 +113,11 @@ int main(int argc, char **argv) {
             }
             break;
         } else {
+            for (i = 0; i < 1; ++i) {
+                addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
+                e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
+                printf("core %d is in stage %d\n", i, Mailbox.core.go[i]);
+            }
             for (i = 2; i < end; ++i) {
                 addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
                 e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));

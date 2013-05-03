@@ -58,6 +58,7 @@ void core_source_main(actor_source *a, source_init_t *init)
         epiphany_write(a->out, Mailbox.source[i]);
     }
     api->end(a);
+    Mailbox.core.go[0] = 4;
     while(1) ;
 }
 
