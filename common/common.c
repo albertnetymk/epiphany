@@ -100,6 +100,7 @@ inline void core_sink_main(actor_sink *a, sink_init_t *init)
         value = epiphany_read(a->in);
         Mailbox.sink[i] = value;
     }
+    Mailbox.core.go[1] = 4;
     while(1) ;
 }
 

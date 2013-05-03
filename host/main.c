@@ -95,16 +95,23 @@ int main(int argc, char **argv) {
     // }
 
     char msg[50];
-    for (i = 0; i < data_size; i += 1) {
-        addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
-        e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
-        addr = DRAM_BASE + offsetof(shared_buf_t, debug[i]);
-        e_read(addr, (void *) (&Mailbox.debug[i]), sizeof(int));
-        // printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
-        //         i, Mailbox.debug[i]);
-        sprintf(msg, "sink[%d] should be %d, but %d is found", i,
-                4*Mailbox.source[i], Mailbox.sink[i]);
-        ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
+    addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
+    e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
+    if (Mailbox.core.go[1] == 4) {
+        for (i = 0; i < data_size; i += 1) {
+            addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
+            e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
+
+            addr = DRAM_BASE + offsetof(shared_buf_t, debug[i]);
+            e_read(addr, (void *) (&Mailbox.debug[i]), sizeof(int));
+            // printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
+            //         i, Mailbox.debug[i]);
+            sprintf(msg, "sink[%d] should be %d, but %d is found", i,
+                    4*Mailbox.source[i], Mailbox.sink[i]);
+            ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
+        }
+    } else {
+        puts("Board hasn't finished yet.\n");
     }
 
     // for (i = 0; i < end; ++i) {
