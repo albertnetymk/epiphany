@@ -303,7 +303,10 @@ static void do_distribute_end(port_out *p, uchar current, uint size)
         (*p->dests)[current_dest]->end = true;
     }
     p->buffers[current]->total = 0;
-    p->current_dest_index[current] = 0;
+    // I believe it's not necessary to initialize dest index in here, for we
+    // do this before any distribution begins, namely when one array is full
+    // or when end_port is called.
+    // p->current_dest_index[current] = 0;
 }
 static void do_distribute(port_out *p, uchar current, uint size)
 {
@@ -316,7 +319,8 @@ static void do_distribute(port_out *p, uchar current, uint size)
         do_flush(p->buffers[current], size);
     }
     p->buffers[current]->total = 0;
-    p->current_dest_index[current] = 0;
+    // The same reason as before.
+    // p->current_dest_index[current] = 0;
 }
 
 static void try_distribute(port_out *p, uchar current)
@@ -329,6 +333,8 @@ static void try_distribute(port_out *p, uchar current)
                 (*p->dests)[p->current_dest_index[current]]->buffers[current];
             p->buffers[current]->dma->status = DMA_PENDING;
             try_flush(p->buffers[current]);
+        } else {
+            p->buffers[current]->total = 0;
         }
     }
 }
@@ -452,11 +458,13 @@ void end_port(port_out *p)
         }
         if (p->buffers[p->ping_pang]->total > 0) {
             current = p->ping_pang;
-            if ( p->buffers[current]->total != p->buffers[current]->size ) {
+            // It seems this check is redundant, for if current is full, we
+            // should goes "double buffer full" branch.
+            // if ( p->buffers[current]->total != p->buffers[current]->size ) {
                 p->buffers[current]->dma->status = DMA_PENDING;
                 p->current_dest_index[current] = 0;
                 p->buffers[current]->twin = (*p->dests)[0]->buffers[current];
-            }
+            // }
             do_distribute_end(p, current,
                     p->buffers[current]->total*sizeof(int));
             p->index = 0;
