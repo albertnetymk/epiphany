@@ -144,9 +144,9 @@ int main(int argc, char **argv) {
             e_read(addr, (void *) (&Mailbox.core.debug_line[i][j]), sizeof(int));
         }
         printf("line %d,\
-                core %d, %d\t, \
-                core %d, %d\t, \
-                core %d, %d\t, \
+                core %d, %d,\t \
+                core %d, %d,\t \
+                core %d, %d,\t \
                 core %d, %d\n",
                 j,
                 2, Mailbox.core.debug_line[2][j],
