@@ -525,6 +525,7 @@ void epiphany_write(port_out *p, int v)
 int epiphany_read(port_in *p)
 {
     // int result = internal_epiphany_read(p)
+    print_core(-1);
     // uint index = Mailbox.core.debug_index[core_num()];
     // Mailbox.core.debug_line[core_num()][index] = result;
     // Mailbox.core.debug_index[core_num()]++;

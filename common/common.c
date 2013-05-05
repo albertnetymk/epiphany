@@ -14,6 +14,25 @@ inline unsigned core_num()
     return row * E_COLS_IN_CHIP + col;
 }
 
+void print_core_index(int i) {
+    Mailbox.debug_index[core_num()] = i;
+}
+
+void print_core(int v) {
+    unsigned char num = core_num();
+    uint index = Mailbox.debug_index[num];
+    if (index < 20) {
+        Mailbox.debug[num*20 + index] = v;
+        Mailbox.debug_index[num]++;
+    }
+}
+
+void print_core_at_index(int v, int i) {
+    unsigned char num = core_num();
+    Mailbox.debug[num*20 + i] = v;
+}
+
+
 inline void *address_from_coreid(e_coreid_t coreid, volatile void *ptr)
 {
     return e_address_from_coreid(coreid, (void *)ptr);
@@ -66,7 +85,7 @@ void core_source_main(actor_source *a, source_init_t *init)
 inline void core_main(void *a, init_t *init)
 {
     Mailbox.core.go[core_num()] = 0;
-    Mailbox.core.debug_index[core_num()] = 0;
+    print_core_index(0);
 
     stage(1);
     api_t *api = init(a);
@@ -85,11 +104,11 @@ inline void core_main(void *a, init_t *init)
     Mailbox.core.clocks[core_num()] = get_clock();
     Mailbox.core.go[core_num()] = 5;
     if (core_num() == 5) {
-        Mailbox.core.debug_line[5][0] = -1;
-        Mailbox.core.debug_line[5][1] = all.instance_double1->in->buffers[0]->total;
-        Mailbox.core.debug_line[5][2] = all.instance_double1->in->buffers[1]->total;
-        Mailbox.core.debug_line[5][3] = all.instance_double2->in->buffers[0]->total;
-        Mailbox.core.debug_line[5][4] = all.instance_double2->in->buffers[1]->total;
+        print_core_at_index(-1, 0);
+        print_core_at_index(all.instance_double1->in->buffers[0]->total, 1);
+        print_core_at_index(all.instance_double1->in->buffers[1]->total, 2);
+        print_core_at_index(all.instance_double2->in->buffers[0]->total, 3);
+        print_core_at_index(all.instance_double2->in->buffers[1]->total, 4);
     }
     while(1) ;
 }

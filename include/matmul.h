@@ -44,8 +44,6 @@ typedef struct {
     int    go[_Ncores];    // Call for matmul function
     uint    cycles[_Ncores];
     uint    clocks[_Ncores];
-    uint debug_index[_Ncores];
-    int debug_line[_Ncores][20];
 } mbox_t;
 
 
@@ -55,7 +53,8 @@ typedef struct {
     int players;
     int source[20];
     int sink[20];
-    int debug[10];
+    int debug[200];
+    int debug_index[10];
     mbox_t core;
 } shared_buf_t;
 
