@@ -495,7 +495,8 @@ bool has_input(port_in *p, uint n)
 
 bool might_has_input(port_in *p)
 {
-    return has_input(p, 1) || !p->end;
+    // return has_input(p, 1) || !p->end;
+    return !p->end || has_input(p, 1) ;
 }
 
 int read(port_in *p)
