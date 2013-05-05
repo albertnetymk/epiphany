@@ -53,7 +53,12 @@ typedef struct {
     int players;
     int source[20];
     int sink[20];
-    int debug[200];
+    int debug_one[20];
+    int debug_two[20];
+    int debug_three[20];
+    int debug_four[20];
+    int debug_five[20];
+    // int debug[200];
     int debug_index[10];
     mbox_t core;
 } shared_buf_t;
