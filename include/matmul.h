@@ -53,6 +53,7 @@ typedef struct {
     int players;
     int source[20];
     int sink[20];
+    int debug_zero[20];
     int debug_one[20];
     int debug_two[20];
     int debug_three[20];

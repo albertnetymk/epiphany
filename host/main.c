@@ -136,8 +136,9 @@ int main(int argc, char **argv) {
             addr = DRAM_BASE + offsetof(shared_buf_t, debug_five);
             e_read(addr, (void *) Mailbox.debug_five, sizeof(int)*20);
             for (j = 0; j < 10; j += 1) {
-                printf("line %d, core %d: %d,\tcore %d: %d,\t core %d, %d,\t core %d, %d,\t core %d, %d\n",
+                printf("line %d, core %d: %d,\tcore %d: %d,\tcore %d: %d,\t core %d, %d,\t core %d, %d,\t core %d, %d\n",
                         j,
+                        0, Mailbox.debug_zero[j],
                         1, Mailbox.debug_one[j],
                         2, Mailbox.debug_two[j],
                         3, Mailbox.debug_three[j],
