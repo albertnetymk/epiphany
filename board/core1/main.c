@@ -12,6 +12,9 @@ fifo buffer;
 #ifdef USE_DOUBLE_BUFFER
 fifo b0, b1;
 #endif
+#ifdef USE_MULTIPLE_BUFFER
+fifo buffers[BUFFER_NUMBER];
+#endif
 
 static inline void fetch_data(void)
 {
@@ -37,6 +40,12 @@ int main(void) {
 #ifdef USE_DOUBLE_BUFFER
     in.buffers[0] = address_from_coreid(mycoreid, &b0);
     in.buffers[1] = address_from_coreid(mycoreid, &b1);
+#endif
+#ifdef USE_MULTIPLE_BUFFER
+    int i;
+    for (i = 0; i < BUFFER_NUMBER; ++i) {
+        in.buffers[i] = address_from_coreid(mycoreid, &buffers[i]);
+    }
 #endif
     // this one to local?
     instance.in = address_from_coreid(mycoreid, &in);

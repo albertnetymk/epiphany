@@ -74,6 +74,25 @@ typedef struct port_out_struct {
 } port_out;
 #endif // USE_DOUBLE_BUFFER
 
+#ifdef USE_MULTIPLE_BUFFER
+
+typedef struct port_in_struct {
+    uchar index;
+    uchar buffer_index;
+    fifo *buffers[BUFFER_NUMBER];
+    bool end;
+} port_in;
+
+typedef struct port_out_struct {
+    uchar index;
+    uchar buffer_index;
+    fifo *buffers[BUFFER_NUMBER];
+    port_in *(*dests)[];
+    uchar dest_index;
+    uchar current_dest_index[BUFFER_NUMBER];
+} port_out;
+#endif // USE_MULTIPLE_BUFFER
+
 #endif // USE_DESTINATION_BUFFER
 
 void port_out_init(port_out *p);

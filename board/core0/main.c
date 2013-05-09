@@ -16,6 +16,10 @@ dma_cfg dma;
 fifo b0, b1;
 dma_cfg dma0, dma1;
 #endif
+#ifdef USE_MULTIPLE_BUFFER
+fifo buffers[BUFFER_NUMBER];
+dma_cfg dma[BUFFER_NUMBER];
+#endif
 
 static void connect_network()
 {
@@ -56,6 +60,13 @@ int main(void) {
     b1.dma = &dma1;
     out.buffers[0] = address_from_coreid(mycoreid, &b0);
     out.buffers[1] = address_from_coreid(mycoreid, &b1);
+#endif
+#ifdef USE_MULTIPLE_BUFFER
+    int i;
+    for (i = 0; i < BUFFER_NUMBER; ++i) {
+        buffers[i].dma = &dma[i];
+        out.buffers[i] = address_from_coreid(mycoreid, &buffers[i]);
+    }
 #endif
     // this one to local?
     instance.out = address_from_coreid(mycoreid, &out);

@@ -21,6 +21,12 @@ fifo in2_b0, in2_b1;
 fifo out_b0, out_b1;
 dma_cfg dma0, dma1;
 #endif
+#ifdef USE_MULTIPLE_BUFFER
+fifo in1_buffers[BUFFER_NUMBER];
+fifo in2_buffers[BUFFER_NUMBER];
+fifo out_buffers[BUFFER_NUMBER];
+dma_cfg dma[BUFFER_NUMBER];
+#endif
 
 static api_t api;
 static inline api_t *init(void *a)
@@ -52,6 +58,15 @@ int main(void) {
     in1.buffers[1] = address_from_coreid(mycoreid, &in1_b1);
     in2.buffers[0] = address_from_coreid(mycoreid, &in2_b0);
     in2.buffers[1] = address_from_coreid(mycoreid, &in2_b1);
+#endif
+#ifdef USE_MULTIPLE_BUFFER
+    int i;
+    for (i = 0; i < BUFFER_NUMBER; ++i) {
+        out_buffers[i].dma = &dma[i];
+        out.buffers[i] = address_from_coreid(mycoreid, &out_buffers[i]);
+        in1.buffers[i] = address_from_coreid(mycoreid, &in1_buffers[i]);
+        in2.buffers[i] = address_from_coreid(mycoreid, &in2_buffers[i]);
+    }
 #endif
     instance_add.in1 = address_from_coreid(mycoreid, &in1);
     instance_add.in2 = address_from_coreid(mycoreid, &in2);

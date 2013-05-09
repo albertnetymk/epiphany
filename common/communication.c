@@ -289,7 +289,6 @@ void connect(port_out *out, port_in *in)
 }
 #endif // USE_BOTH_BUFFER
 
-#ifdef USE_DOUBLE_BUFFER
 static void do_distribute_end(port_out *p, uchar current, uint size)
 {
     do_flush(p->buffers[current], size);
@@ -308,6 +307,7 @@ static void do_distribute_end(port_out *p, uchar current, uint size)
     // or when end_port is called.
     // p->current_dest_index[current] = 0;
 }
+
 static void do_distribute(port_out *p, uchar current, uint size)
 {
     do_flush(p->buffers[current], size);
@@ -339,6 +339,7 @@ static void try_distribute(port_out *p, uchar current)
     }
 }
 
+#ifdef USE_DOUBLE_BUFFER
 void port_out_init(port_out *p)
 {
     p->dest_index = 0;
@@ -491,25 +492,166 @@ bool has_input(port_in *p, uint n)
 }
 #endif // USE_DOUBLE_BUFFER
 
+#ifdef USE_MULTIPLE_BUFFER
+void port_out_init(port_out *p)
+{
+    p->dest_index = 0;
+    int i;
+    fifo *b;
+    for(i=0; i<sizeof(p->buffers)/sizeof(fifo *); ++i) {
+        b = p->buffers[i];
+        b->dma->status = DMA_IDLE;
+        b->total = 0;
+        b->size = sizeof(b->array)/sizeof(int);
+    }
+    p->index = p->buffer_index = 0;
+}
+
+void port_in_init(port_in *p)
+{
+    int i;
+    fifo *b;
+    for(i=0; i<sizeof(p->buffers)/sizeof(fifo *); ++i) {
+        b = p->buffers[i];
+        b->total = 0;
+        b->size = sizeof(b->array)/sizeof(int);
+    }
+    p->end = false;
+    p->index = p->buffer_index = 0;
+}
+
+void internal_epiphany_write(port_out *p, int v)
+{
+    if (p->index == 0 &&
+            p->buffers[p->buffer_index]->total
+                == p->buffers[p->buffer_index]->size) {
+        do_distribute(p, p->buffer_index,
+                sizeof(p->buffers[p->buffer_index]->array));
+    }
+
+    {
+        int i;
+        for (i = 0; i < BUFFER_NUMBER; ++i) {
+            if (p->buffers[i]->total == p->buffers[i]->size) {
+                try_distribute(p, i);
+            }
+        }
+    }
+
+    p->buffers[p->buffer_index]->array[p->index++] = v;
+    p->buffers[p->buffer_index]->total++;
+
+    if (p->index == p->buffers[p->buffer_index]->size) {
+        p->index = 0;
+        p->buffers[p->buffer_index]->dma->status = DMA_PENDING;
+        p->current_dest_index[p->buffer_index] = 0;
+        p->buffers[p->buffer_index]->twin = (*p->dests)[0]->buffers[p->buffer_index];
+        try_distribute(p, 0);
+        p->buffer_index++;
+        if (p->buffer_index == BUFFER_NUMBER) {
+            p->buffer_index = 0;
+        }
+    }
+}
+
+int internal_epiphany_read(port_in *p)
+{
+    if (p->index == 0) {
+        wait_till_ready_to_read(p->buffers[p->buffer_index]);
+    }
+    int result = p->buffers[p->buffer_index]->array[p->index++];
+    if (p->index == p->buffers[p->buffer_index]->total) {
+        p->index = p->buffers[p->buffer_index]->total = 0;
+        p->buffer_index++;
+        if (p->buffer_index == BUFFER_NUMBER) {
+            p->buffer_index = 0;
+        }
+    }
+    return result;
+}
+
+int epiphany_peek(port_in *p)
+{
+    if (p->index == 0) {
+        wait_till_ready_to_read(p->buffers[p->buffer_index]);
+    }
+    return p->buffers[p->buffer_index]->array[p->index];
+}
+
+void end_port(port_out *p)
+{
+    int i;
+    if (p->buffers[p->buffer_index]->total == p->buffers[p->buffer_index]->size) {
+        // all buffer full
+        for (i = p->buffer_index; i < BUFFER_NUMBER; ++i) {
+            do_distribute_end(p, i, sizeof(p->buffers[i]->array));
+        }
+        for (i = 0; i < p->buffer_index; ++i) {
+            do_distribute_end(p, i, sizeof(p->buffers[i]->array));
+        }
+    } else {
+        // check from buffers below current one
+        for (i = p->buffer_index+1; i < BUFFER_NUMBER; ++i) {
+            if (p->buffers[i]->total == p->buffers[i]->size) {
+                do_distribute_end(p, i, sizeof(p->buffers[i]->array));
+            }
+        }
+        // maybe wrapping
+        for (i = 0; i < p->buffer_index; ++i) {
+            if (p->buffers[i]->total == p->buffers[i]->size) {
+                do_distribute_end(p, i, sizeof(p->buffers[i]->array));
+            }
+        }
+        if (p->buffers[p->buffer_index]->total > 0) {
+            uchar current = p->buffer_index;
+            p->buffers[current]->dma->status = DMA_PENDING;
+            p->current_dest_index[current] = 0;
+            p->buffers[current]->twin = (*p->dests)[0]->buffers[current];
+            do_distribute_end(p, current,
+                    p->buffers[current]->total*sizeof(int));
+            p->index = 0;
+        }
+    }
+}
+
+void connect(port_out *out, port_in *in)
+{
+    (*out->dests)[out->dest_index++] = in;
+}
+
+bool has_input(port_in *p, uint n)
+{
+    uint total = 0;
+    int i;
+    for (i = 0; i < sizeof(p->buffers)/sizeof(fifo *); ++i) {
+        total += p->buffers[i]->total;
+        if (total - p->index >= n) {
+            return true;
+        }
+    }
+    return false;
+}
+#endif // USE_MULTIPLE_BUFFER
+
 #endif // USE_DESTINATION_BUFFER
 
 bool might_has_input(port_in *p)
 {
-    if (!has_input(p, 1) && !p->end) {
-        return true;
-    }
-    if (!has_input(p, 1) && p->end) {
-        return false;
-    }
-    if (has_input(p, 1)) {
-        return true;
-    }
+    // if (!has_input(p, 1) && !p->end) {
+    //     return true;
+    // }
+    // if (!has_input(p, 1) && p->end) {
+    //     return false;
+    // }
+    // if (has_input(p, 1)) {
+    //     return true;
+    // }
     // if (has_input(p, 1)) {
     //     return true;
     // }
     // return !p->end;
     // return has_input(p, 1) || !p->end;
-    // return !p->end || has_input(p, 1) ;
+    return !p->end || has_input(p, 1) ;
 }
 
 int read(port_in *p)
@@ -539,7 +681,7 @@ void epiphany_write(port_out *p, int v)
 int epiphany_read(port_in *p)
 {
     // int result = internal_epiphany_read(p)
-    print_core(-1);
+    // print_core(-1);
     // uint index = Mailbox.core.debug_index[core_num()];
     // Mailbox.core.debug_line[core_num()][index] = result;
     // Mailbox.core.debug_index[core_num()]++;
