@@ -48,7 +48,7 @@ typedef struct {
 
 
 typedef struct {
-    // TODO why have to even?
+    // Note: Since host is 64bit, alignment has to be addressed.
     int data_size;
     int players;
     int source[20];

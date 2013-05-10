@@ -637,20 +637,7 @@ bool has_input(port_in *p, uint n)
 
 bool might_has_input(port_in *p)
 {
-    // if (!has_input(p, 1) && !p->end) {
-    //     return true;
-    // }
-    // if (!has_input(p, 1) && p->end) {
-    //     return false;
-    // }
-    // if (has_input(p, 1)) {
-    //     return true;
-    // }
-    // if (has_input(p, 1)) {
-    //     return true;
-    // }
-    // return !p->end;
-    // return has_input(p, 1) || !p->end;
+    // Note: Here, end acts like one lock. The same trick to carrier in v1.
     return !p->end || has_input(p, 1) ;
 }
 
