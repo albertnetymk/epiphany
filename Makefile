@@ -192,6 +192,18 @@ acceptance-test:
 	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER load
 	$(MAKE) $(MFLAGS) -C .. host-build
 	./$(host_program) 11
+
+	# cat /dev/null > $(ROOT_DIR)/include/flags.h
+	# echo 'Multiple buffer with 3'
+	# $(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_MULTIPLE_BUFFER BUFFER_NUMBER=3 load
+	# $(MAKE) $(MFLAGS) -C .. host-build
+	# ./$(host_program) 9
+	# $(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_MULTIPLE_BUFFER BUFFER_NUMBER=3 load
+	# $(MAKE) $(MFLAGS) -C .. host-build
+	# ./$(host_program) 10
+	# $(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_MULTIPLE_BUFFER BUFFER_NUMBER=3 load
+	# $(MAKE) $(MFLAGS) -C .. host-build
+	# ./$(host_program) 11
 	git reset --hard
 
 .PHONY: load

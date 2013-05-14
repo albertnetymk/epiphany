@@ -99,41 +99,41 @@ int main(int argc, char **argv) {
         addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
         e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
         if (Mailbox.core.go[1] == 4) {
-            // for (i = 0; i < data_size; i += 1) {
-            //     addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
-            //     e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
+            for (i = 0; i < data_size; i += 1) {
+                addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
+                e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
 
-            //     addr = DRAM_BASE + offsetof(shared_buf_t, debug[i]);
-            //     e_read(addr, (void *) (&Mailbox.debug[i]), sizeof(int));
-            //     // printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
-            //     //         i, Mailbox.debug[i]);
-            //     sprintf(msg, "sink[%d] should be %d, but %d is found", i,
-            //             4*Mailbox.source[i], Mailbox.sink[i]);
-            //     ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
-            // }
-            // break;
-            exit(-1);
-            addr = DRAM_BASE + offsetof(shared_buf_t, debug_one);
-            e_read(addr, (void *) Mailbox.debug_one, sizeof(int)*20);
-            addr = DRAM_BASE + offsetof(shared_buf_t, debug_two);
-            e_read(addr, (void *) Mailbox.debug_two, sizeof(int)*20);
-            addr = DRAM_BASE + offsetof(shared_buf_t, debug_three);
-            e_read(addr, (void *) Mailbox.debug_three, sizeof(int)*20);
-            addr = DRAM_BASE + offsetof(shared_buf_t, debug_four);
-            e_read(addr, (void *) Mailbox.debug_four, sizeof(int)*20);
-            addr = DRAM_BASE + offsetof(shared_buf_t, debug_five);
-            e_read(addr, (void *) Mailbox.debug_five, sizeof(int)*20);
-            for (j = 0; j < 10; j += 1) {
-                printf("line %d, core %d: %d,\tcore %d: %d,\tcore %d: %d,\t core %d, %d,\t core %d, %d,\t core %d, %d\n",
-                        j,
-                        0, Mailbox.debug_zero[j],
-                        1, Mailbox.debug_one[j],
-                        2, Mailbox.debug_two[j],
-                        3, Mailbox.debug_three[j],
-                        4, Mailbox.debug_four[j],
-                        5, Mailbox.debug_five[j]
-                      );
+                // addr = DRAM_BASE + offsetof(shared_buf_t, debug[i]);
+                // e_read(addr, (void *) (&Mailbox.debug[i]), sizeof(int));
+                // printf("sink[%d]: %d\tdebug[%d]: %d\n", i, Mailbox.sink[i],
+                //         i, Mailbox.debug[i]);
+                sprintf(msg, "sink[%d] should be %d, but %d is found", i,
+                        4*Mailbox.source[i], Mailbox.sink[i]);
+                ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
             }
+            // break;
+            // exit(-1);
+            // addr = DRAM_BASE + offsetof(shared_buf_t, debug_one);
+            // e_read(addr, (void *) Mailbox.debug_one, sizeof(int)*20);
+            // addr = DRAM_BASE + offsetof(shared_buf_t, debug_two);
+            // e_read(addr, (void *) Mailbox.debug_two, sizeof(int)*20);
+            // addr = DRAM_BASE + offsetof(shared_buf_t, debug_three);
+            // e_read(addr, (void *) Mailbox.debug_three, sizeof(int)*20);
+            // addr = DRAM_BASE + offsetof(shared_buf_t, debug_four);
+            // e_read(addr, (void *) Mailbox.debug_four, sizeof(int)*20);
+            // addr = DRAM_BASE + offsetof(shared_buf_t, debug_five);
+            // e_read(addr, (void *) Mailbox.debug_five, sizeof(int)*20);
+            // for (j = 0; j < 10; j += 1) {
+            //     printf("line %d, core %d: %d,\tcore %d: %d,\tcore %d: %d,\t core %d, %d,\t core %d, %d,\t core %d, %d\n",
+            //             j,
+            //             0, Mailbox.debug_zero[j],
+            //             1, Mailbox.debug_one[j],
+            //             2, Mailbox.debug_two[j],
+            //             3, Mailbox.debug_three[j],
+            //             4, Mailbox.debug_four[j],
+            //             5, Mailbox.debug_five[j]
+            //           );
+            // }
         } else {
             for (i = 0; i < 1; ++i) {
                 addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
@@ -200,15 +200,15 @@ int main(int argc, char **argv) {
         }
     // }
 
-    // for (i = 0; i < end; ++i) {
-    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks[i]);
-    //     e_read(addr, (void *) (&Mailbox.core.clocks[i]), sizeof(int));
-    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles[i]);
-    //     e_read(addr, (void *) (&Mailbox.core.cycles[i]), sizeof(int));
+    for (i = 0; i < end; ++i) {
+        addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks[i]);
+        e_read(addr, (void *) (&Mailbox.core.clocks[i]), sizeof(int));
+        addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles[i]);
+        e_read(addr, (void *) (&Mailbox.core.cycles[i]), sizeof(int));
 
-    //     printf("pending/clock for %d is %d/%d\n", i,
-    //             Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
-    // }
+        printf("pending/clock for %d is %d/%d\n", i,
+                Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
+    }
 
     // for (j = 0; j < data_size; j += 1) {
     //     for (i = 2; i < 6; ++i) {
