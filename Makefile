@@ -70,6 +70,9 @@ else
   ifneq ($(COM_FIFO),)
     CPPFLAGS+=-D$(COM_FIFO)
   endif
+  ifneq ($(BUFFER_NUMBER),)                                                                                                               │················
+    CPPFLAGS+=-DBUFFER_NUMBER=$(BUFFER_NUMBER)                                                                                            │················
+  endif
 
   CFLAGS = -O0 -g3 -Wall -c -fmessage-length=0 \
 		   -ffp-contract=fast -mlong-calls -mfp-mode=round-nearest
@@ -153,57 +156,43 @@ endef
 static-test:
 	$(call switch-branch)
 
+test-input-size = 9 10 15
+
 .PHONY: acceptance-test
 acceptance-test:
 	-git branch -D $@
 	git checkout -b $@
 	cat /dev/null > $(ROOT_DIR)/include/flags.h
 	echo 'Destination buffer'
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 9
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 10
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 11
+	for arg in $(test-input-size); do \
+		$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load; \
+		$(MAKE) $(MFLAGS) -C .. host-build; \
+		./$(host_program) $$arg; \
+	done
 
 	cat /dev/null > $(ROOT_DIR)/include/flags.h
 	echo 'Both buffer'
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 9
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 10
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 11
+	for arg in $(test-input-size); do \
+		$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load; \
+		$(MAKE) $(MFLAGS) -C .. host-build; \
+		./$(host_program) $$arg; \
+	done
 
 	cat /dev/null > $(ROOT_DIR)/include/flags.h
 	echo 'Double buffer'
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 9
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 10
-	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER load
-	$(MAKE) $(MFLAGS) -C .. host-build
-	./$(host_program) 11
+	for arg in $(test-input-size); do \
+		$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER load; \
+		$(MAKE) $(MFLAGS) -C .. host-build; \
+		./$(host_program) $$arg; \
+	done
 
-	# cat /dev/null > $(ROOT_DIR)/include/flags.h
-	# echo 'Multiple buffer with 3'
-	# $(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_MULTIPLE_BUFFER BUFFER_NUMBER=3 load
-	# $(MAKE) $(MFLAGS) -C .. host-build
-	# ./$(host_program) 9
-	# $(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_MULTIPLE_BUFFER BUFFER_NUMBER=3 load
-	# $(MAKE) $(MFLAGS) -C .. host-build
-	# ./$(host_program) 10
-	# $(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_MULTIPLE_BUFFER BUFFER_NUMBER=3 load
-	# $(MAKE) $(MFLAGS) -C .. host-build
-	# ./$(host_program) 11
+	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	echo 'Multiple buffer with 3 arraies'
+	for arg in $(test-input); do \
+		$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_MULTIPLE_BUFFER -e BUFFER_NUMBER=3 load; \
+		$(MAKE) $(MFLAGS) -C .. host-build; \
+		./$(host_program) $$arg; \
+		done
 	git reset --hard
 
 .PHONY: load

@@ -287,7 +287,7 @@ void connect(port_out *out, port_in *in)
 {
     (*out->dests)[out->dest_index++] = in;
 }
-#endif // USE_BOTH_BUFFER
+#else
 
 static void do_distribute_end(port_out *p, uchar current, uint size)
 {
@@ -338,6 +338,7 @@ static void try_distribute(port_out *p, uchar current)
         }
     }
 }
+#endif // USE_BOTH_BUFFER
 
 #ifdef USE_DOUBLE_BUFFER
 void port_out_init(port_out *p)

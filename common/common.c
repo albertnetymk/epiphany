@@ -127,13 +127,13 @@ inline void core_main(void *a, init_t *init)
     Mailbox.core.cycles[core_num()] = get_time();
     Mailbox.core.clocks[core_num()] = get_clock();
     Mailbox.core.go[core_num()] = 5;
-    if (core_num() == 5) {
-        print_core_at_index(-1, 0);
-        print_core_at_index(all.instance_double1->in->buffers[0]->total, 1);
-        print_core_at_index(all.instance_double1->in->buffers[1]->total, 2);
-        print_core_at_index(all.instance_double2->in->buffers[0]->total, 3);
-        print_core_at_index(all.instance_double2->in->buffers[1]->total, 4);
-    }
+    // if (core_num() == 5) {
+    //     print_core_at_index(-1, 0);
+    //     print_core_at_index(all.instance_double1->in->buffers[0]->total, 1);
+    //     print_core_at_index(all.instance_double1->in->buffers[1]->total, 2);
+    //     print_core_at_index(all.instance_double2->in->buffers[0]->total, 3);
+    //     print_core_at_index(all.instance_double2->in->buffers[1]->total, 4);
+    // }
     while(1) ;
 }
 
