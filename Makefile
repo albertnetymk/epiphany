@@ -70,8 +70,8 @@ else
   ifneq ($(COM_FIFO),)
     CPPFLAGS+=-D$(COM_FIFO)
   endif
-  ifneq ($(BUFFER_NUMBER),)                                                                                                               │················
-    CPPFLAGS+=-DBUFFER_NUMBER=$(BUFFER_NUMBER)                                                                                            │················
+  ifneq ($(BUFFER_NUMBER),)
+    CPPFLAGS+=-DBUFFER_NUMBER=$(BUFFER_NUMBER)
   endif
 
   CFLAGS = -O0 -g3 -Wall -c -fmessage-length=0 \
