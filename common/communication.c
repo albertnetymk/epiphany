@@ -99,7 +99,7 @@ static bool try_dma(dma_cfg *dma)
         }
         dma->status = DMA_ING;
         dma->id = E_DMA_0;
-        dma_pool[0] = dma;
+        dma_pool[E_DMA_0] = dma;
         return true;
     }
     if (! e_dma_busy(E_DMA_1) ) {
@@ -108,7 +108,7 @@ static bool try_dma(dma_cfg *dma)
         }
         dma->status = DMA_ING;
         dma->id = E_DMA_1;
-        dma_pool[1] = dma;
+        dma_pool[E_DMA_1] = dma;
         return true;
     }
     return false;
