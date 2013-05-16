@@ -95,7 +95,7 @@ static bool try_dma(dma_cfg *dma)
 {
     if (! e_dma_busy(E_DMA_0) ) {
         if (dma_pool[0] != NULL) {
-            dma_pool[0]->status = DMA_IDLE;
+            dma_pool[0]->status = DMA_FINISHED;
         }
         dma->status = DMA_ING;
         dma->id = E_DMA_0;
@@ -104,7 +104,7 @@ static bool try_dma(dma_cfg *dma)
     }
     if (! e_dma_busy(E_DMA_1) ) {
         if (dma_pool[1] != NULL) {
-            dma_pool[1]->status = DMA_IDLE;
+            dma_pool[1]->status = DMA_FINISHED;
         }
         dma->status = DMA_ING;
         dma->id = E_DMA_1;
@@ -140,8 +140,10 @@ static void do_flush(fifo *b, uint size)
                     size, E_ALIGN_BYTE);
         case DMA_ING:
             wait_till_dma_over(b);
-            b->dma->status = DMA_IDLE;
+            dma_pool[b->dma->id] = NULL;
+        case DMA_FINISHED:
             b->twin->total = size/sizeof(int);
+            b->dma->status = DMA_IDLE;
         case DMA_IDLE:
             ;
     }
@@ -149,16 +151,26 @@ static void do_flush(fifo *b, uint size)
 
 static void try_flush(fifo *b)
 {
-    if (b->dma->status == DMA_PENDING) {
-        if (b->total > 0 && b->twin->total == 0) {
-            if (try_dma(b->dma)) {
-                dma_copy(b->dma->id, b->twin->array, b->array,
-                        sizeof(b->array), E_ALIGN_BYTE);
+    switch (b->dma->status) {
+        case DMA_PENDING:
+            if (b->total > 0 && b->twin->total == 0) {
+                if (try_dma(b->dma)) {
+                    dma_copy(b->dma->id, b->twin->array, b->array,
+                            sizeof(b->array), E_ALIGN_BYTE);
+                }
             }
-        }
-    } else if (b->dma->status == DMA_ING && ! e_dma_busy(b->dma->id)) {
-        b->dma->status = DMA_IDLE;
-        b->twin->total = sizeof(b->array)/sizeof(int);
+            break;
+        case DMA_ING:
+            if (e_dma_busy(b->dma->id)) {
+                break;
+            } else {
+                dma_pool[b->dma->id] = NULL;
+            }
+        case DMA_FINISHED:
+            b->twin->total = sizeof(b->array)/sizeof(int);
+            b->dma->status = DMA_IDLE;
+        case DMA_IDLE:
+            ;
     }
 }
 

@@ -25,7 +25,8 @@ typedef volatile struct port_out_struct {
 enum dma_status {
     DMA_PENDING,
     DMA_ING,
-    DMA_IDLE,
+    DMA_FINISHED,
+    DMA_IDLE
 };
 
 typedef volatile struct dma_cfg_struct {
