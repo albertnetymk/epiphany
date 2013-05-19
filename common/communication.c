@@ -24,9 +24,7 @@ void internal_epiphany_write(port_out *p, int v)
     for (i = 0; i < p->dest_index; ++i) {
         dest = (*p->dests)[i];
         if (dest->carrier) {
-            timer_resume();
             while (dest->write_index == dest->read_index) ;
-            timer_pause();
         }
         dest->array[dest->write_index] = v;
         if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
@@ -122,20 +120,16 @@ inline static void dma_copy(e_dma_id_t chan, volatile void *dst, volatile void *
 
 static void wait_till_dma_over(fifo *b)
 {
-    timer_resume();
     while(e_dma_busy(b->dma->id)) ;
-    timer_pause();
 }
 
 static void do_flush(fifo *b, uint size)
 {
     switch (b->dma->status) {
         case DMA_PENDING:
-            timer_resume();
             while(! b->total > 0) ;
             while(! b->twin->total == 0) ;
             while(! try_dma(b->dma)) ;
-            timer_pause();
             dma_copy(b->dma->id, b->twin->array, b->array,
                     size, E_ALIGN_BYTE);
         case DMA_ING:
@@ -176,9 +170,7 @@ static void try_flush(fifo *b)
 
 static void wait_till_ready_to_read(volatile fifo *b)
 {
-    timer_resume();
     while(! b->total > 0) ;
-    timer_pause();
 }
 
 #ifdef USE_BOTH_BUFFER
@@ -656,7 +648,6 @@ bool might_has_input(port_in *p)
 
 int read(port_in *p)
 {
-    timer_pause();
     return internal_epiphany_read(p);
 }
 
@@ -675,15 +666,19 @@ void epiphany_write(port_out *p, int v)
     // uint index = Mailbox.core.debug_index[core_num()];
     // Mailbox.core.debug_line[core_num()][index] = v;
     // Mailbox.core.debug_index[core_num()]++;
+    timer_resume();
     internal_epiphany_write(p, v);
+    timer_pause();
 }
 
 int epiphany_read(port_in *p)
 {
-    // int result = internal_epiphany_read(p)
+    timer_resume();
+    int result = internal_epiphany_read(p);
+    timer_pause();
     // print_core(-1);
     // uint index = Mailbox.core.debug_index[core_num()];
     // Mailbox.core.debug_line[core_num()][index] = result;
     // Mailbox.core.debug_index[core_num()]++;
-    return internal_epiphany_read(p);
+    return result;
 }
