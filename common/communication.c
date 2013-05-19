@@ -51,7 +51,7 @@ int internal_epiphany_read(port_in *p)
     return result;
 }
 
-int epiphany_peek(port_in *p)
+int internal_epiphany_peek(port_in *p)
 {
     if (!p->carrier) {
         while (p->read_index == p->write_index) ;
@@ -234,7 +234,7 @@ int internal_epiphany_read(port_in *p)
     return result;
 }
 
-int epiphany_peek(port_in *p)
+int internal_epiphany_peek(port_in *p)
 {
     if (p->index == 0) {
         // TODO
@@ -411,7 +411,7 @@ int internal_epiphany_read(port_in *p)
     return result;
 }
 
-int epiphany_peek(port_in *p)
+int internal_epiphany_peek(port_in *p)
 {
     if (p->index == 0) {
         wait_till_ready_to_read(p->buffers[p->ping_pang]);
@@ -575,7 +575,7 @@ int internal_epiphany_read(port_in *p)
     return result;
 }
 
-int epiphany_peek(port_in *p)
+int internal_epiphany_peek(port_in *p)
 {
     if (p->index == 0) {
         wait_till_ready_to_read(p->buffers[p->buffer_index]);
@@ -646,19 +646,12 @@ bool might_has_input(port_in *p)
     return !p->end || has_input(p, 1) ;
 }
 
-int read(port_in *p)
+int epiphany_peek(port_in *p)
 {
-    return internal_epiphany_read(p);
-}
-
-void write(port_out *p, int v)
-{
-    internal_epiphany_write(p, v);
-}
-
-int peek(port_in *p)
-{
-    return epiphany_peek(p);
+    timer_resume();
+    int result = internal_epiphany_peek(p);
+    timer_pause();
+    return result;
 }
 
 void epiphany_write(port_out *p, int v)
