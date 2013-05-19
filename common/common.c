@@ -143,7 +143,7 @@ inline void core_sink_main(actor_sink *a, sink_init_t *init)
     Mailbox.core.go[1] = 0;
 
     stage(1);
-    sink_api_t *api = init(a);
+    init(a);
 
     Mailbox.core.go[1] = 2;
     stage_all(2);
