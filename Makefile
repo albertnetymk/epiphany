@@ -88,20 +88,38 @@ modules += $(ROOT_DIR)/board/core4
 modules += $(ROOT_DIR)/board/core5
 vpath %.c $(ROOT_DIR)/board
 vpath %.c $(ROOT_DIR)
-define make_library
-  programs += $1
+define make_core
+  cores += $1
   $2 : ;
   $(shell mkdir -p $(dir $1))
-  objects += $(call source_to_object,$2)
-  $1 : $(call source_to_object,$2) common/common.a
+  core-objects += $(call source_to_object,$2)
+  $1 : $(call source_to_object,$2) $(libraries_archive)
 	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
 	$(ROOT_DIR)/checksize.bash $$@
 endef
 $(foreach m, $(modules), \
-	$(eval $(call make_library, $(notdir $(m))/main.elf, \
+	$(eval $(call make_core, $(notdir $(m))/main.elf, \
 			$(addprefix $(notdir $(m))/, $(notdir $(wildcard $(m)/*.c))))))
 
-dependencies += $(subst .o,.d,$(objects))
+dependencies += $(subst .o,.d,$(core-objects))
+
+libraries :=
+libraries += actors
+libraries += util
+libraries_archive = $(addsuffix .a, $(libraries))
+libraries := $(addprefix $(ROOT_DIR)/src/, $())
+define make_library
+  $2 : ;
+  $(shell mkdir -p $1)
+  libraries-objects += $(call source_to_object,$2)
+  $1.a : $(call source_to_object,$2)
+	$(AR) r $@ $^ 2>/dev/null
+endef
+$(foreach l, $(libraries), \
+	$(eval $(call make_library, $(notdir $(l)), \
+			$(addprefix $(notdir $(l))/, $(notdir $(wildcard $(l)/*.c))))))
+
+dependencies += $(subst .o,.d,$(libraries-objects))
 
 common_objects = $(addprefix common/, \
   $(call source_to_object, $(notdir $(wildcard $(ROOT_DIR)/common/*.c))))
@@ -110,18 +128,18 @@ dependencies += $(subst .o,.d,$(common_objects))
 common/common.a: $(common_objects)
 	$(AR) r $@ $^ 2>/dev/null
 
-main.srec : $(programs)
+main.srec : $(cores)
 	$(ROOT_DIR)/translate $^
 	cat */*.srec > main.srec
 
 all : main.srec
 
 .PHONY: compile
-compile : $(objects) common/common.a
+compile : $(core-objects) $(libraries_archive)
 	@$(MAKE) $(MFLAGS) -f ../Makefile ROOT_DIR=.. host-compile
 
 .PHONY: build
-build : $(programs)
+build : $(cores)
 	@$(MAKE) $(MFLAGS) -f ../Makefile ROOT_DIR=.. host-build
 
 .PHONY: tran
