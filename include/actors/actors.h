@@ -1,11 +1,11 @@
 #ifndef _ACTORS_H
 #define _ACTORS_H
 
-#include "actor_source.h"
-#include "actor_sink.h"
-#include "actor_distributor.h"
-#include "actor_double.h"
-#include "actor_add.h"
+#include "actors/actor_source.h"
+#include "actors/actor_sink.h"
+#include "actors/actor_distributor.h"
+#include "actors/actor_double.h"
+#include "actors/actor_add.h"
 
 typedef struct actors_struct {
     actor_source *instance_source;

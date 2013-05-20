@@ -1,6 +1,6 @@
 #ifndef __COMMON_BUFFERS_H__
 #define __COMMON_BUFFERS_H__
-#include "matmul.h"
+#include "util/matmul.h"
 #ifdef __HOST__
 #define SECTION(x)
 #else // __HOST__

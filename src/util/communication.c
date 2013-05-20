@@ -1,6 +1,6 @@
-#include "communication.h"
-#include "matmul.h"
-#include "timers.h"
+#include "util/communication.h"
+#include "util/matmul.h"
+#include "util/timers.h"
 
 extern unsigned core_num();
 

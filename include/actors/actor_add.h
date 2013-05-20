@@ -1,7 +1,7 @@
 #ifndef ACTOR_ADD_H_U3BIYYBH
 #define ACTOR_ADD_H_U3BIYYBH
 
-#include "communication.h"
+#include "util/communication.h"
 typedef struct actor_add_struct {
     port_in *in1;
     port_in *in2;

@@ -1,6 +1,6 @@
 #include <e_coreid.h>
-#include "common.h"
-#include "flags.h"
+#include "util/common.h"
+#include "util/flags.h"
 
 actor_add instance_add;
 port_in in1;

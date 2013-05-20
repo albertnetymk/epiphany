@@ -1,8 +1,8 @@
 #include <e_coreid.h>
-#include "types.h"
-#include "common.h"
-#include "common_buffers.h"
-#include "timers.h"
+#include "util/types.h"
+#include "util/common.h"
+#include "util/common_buffers.h"
+#include "util/timers.h"
 
 inline unsigned core_num()
 {

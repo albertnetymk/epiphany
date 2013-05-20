@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <e_host.h>
-#include "common_buffers.h"
+#include "util/common_buffers.h"
 
 static char *error_color = "\x1B[0;31m";
 static char *success_color = "\x1B[0;32m";

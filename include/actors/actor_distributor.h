@@ -1,7 +1,7 @@
 #ifndef ACTOR_DISTRIBUTOR_H
 #define ACTOR_DISTRIBUTOR_H
 
-#include "communication.h"
+#include "util/communication.h"
 typedef struct actor_distributor_struct {
     port_in *in;
     port_out *out;

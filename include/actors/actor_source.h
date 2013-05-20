@@ -1,7 +1,7 @@
 #ifndef ACTOR_SOURCE_H
 #define ACTOR_SOURCE_H
 
-#include "communication.h"
+#include "util/communication.h"
 typedef struct actor_source_struct {
     port_out *out;
     void (*end)(struct actor_source_struct *self);

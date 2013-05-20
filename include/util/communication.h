@@ -2,8 +2,8 @@
 #define _COMMUNICATION_H
 
 #include <stdbool.h>
-#include "types.h"
-#include "flags.h"
+#include "util/types.h"
+#include "util/flags.h"
 
 #ifdef USE_DESTINATION_BUFFER
 typedef volatile struct port_in_struct {

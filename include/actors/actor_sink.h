@@ -1,7 +1,7 @@
 #ifndef _ACTOR_B_H
 #define _ACTOR_B_H
 
-#include "communication.h"
+#include "util/communication.h"
 typedef struct actor_sink_struct {
     port_in *in;
 } actor_sink;

@@ -1,6 +1,6 @@
 #include <e_coreid.h>
-#include "common.h"
-#include "flags.h"
+#include "util/common.h"
+#include "util/flags.h"
 
 // it's not necessary to use global address for non shared resources.
 actor_source instance;

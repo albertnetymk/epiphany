@@ -1,6 +1,6 @@
 #ifndef _COMMON_H
 #define _COMMON_H
-#include "actors.h"
+#include "actors/actors.h"
 
 extern volatile actors all;
 

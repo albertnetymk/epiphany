@@ -87,7 +87,7 @@ modules += $(ROOT_DIR)/board/core3
 modules += $(ROOT_DIR)/board/core4
 modules += $(ROOT_DIR)/board/core5
 vpath %.c $(ROOT_DIR)/board
-vpath %.c $(ROOT_DIR)
+vpath %.c $(ROOT_DIR)/src
 define make_core
   cores += $1
   $2 : ;
@@ -106,27 +106,20 @@ dependencies += $(subst .o,.d,$(core-objects))
 libraries :=
 libraries += actors
 libraries += util
-libraries_archive = $(addsuffix .a, $(libraries))
-libraries := $(addprefix $(ROOT_DIR)/src/, $())
+libraries_archive := $(addsuffix .a, $(libraries))
+libraries := $(addprefix $(ROOT_DIR)/src/, $(libraries))
 define make_library
   $2 : ;
   $(shell mkdir -p $1)
   libraries-objects += $(call source_to_object,$2)
   $1.a : $(call source_to_object,$2)
-	$(AR) r $@ $^ 2>/dev/null
+	$(AR) r $$@ $$^ 2>/dev/null
 endef
 $(foreach l, $(libraries), \
 	$(eval $(call make_library, $(notdir $(l)), \
 			$(addprefix $(notdir $(l))/, $(notdir $(wildcard $(l)/*.c))))))
 
 dependencies += $(subst .o,.d,$(libraries-objects))
-
-common_objects = $(addprefix common/, \
-  $(call source_to_object, $(notdir $(wildcard $(ROOT_DIR)/common/*.c))))
-$(shell mkdir -p common)
-dependencies += $(subst .o,.d,$(common_objects))
-common/common.a: $(common_objects)
-	$(AR) r $@ $^ 2>/dev/null
 
 main.srec : $(cores)
 	$(ROOT_DIR)/translate $^

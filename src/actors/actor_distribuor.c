@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "actor_distributor.h"
+#include "actors/actor_distributor.h"
 
 static void run(actor_distributor *self)
 {

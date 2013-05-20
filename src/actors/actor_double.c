@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "actor_double.h"
+#include "actors/actor_double.h"
 
 static void run(actor_double *self)
 {

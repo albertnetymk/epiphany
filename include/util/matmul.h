@@ -37,7 +37,7 @@ typedef struct {
 } core_t;
 
 
-#include "types.h"
+#include "util/types.h"
 
 typedef struct {
     int    ready[_Ncores]; // Core is ready after reset

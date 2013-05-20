@@ -1,7 +1,7 @@
 #ifndef ACTOR_DOUBLE_H_A6EW1BO9
 #define ACTOR_DOUBLE_H_A6EW1BO9
 
-#include "communication.h"
+#include "util/communication.h"
 typedef struct actor_double_struct {
     port_in *in;
     port_out *out;
