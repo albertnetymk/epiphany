@@ -113,9 +113,8 @@ define make_core
   $(shell mkdir -p $(dir $1))
   core-objects += $(call source_to_object,$2)
   $1 : $(call source_to_object,$2) $(libraries_archive)
-	echo $$^
-	# ${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
-	# $(ROOT_DIR)/checksize.bash $$@
+	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
+	$(ROOT_DIR)/checksize.bash $$@
 endef
 $(foreach m, $(modules), \
 	$(eval $(call make_core, $(notdir $(m))/main.elf, \
