@@ -79,29 +79,8 @@ else
 
 
 source_to_object = $(subst .c,.o,$1)
-# modules := $(wildcard $(ROOT_DIR)/board/*)
-modules += $(ROOT_DIR)/board/core0
-modules += $(ROOT_DIR)/board/core1
-modules += $(ROOT_DIR)/board/core2
-modules += $(ROOT_DIR)/board/core3
-modules += $(ROOT_DIR)/board/core4
-modules += $(ROOT_DIR)/board/core5
 vpath %.c $(ROOT_DIR)/board
 vpath %.c $(ROOT_DIR)/src
-define make_core
-  cores += $1
-  $2 : ;
-  $(shell mkdir -p $(dir $1))
-  core-objects += $(call source_to_object,$2)
-  $1 : $(call source_to_object,$2) $(libraries_archive)
-	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
-	$(ROOT_DIR)/checksize.bash $$@
-endef
-$(foreach m, $(modules), \
-	$(eval $(call make_core, $(notdir $(m))/main.elf, \
-			$(addprefix $(notdir $(m))/, $(notdir $(wildcard $(m)/*.c))))))
-
-dependencies += $(subst .o,.d,$(core-objects))
 
 libraries :=
 libraries += actors
@@ -120,6 +99,29 @@ $(foreach l, $(libraries), \
 			$(addprefix $(notdir $(l))/, $(notdir $(wildcard $(l)/*.c))))))
 
 dependencies += $(subst .o,.d,$(libraries-objects))
+
+# modules := $(wildcard $(ROOT_DIR)/board/*)
+modules += $(ROOT_DIR)/board/core0
+modules += $(ROOT_DIR)/board/core1
+modules += $(ROOT_DIR)/board/core2
+modules += $(ROOT_DIR)/board/core3
+modules += $(ROOT_DIR)/board/core4
+modules += $(ROOT_DIR)/board/core5
+define make_core
+  cores += $1
+  $2 : ;
+  $(shell mkdir -p $(dir $1))
+  core-objects += $(call source_to_object,$2)
+  $1 : $(call source_to_object,$2) $(libraries_archive)
+	echo $$^
+	# ${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
+	# $(ROOT_DIR)/checksize.bash $$@
+endef
+$(foreach m, $(modules), \
+	$(eval $(call make_core, $(notdir $(m))/main.elf, \
+			$(addprefix $(notdir $(m))/, $(notdir $(wildcard $(m)/*.c))))))
+
+dependencies += $(subst .o,.d,$(core-objects))
 
 main.srec : $(cores)
 	$(ROOT_DIR)/translate $^
