@@ -152,13 +152,13 @@ server-test :
 define switch-branch
 	-git branch -D $@
 	git checkout -b $@
-	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	cat /dev/null > $(ROOT_DIR)/include/util/flags.h
 	echo 'Destination buffer'
 	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER
-	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	cat /dev/null > $(ROOT_DIR)/include/util/flags.h
 	echo 'Both buffer'
 	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER
-	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	cat /dev/null > $(ROOT_DIR)/include/util/flags.h
 	echo 'Double buffer'
 	$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER
 	git reset --hard
@@ -174,7 +174,7 @@ test-input-size = 9 10 15
 acceptance-test:
 	-git branch -D $@
 	git checkout -b $@
-	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	cat /dev/null > $(ROOT_DIR)/include/util/flags.h
 	echo 'Destination buffer'
 	for arg in $(test-input-size); do \
 		$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DESTINATION_BUFFER load; \
@@ -182,7 +182,7 @@ acceptance-test:
 		./$(host_program) $$arg; \
 	done
 
-	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	cat /dev/null > $(ROOT_DIR)/include/util/flags.h
 	echo 'Both buffer'
 	for arg in $(test-input-size); do \
 		$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_BOTH_BUFFER load; \
@@ -190,7 +190,7 @@ acceptance-test:
 		./$(host_program) $$arg; \
 	done
 
-	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	cat /dev/null > $(ROOT_DIR)/include/util/flags.h
 	echo 'Double buffer'
 	for arg in $(test-input-size); do \
 		$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_DOUBLE_BUFFER load; \
@@ -198,7 +198,7 @@ acceptance-test:
 		./$(host_program) $$arg; \
 	done
 
-	cat /dev/null > $(ROOT_DIR)/include/flags.h
+	cat /dev/null > $(ROOT_DIR)/include/util/flags.h
 	echo 'Multiple buffer with 3 arraies'
 	for arg in $(test-input); do \
 		$(MAKE) $(MFLAGS) -C .. -e COM_FIFO=USE_MULTIPLE_BUFFER -e BUFFER_NUMBER=3 load; \
