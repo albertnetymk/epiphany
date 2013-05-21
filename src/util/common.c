@@ -119,8 +119,11 @@ inline void core_main(void *a, init_t *init)
 
     stage(3);
     init_clock();
-    while(api->not_finished(a)) {
+    while(1) {
         api->run(a);
+        if (!api->not_finished(a)) {
+            break;
+        }
     }
     Mailbox.core.go[core_num()] = 4;
     api->end(a);
