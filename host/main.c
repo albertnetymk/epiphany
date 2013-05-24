@@ -23,7 +23,8 @@ void ok(bool assertion, char *msg)
         printf("\t%sError: '%s' is unsatisfied.%s\n", error_color, msg, reset);
         exit(-1);
     } else {
-        printf("\t%sSuccess: %s.%s\n", success_color, msg, reset);
+        // printf("\t%sSuccess: %s.%s\n", success_color, msg, reset);
+        printf("%s.%s\n", success_color, reset);
     }
 }
 void show_core_go()
