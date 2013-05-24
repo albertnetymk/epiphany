@@ -130,10 +130,9 @@ int main(int argc, char **argv) {
         addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
         e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
         if (Mailbox.core.go[1] == 4) {
+            addr = DRAM_BASE + offsetof(shared_buf_t, sink);
+            e_read(addr, (void *) (Mailbox.sink), sizeof(int)*data_size);
             for (i = 0; i < data_size; i += 1) {
-                addr = DRAM_BASE + offsetof(shared_buf_t, sink[i]);
-                e_read(addr, (void *) (&Mailbox.sink[i]), sizeof(int));
-
                 sprintf(msg, "sink[%d] should be %d, but %d is found", i,
                         4*Mailbox.source[i], Mailbox.sink[i]);
                 ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
