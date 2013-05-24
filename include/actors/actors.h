@@ -1,5 +1,5 @@
-#ifndef _ACTORS_H
-#define _ACTORS_H
+#ifndef ACTORS_H
+#define ACTORS_H
 
 #include "actors/actor_source.h"
 #include "actors/actor_sink.h"

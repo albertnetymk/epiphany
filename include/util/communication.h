@@ -1,5 +1,5 @@
-#ifndef _COMMUNICATION_H
-#define _COMMUNICATION_H
+#ifndef COMMUNICATION_H
+#define COMMUNICATION_H
 
 #include <stdbool.h>
 #include "util/types.h"

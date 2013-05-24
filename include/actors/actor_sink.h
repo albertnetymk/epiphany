@@ -1,5 +1,5 @@
-#ifndef _ACTOR_B_H
-#define _ACTOR_B_H
+#ifndef ACTOR_B_H
+#define ACTOR_B_H
 
 #include "util/communication.h"
 typedef struct actor_sink_struct {
