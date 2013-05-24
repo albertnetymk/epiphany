@@ -24,7 +24,7 @@ void ok(bool assertion, char *msg)
         exit(-1);
     } else {
         // printf("\t%sSuccess: %s.%s\n", success_color, msg, reset);
-        printf("%s.%s\n", success_color, reset);
+        printf("%s.%s", success_color, reset);
     }
 }
 void show_core_go()
