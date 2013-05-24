@@ -137,6 +137,7 @@ int main(int argc, char **argv) {
                         4*Mailbox.source[i], Mailbox.sink[i]);
                 ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
             }
+            printf("\n");
             break;
             // exit(-1);
             // show_debug_info();
