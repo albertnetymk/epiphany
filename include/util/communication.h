@@ -106,5 +106,11 @@ void end_port(port_out *p);
 void connect(port_out *out, port_in *in);
 bool has_input(port_in *p, uint n);
 bool might_has_input(port_in *p);
+int ReadToken(port_in *p, uint n);
+int ConsumeToken(port_in *p, uint n);
+void SendToken(port_out *p, int v, uint n);
+bool TestInputPort(port_in *p, uint n);
+void wait();
+void dead();
 
 #endif /* end of include guard: _COMMUNICATION_H */
