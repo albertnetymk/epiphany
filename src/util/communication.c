@@ -127,8 +127,8 @@ static void do_flush(fifo *b, uint size)
 {
     switch (b->dma->status) {
         case DMA_PENDING:
-            while(! b->total > 0) ;
-            while(! b->twin->total == 0) ;
+            while(!(b->total > 0)) ;
+            while(!(b->twin->total == 0)) ;
             while(! try_dma(b->dma)) ;
             dma_copy(b->dma->id, b->twin->array, b->array,
                     size, E_ALIGN_BYTE);
@@ -170,7 +170,7 @@ static void try_flush(fifo *b)
 
 static void wait_till_ready_to_read(volatile fifo *b)
 {
-    while(! b->total > 0) ;
+    while(!(b->total > 0)) ;
 }
 
 #ifdef USE_BOTH_BUFFER
