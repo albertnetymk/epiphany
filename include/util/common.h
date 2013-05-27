@@ -32,11 +32,4 @@ typedef api_t *init_t (void *);
 inline void core_main(void *a, init_t *init);
 
 inline void *address_from_coreid(e_coreid_t coreid, volatile void *ptr);
-inline void core_source_main(actor_source *a, source_init_t *init);
-inline void core_sink_main(actor_sink *a, sink_init_t *init);
-inline void core2_main(actor_double *a);
-inline void core3_main(actor_double *a);
-inline void core4_main(actor_add *a);
-// void core1_main(actor_b *a);
-// void core1_main(actor_b *a);
 #endif

@@ -4,6 +4,8 @@
 #include "util/common_buffers.h"
 #include "util/timers.h"
 
+void connect_network();
+
 inline unsigned core_num()
 {
     e_coreid_t coreid = e_get_coreid();
@@ -75,37 +77,6 @@ void stage_all(uint s)
     }
 }
 
-void core_source_main(actor_source *a, source_init_t *init)
-{
-    int i;
-    Mailbox.core.go[core_num()] = 0;
-
-    for (i = 0; i < 10; ++i) {
-        Mailbox.sink[i] = 0;
-    }
-
-    stage(1);
-    source_api_t *api = init(a);
-
-    Mailbox.core.go[core_num()] = 2;
-    stage_all(2);
-    // network
-    api->connect_network();
-
-    for(i=0; i<Mailbox.players; ++i) {
-        Mailbox.core.go[i] = 3;
-    }
-
-    stage(3);
-    for (i = 0; i < Mailbox.data_size; ++i) {
-        epiphany_write(a->out, Mailbox.source[i]);
-    }
-    Mailbox.core.go[0] = 4;
-    api->end(a);
-    Mailbox.core.go[0] = 5;
-    while(1) ;
-}
-
 inline void core_main(void *a, init_t *init)
 {
     Mailbox.core.go[core_num()] = 0;
@@ -116,6 +87,10 @@ inline void core_main(void *a, init_t *init)
 
     Mailbox.core.go[core_num()] = 2;
     stage_all(2);
+
+    if (core_num() == 0) {
+        connect_network();
+    }
 
     stage(3);
     init_clock();
@@ -137,26 +112,5 @@ inline void core_main(void *a, init_t *init)
     //     print_core_at_index(all.instance_double2->in->buffers[0]->total, 3);
     //     print_core_at_index(all.instance_double2->in->buffers[1]->total, 4);
     // }
-    while(1) ;
-}
-
-inline void core_sink_main(actor_sink *a, sink_init_t *init)
-{
-    int i;
-    Mailbox.core.go[1] = 0;
-
-    stage(1);
-    init(a);
-
-    Mailbox.core.go[1] = 2;
-    stage_all(2);
-
-    stage(3);
-    int value;
-    for (i = 0; i < Mailbox.data_size; ++i) {
-        value = epiphany_read(a->in);
-        Mailbox.sink[i] = value;
-    }
-    Mailbox.core.go[1] = 4;
     while(1) ;
 }
