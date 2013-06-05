@@ -102,5 +102,6 @@ int main(void) {
     instance_Scale.Y1 = address_from_coreid(mycoreid, &Y1);
     instance_Scale.Y2 = address_from_coreid(mycoreid, &Y2);
     instance_Scale.Y3 = address_from_coreid(mycoreid, &Y3);
+   core_main(address_from_coreid(mycoreid, &), &init);
    return 0;
 }

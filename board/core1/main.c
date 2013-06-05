@@ -88,5 +88,6 @@ int main(void) {
     instance_Combine.X3 = address_from_coreid(mycoreid, &X3);
     instance_Combine.Y0 = address_from_coreid(mycoreid, &Y0);
     instance_Combine.Y1 = address_from_coreid(mycoreid, &Y1);
+   core_main(address_from_coreid(mycoreid, &), &init);
    return 0;
 }
