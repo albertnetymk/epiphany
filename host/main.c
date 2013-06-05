@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
     for (i = 0; i < 2; ++i) {
         Mailbox.n_source[i].size = 23;
         Mailbox.n_source[i].index = 0;
-        for (j = 0; i < sizeof(input[i])/sizeof(int); ++j) {
+        for (j = 0; j < sizeof(input[i])/sizeof(int); ++j) {
             Mailbox.n_source[i].array[j] = input[i][j];
         }
     }
