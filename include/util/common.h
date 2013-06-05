@@ -1,5 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
+#include <e_coreid.h>
 #include "actors/actors.h"
 
 extern volatile actors all;

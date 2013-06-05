@@ -46,6 +46,16 @@ typedef struct {
     uint    clocks[_Ncores];
 } mbox_t;
 
+typedef struct {
+    uint index;
+    uint size;
+    int array[100];
+} network_source;
+
+typedef struct {
+    uint index;
+    int array[100];
+} network_sink;
 
 typedef struct {
     // Note: Since host is 64bit, alignment has to be addressed.
@@ -53,6 +63,8 @@ typedef struct {
     int players;
     int source[20];
     int sink[20];
+    network_source n_source[2];
+    network_sink n_sink[4];
     int debug_zero[20];
     int debug_one[20];
     int debug_two[20];
