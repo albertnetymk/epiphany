@@ -90,6 +90,9 @@ inline void core_main(void *a, init_t *init)
 
     if (core_num() == 0) {
         connect_network();
+        for(i=0; i<Mailbox.players; ++i) {
+            Mailbox.core.go[i] = 3;
+        }
     }
 
     stage(3);
