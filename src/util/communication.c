@@ -675,3 +675,22 @@ int epiphany_read(port_in *p)
     // Mailbox.core.debug_index[core_num()]++;
     return result;
 }
+
+int ReadToken(port_in *p, uint n)
+{
+    return epiphany_peek(p);
+}
+int ConsumeToken(port_in *p, uint n)
+{
+    return epiphany_read(p);
+}
+void SendToken(port_out *p, int v, uint n)
+{
+    epiphany_write(p, v);
+}
+bool TestInputPort(port_in *p, uint n)
+{
+    return has_input(p, n);
+}
+void wait(){}
+void dead(){}
