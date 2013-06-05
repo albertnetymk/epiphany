@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 
     int i, j, n;
     int start = 0;
-    int end = 6;
+    int end = 5;
     puts("Host is running ...");
     fo = stdout;
     for (i=start; i<end; ++i) {

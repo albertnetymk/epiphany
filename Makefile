@@ -86,6 +86,8 @@ libraries :=
 libraries += actors
 libraries += util
 libraries_archive := $(addsuffix .a, $(libraries))
+libraries_archive += actors.a
+libraries_archive += util.a
 libraries := $(addprefix $(ROOT_DIR)/src/, $(libraries))
 define make_library
   $2 : ;
@@ -114,7 +116,7 @@ define make_core
   $(shell mkdir -p $(dir $1))
   core-objects += $(call source_to_object,$2)
   $1 : $(call source_to_object,$2) $(libraries_archive)
-	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$^ -o $$@
+	${CC} -T ${ESDK}/bsps/emek3/fast.ldf $$+ -o $$@
 	$(ROOT_DIR)/checksize.bash $$@
 endef
 $(foreach m, $(modules), \
