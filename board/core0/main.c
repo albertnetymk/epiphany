@@ -1,7 +1,7 @@
 #include <e_coreid.h> 
 #include "util/common.h"
 #include "util/flags.h"
-actor_Scale instance_Scale;
+actor_Scale_source instance_Scale;
 port_in X0;
 port_in X1;
 port_out Y0;
@@ -48,7 +48,7 @@ static api_t api;
 static inline api_t *init(void *a)
 {
     all.instance_Scale = a;
-    actor_Scale_init(a);
+    actor_Scale_source_init(a);
     api.run = (run_t *)all.instance_Scale->run;
     api.end = (end_t *)all.instance_Scale->end;
     api.not_finished = (not_finished_t *)all.instance_Scale->not_finished;

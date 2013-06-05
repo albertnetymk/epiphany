@@ -1,7 +1,7 @@
 #include <e_coreid.h> 
 #include "util/common.h"
 #include "util/flags.h"
-actor_Final instance_Final;
+actor_Final_sink instance_Final;
 port_in X0;
 port_in X1;
 port_in X2;
@@ -56,7 +56,7 @@ static api_t api;
 static inline api_t *init(void *a)
 {
     all.instance_Final = a;
-    actor_Final_init(a);
+    actor_Final_sink_init(a);
     api.run = (run_t *)all.instance_Final->run;
     api.end = (end_t *)all.instance_Final->end;
     api.not_finished = (not_finished_t *)all.instance_Final->not_finished;
