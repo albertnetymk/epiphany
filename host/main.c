@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 
     // rv = e_load("../epiphany/main.srec", 1, 1, 0);
 
-    int i, n;
+    int i, j, n;
     int start = 0;
     int end = 6;
     puts("Host is running ...");
@@ -95,10 +95,27 @@ int main(int argc, char **argv) {
         data_size = 9;
     }
 
-    Mailbox.data_size = data_size;
-    for (i=0; i<data_size; ++i) {
-        Mailbox.source[i] = 2*i;
+    // Mailbox.data_size = data_size;
+    // for (i=0; i<data_size; ++i) {
+    //     Mailbox.source[i] = 2*i;
+    // }
+    int input[2][24] = {
+        { 1458 , -249 , -289 , -89  , 49  , 0   , 69 , -29 , 89 , -29 , -69 , 0   , 69 , 0 , -69 , 0 , 69  , 0 , 0 , 0   , 0 , 0 , 0 , 0 },
+        { -169 , -49  , 0    , -149 , -29 , -49 , 0  , 0   , 49 , 0   , 0   , -29 , 0  , 0 , 0   , 0 , -29 , 0 , 0 , -29 , 0 , 0 , 0 , -29 }
+    };
+    for (i = 0; i < 2; ++i) {
+        Mailbox.n_source[i].size = 23;
+        Mailbox.n_source[i].index = 0;
+        for (j = 0; i < sizeof(input[i])/sizeof(int); ++j) {
+            Mailbox.n_source[i].array[j] = input[i][j];
+        }
     }
+    int expect[4][12] = {
+        { 2329  , 11048 , 531  , 2107 , -238 , -391 , -214 , -97  , 47  , 848  , -273 , 64 },
+        { 12665 , 13853 , -636 , 165  , 1839 , 780  , 1318 , 1201 , 593 , 720  , 273  , -64 },
+        { 12588 , 13222 , 252  , 482  , 1437 , 334  , 400  , 118  , 502 , 1106 , 182  , 322 },
+        { 13665 , 13941 , 493  , -258 , 1377 , 558  , 704  , 986  , 138 , 462  , -182 , -322 }
+    };
 
     // for (i=start; i<end; ++i) {
     // printf("go is %d\n", Mailbox.core.go[i]);
@@ -129,13 +146,18 @@ int main(int argc, char **argv) {
     while (n<2) {
         addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
         e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
-        if (Mailbox.core.go[1] == 4) {
+        if (Mailbox.core.go[4] == 4) {
             addr = DRAM_BASE + offsetof(shared_buf_t, sink);
-            e_read(addr, (void *) (Mailbox.sink), sizeof(int)*data_size);
-            for (i = 0; i < data_size; i += 1) {
-                sprintf(msg, "sink[%d] should be %d, but %d is found", i,
-                        4*Mailbox.source[i], Mailbox.sink[i]);
-                ok(Mailbox.sink[i] == 4*Mailbox.source[i], msg);
+            for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+                e_read(addr, (void *) (Mailbox.n_sink[i].array),
+                        sizeof(expect[i]));
+            }
+            for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+                for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j)
+                {
+                    sprintf(msg, "n_sink[%d] should be %d, but %d is found", i,
+                            expect[i][j], Mailbox.n_sink[i].array[j]);
+                }
             }
             printf("\n");
             break;

@@ -106,7 +106,8 @@ modules += $(ROOT_DIR)/board/core1
 modules += $(ROOT_DIR)/board/core2
 modules += $(ROOT_DIR)/board/core3
 modules += $(ROOT_DIR)/board/core4
-modules += $(ROOT_DIR)/board/core5
+# modules += $(ROOT_DIR)/board/core5
+# modules += $(ROOT_DIR)/board/core6
 define make_core
   cores += $1
   $2 : ;
@@ -231,5 +232,22 @@ endef
 ifneq "$(strip $(MAKECMDGOALS))" "clean"
 -include $(dependencies)
 endif
+
+.PHONY: source_actor
+source_actor:
+	$(ROOT_DIR)/source.pl  $(ROOT_DIR)/src/actors/actor_Scale.c > $(ROOT_DIR)/src/actors/actor_Scale_source.c
+	 sed -r 's!actor_Scale!actor_Scale_source!g' $(ROOT_DIR)/include/actors/actor_Scale.h > $(ROOT_DIR)/include/actors/actor_Scale_source.h.tmp
+	 echo '#include "util/source.h"' > $(ROOT_DIR)/include/actors/actor_Scale_source.h
+	 cat $(ROOT_DIR)/include/actors/actor_Scale_source.h.tmp >> $(ROOT_DIR)/include/actors/actor_Scale_source.h
+	 rm $(ROOT_DIR)/include/actors/actor_Scale_source.h.tmp
+
+.PHONY: sink_actor
+sink_actor:
+	$(ROOT_DIR)/sink.pl  $(ROOT_DIR)/src/actors/actor_Final.c > $(ROOT_DIR)/src/actors/actor_Final_sink.c
+	 sed -r 's!actor_Final!actor_Final_sink!g' $(ROOT_DIR)/include/actors/actor_Final.h > $(ROOT_DIR)/include/actors/actor_Final_sink.h.tmp
+	 echo '#include "util/sink.h"' > $(ROOT_DIR)/include/actors/actor_Final_sink.h
+	 cat $(ROOT_DIR)/include/actors/actor_Final_sink.h.tmp >> $(ROOT_DIR)/include/actors/actor_Final_sink.h
+	 rm $(ROOT_DIR)/include/actors/actor_Final_sink.h.tmp
+
 
 endif
