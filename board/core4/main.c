@@ -118,6 +118,6 @@ int main(void) {
     instance_Final.Y1 = address_from_coreid(mycoreid, &Y1);
     instance_Final.Y2 = address_from_coreid(mycoreid, &Y2);
     instance_Final.Y3 = address_from_coreid(mycoreid, &Y3);
-   core_main(address_from_coreid(mycoreid, &), &init);
+   core_main(address_from_coreid(mycoreid, &instance_Final), &init);
    return 0;
 }

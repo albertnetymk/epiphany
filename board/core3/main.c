@@ -118,6 +118,6 @@ int main(void) {
     instance_Shuffle.Y1 = address_from_coreid(mycoreid, &Y1);
     instance_Shuffle.Y2 = address_from_coreid(mycoreid, &Y2);
     instance_Shuffle.Y3 = address_from_coreid(mycoreid, &Y3);
-   core_main(address_from_coreid(mycoreid, &), &init);
+   core_main(address_from_coreid(mycoreid, &instance_Shuffle), &init);
    return 0;
 }
