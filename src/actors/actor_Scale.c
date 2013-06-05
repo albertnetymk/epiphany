@@ -62,12 +62,10 @@ if (scale_state == 0)
       } 
     else 
       { 
-        wait();
         scale_state = 1;
       } 
   else 
     { 
-      wait();
       scale_state = 0;
     } 
 else if (scale_state == 1) 
@@ -78,7 +76,6 @@ else if (scale_state == 1)
     } 
   else 
     { 
-      wait();
       scale_state = 1;
     } 
 

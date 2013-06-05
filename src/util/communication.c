@@ -692,5 +692,4 @@ bool TestInputPort(port_in *p, uint n)
 {
     return has_input(p, n);
 }
-void wait(){}
 void dead(){}

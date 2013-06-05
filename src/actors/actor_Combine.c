@@ -47,22 +47,18 @@ if (combine_state == 0)
           } 
         else 
           { 
-            wait();
             combine_state = 5;
           } 
       else 
         { 
-          wait();
           combine_state = 3;
         } 
     else 
       { 
-        wait();
         combine_state = 1;
       } 
   else 
     { 
-      wait();
       combine_state = 0;
     } 
 else if (combine_state == 1) 
@@ -75,17 +71,14 @@ else if (combine_state == 1)
         } 
       else 
         { 
-          wait();
           combine_state = 5;
         } 
     else 
       { 
-        wait();
         combine_state = 3;
       } 
   else 
     { 
-      wait();
       combine_state = 1;
     } 
 else if (combine_state == 3) 
@@ -97,12 +90,10 @@ else if (combine_state == 3)
       } 
     else 
       { 
-        wait();
         combine_state = 5;
       } 
   else 
     { 
-      wait();
       combine_state = 3;
     } 
 else if (combine_state == 5) 
@@ -113,7 +104,6 @@ else if (combine_state == 5)
     } 
   else 
     { 
-      wait();
       combine_state = 5;
     } 
 

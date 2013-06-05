@@ -35,12 +35,10 @@ if (shufflefly_state == 0)
       } 
     else 
       { 
-        wait();
         shufflefly_state = 1;
       } 
   else 
     { 
-      wait();
       shufflefly_state = 0;
     } 
 else if (shufflefly_state == 5) 
@@ -52,12 +50,10 @@ else if (shufflefly_state == 5)
       } 
     else 
       { 
-        wait();
         shufflefly_state = 6;
       } 
   else 
     { 
-      wait();
       shufflefly_state = 5;
     } 
 else if (shufflefly_state == 1) 
@@ -68,7 +64,6 @@ else if (shufflefly_state == 1)
     } 
   else 
     { 
-      wait();
       shufflefly_state = 1;
     } 
 else if (shufflefly_state == 6) 
@@ -79,7 +74,6 @@ else if (shufflefly_state == 6)
     } 
   else 
     { 
-      wait();
       shufflefly_state = 6;
     } 
 
