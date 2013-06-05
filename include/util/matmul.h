@@ -63,6 +63,7 @@ typedef struct {
     int players;
     int source[20];
     int sink[20];
+    mbox_t core;
     network_source n_source[2];
     network_sink n_sink[4];
     int debug_zero[20];
@@ -73,7 +74,6 @@ typedef struct {
     int debug_five[20];
     // int debug[200];
     int debug_index[10];
-    mbox_t core;
 } shared_buf_t;
 
 extern volatile shared_buf_t Mailbox;

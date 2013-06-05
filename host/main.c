@@ -30,15 +30,20 @@ void ok(bool assertion, char *msg)
 void show_core_go()
 {
     int i;
-    for (i = 0; i < 1; ++i) {
+    // for (i = 0; i < 1; ++i) {
+    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
+    //     e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
+    //     printf("core %d is in stage %d\n", i, Mailbox.core.go[i]);
+    // }
+    for (i = 0; i < Mailbox.players; ++i) {
         addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
         e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
         printf("core %d is in stage %d\n", i, Mailbox.core.go[i]);
     }
-    for (i = 2; i < Mailbox.players; ++i) {
-        addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
-        e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
-        printf("core %d is in stage %d\n", i, Mailbox.core.go[i]);
+    addr = DRAM_BASE + offsetof(shared_buf_t, sink);
+    e_read(addr, (void *) Mailbox.sink, sizeof(int)*20);
+    for (i = 0; i < 5; ++i) {
+        printf("sink[%d] = %d\n", i, Mailbox.sink[i]);
     }
 }
 
@@ -143,33 +148,34 @@ int main(int argc, char **argv) {
     sleep(1);
 
     char msg[50];
-    while (n<2) {
-        addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
-        e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
-        if (Mailbox.core.go[4] == 4) {
-            addr = DRAM_BASE + offsetof(shared_buf_t, sink);
-            for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
-                e_read(addr, (void *) (Mailbox.n_sink[i].array),
-                        sizeof(expect[i]));
-            }
-            for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
-                for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j)
-                {
-                    sprintf(msg, "n_sink[%d] should be %d, but %d is found", i,
-                            expect[i][j], Mailbox.n_sink[i].array[j]);
-                }
-            }
-            printf("\n");
-            break;
-            // exit(-1);
-            // show_debug_info();
-        } else {
-            show_core_go();
-            show_debug_info();
-        }
-        printf("Board hasn't finished yet... %d\n", n++);
-        sleep(2);
-    }
+    show_core_go();
+    // while (n<2) {
+    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
+    //     e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
+    //     if (Mailbox.core.go[4] == 4) {
+    //         addr = DRAM_BASE + offsetof(shared_buf_t, sink);
+    //         for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+    //             e_read(addr, (void *) (Mailbox.n_sink[i].array),
+    //                     sizeof(expect[i]));
+    //         }
+    //         for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+    //             for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j)
+    //             {
+    //                 sprintf(msg, "n_sink[%d] should be %d, but %d is found", i,
+    //                         expect[i][j], Mailbox.n_sink[i].array[j]);
+    //             }
+    //         }
+    //         printf("\n");
+    //         break;
+    //         // exit(-1);
+    //         // show_debug_info();
+    //     } else {
+    //         show_core_go();
+    //         show_debug_info();
+    //     }
+    //     printf("Board hasn't finished yet... %d\n", n++);
+    //     sleep(2);
+    // }
 
     // for (i = 0; i < end; ++i) {
     //     addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks[i]);
