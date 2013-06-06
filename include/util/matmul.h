@@ -53,6 +53,7 @@ typedef struct {
 } network_source;
 
 typedef struct {
+    uint dummy;
     uint index;
     int array[100];
 } network_sink;
