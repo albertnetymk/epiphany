@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
         { 1458 , -249 , -289 , -89  , 49  , 0   , 69 , -29 , 89 , -29 , -69 , 0   , 69 , 0 , -69 , 0 , 69  , 0 , 0 , 0   , 0 , 0 , 0 , 0 },
         { -169 , -49  , 0    , -149 , -29 , -49 , 0  , 0   , 49 , 0   , 0   , -29 , 0  , 0 , 0   , 0 , -29 , 0 , 0 , -29 , 0 , 0 , 0 , -29 }
     };
-    for (i = 0; i < 2; ++i) {
+    for (i = 0; i < sizeof(input)/sizeof(input[0]); ++i) {
         Mailbox.n_source[i].size = 23;
         Mailbox.n_source[i].index = 0;
         for (j = 0; j < sizeof(input[i])/sizeof(int); ++j) {
@@ -144,11 +144,24 @@ int main(int argc, char **argv) {
 
     addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
     e_write(addr, (void *) (&Mailbox.core.go[0]), sizeof(int)*end);
+
+    addr = DRAM_BASE;
+    e_write(addr, (void *) &Mailbox, sizeof(Mailbox));
     puts("Waiting for the board to finish...");
     sleep(1);
 
     char msg[50];
     show_core_go();
+    puts("Read data from board");
+    addr = DRAM_BASE;
+    e_read(addr, (void *) &Mailbox, sizeof(Mailbox));
+    for (i = 3; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+        for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j) {
+            sprintf(msg, "n_sink[%d] should be %d, but %d is found", i,
+                    expect[i][j], Mailbox.n_sink[i].array[j]);
+            ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
+        }
+    }
     // while (n<2) {
     //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
     //     e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
