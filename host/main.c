@@ -50,6 +50,8 @@ void show_core_go()
 void show_debug_info()
 {
     int i;
+    addr = DRAM_BASE + offsetof(shared_buf_t, debug_zero);
+    e_read(addr, (void *) Mailbox.debug_zero, sizeof(int)*20);
     addr = DRAM_BASE + offsetof(shared_buf_t, debug_one);
     e_read(addr, (void *) Mailbox.debug_one, sizeof(int)*20);
     addr = DRAM_BASE + offsetof(shared_buf_t, debug_two);
@@ -61,15 +63,12 @@ void show_debug_info()
     addr = DRAM_BASE + offsetof(shared_buf_t, debug_five);
     e_read(addr, (void *) Mailbox.debug_five, sizeof(int)*20);
     for (i = 0; i < 10; i += 1) {
-        printf("line %d, core %d: %d,\tcore %d: %d,\tcore %d: %d,\t core %d, %d,\t core %d, %d,\t core %d, %d\n",
-                i,
-                0, Mailbox.debug_zero[i],
-                1, Mailbox.debug_one[i],
-                2, Mailbox.debug_two[i],
-                3, Mailbox.debug_three[i],
-                4, Mailbox.debug_four[i],
-                5, Mailbox.debug_five[i]
-              );
+        printf("line %d",  i);
+        printf("core %d: %d", 0, Mailbox.debug_zero[i]);
+        printf("core %d: %d", 1, Mailbox.debug_one[i]);
+        printf("core %d: %d", 2, Mailbox.debug_two[i]);
+        printf("core %d: %d", 3, Mailbox.debug_three[i]);
+        printf("core %d: %d", 4, Mailbox.debug_four[i]);
     }
 }
 
@@ -136,14 +135,14 @@ int main(int argc, char **argv) {
     e_write(addr, (void *) &(Mailbox.players), sizeof(int));
 
     // Prepare input data.
-    addr = DRAM_BASE + offsetof(shared_buf_t, source);
-    e_write(addr, (void *) Mailbox.source, sizeof(int)*data_size);
+    // addr = DRAM_BASE + offsetof(shared_buf_t, source);
+    // e_write(addr, (void *) Mailbox.source, sizeof(int)*data_size);
 
-    addr = DRAM_BASE + offsetof(shared_buf_t, data_size);
-    e_write(addr, (void *) &(Mailbox.data_size), sizeof(int));
+    // addr = DRAM_BASE + offsetof(shared_buf_t, data_size);
+    // e_write(addr, (void *) &(Mailbox.data_size), sizeof(int));
 
-    addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
-    e_write(addr, (void *) (&Mailbox.core.go[0]), sizeof(int)*end);
+    // addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
+    // e_write(addr, (void *) (&Mailbox.core.go[0]), sizeof(int)*end);
 
     addr = DRAM_BASE;
     e_write(addr, (void *) &Mailbox, sizeof(Mailbox));

@@ -81,6 +81,9 @@ inline void core_main(void *a, init_t *init)
 {
     Mailbox.core.go[core_num()] = 0;
     print_core_index(0);
+    if (core_num() == 0) {
+        Mailbox.sink[4] = -1;
+    }
 
     stage(1);
     api_t *api = init(a);
