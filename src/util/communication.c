@@ -640,12 +640,6 @@ bool has_input(port_in *p, uint n)
 
 #endif // USE_DESTINATION_BUFFER
 
-bool might_has_input(port_in *p)
-{
-    // Note: Here, end acts like one lock. The same trick to carrier in v1.
-    return !p->end || has_input(p, 1) ;
-}
-
 int epiphany_peek(port_in *p)
 {
     timer_resume();
@@ -675,6 +669,13 @@ int epiphany_read(port_in *p)
     // Mailbox.core.debug_index[core_num()]++;
     return result;
 }
+
+bool might_has_input(port_in *p)
+{
+    // Note: Here, end acts like one lock. The same trick to carrier in v1.
+    return !p->end || has_input(p, 1) ;
+}
+
 
 int ReadToken(port_in *p, uint n)
 {
