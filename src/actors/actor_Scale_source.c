@@ -54,8 +54,8 @@ static void run(actor_Scale_source *self)
        initStateVarsScale();
     }
 if (scale_state == 0) 
-  if (network_has_input(&Mailbox.n_source[1]) 
-    if (network_has_input(&Mailbox.n_source[0]) 
+  if (TestInputPort(self->X1, 1)) 
+    if (TestInputPort(self->X0, 1)) 
       { 
         scale(self);
         scale_state = 0;
@@ -69,7 +69,7 @@ if (scale_state == 0)
       scale_state = 0;
     } 
 else if (scale_state == 1) 
-  if (network_has_input(&Mailbox.n_source[0]) 
+  if (TestInputPort(self->X0, 1)) 
     { 
       scale(self);
       scale_state = 0;
