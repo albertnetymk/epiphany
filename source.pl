@@ -9,7 +9,7 @@ while(<>) {
         s/might_has_input\(.*->(.*)\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
     }
     if (/TestInputPort.*/) {
-        s/TestInputPort\(.*->(.*),.*\)/network_has_input(&Mailbox.n_source\[$input{$1}\])/g;
+        s/TestInputPort\(.*->(.*),[^)]*\)/network_has_input(&Mailbox.n_source\[$input{$1}\])/g;
     }
     if (/ConsumeToken.*/) {
         s/ConsumeToken\(.*->(.*),.*\)/network_consume(&Mailbox.n_source\[$input{$1}\])/g;
