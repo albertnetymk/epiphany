@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
         { -169 , -49  , 0    , -149 , -29 , -49 , 0  , 0   , 49 , 0   , 0   , -29 , 0  , 0 , 0   , 0 , -29 , 0 , 0 , -29 , 0 , 0 , 0 , -29 }
     };
     for (i = 0; i < sizeof(input)/sizeof(input[0]); ++i) {
-        Mailbox.n_source[i].size = 24
+        Mailbox.n_source[i].size = 24;
         Mailbox.n_source[i].index = 0;
         for (j = 0; j < sizeof(input[i])/sizeof(int); ++j) {
             Mailbox.n_source[i].array[j] = input[i][j];
