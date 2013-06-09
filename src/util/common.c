@@ -103,6 +103,8 @@ inline void core_main(void *a, init_t *init)
     init_clock();
     while(1) {
         api->run(a);
+        api->run(a);
+        api->run(a);
         if (!api->not_finished(a)) {
             break;
         }

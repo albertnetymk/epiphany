@@ -50,18 +50,6 @@ void show_core_go()
 void show_debug_info()
 {
     int i;
-    addr = DRAM_BASE + offsetof(shared_buf_t, debug_zero);
-    e_read(addr, (void *) Mailbox.debug_zero, sizeof(int)*20);
-    addr = DRAM_BASE + offsetof(shared_buf_t, debug_one);
-    e_read(addr, (void *) Mailbox.debug_one, sizeof(int)*20);
-    addr = DRAM_BASE + offsetof(shared_buf_t, debug_two);
-    e_read(addr, (void *) Mailbox.debug_two, sizeof(int)*20);
-    addr = DRAM_BASE + offsetof(shared_buf_t, debug_three);
-    e_read(addr, (void *) Mailbox.debug_three, sizeof(int)*20);
-    addr = DRAM_BASE + offsetof(shared_buf_t, debug_four);
-    e_read(addr, (void *) Mailbox.debug_four, sizeof(int)*20);
-    addr = DRAM_BASE + offsetof(shared_buf_t, debug_five);
-    e_read(addr, (void *) Mailbox.debug_five, sizeof(int)*20);
     for (i = 0; i < 10; i += 1) {
         printf("line %d ",  i);
         printf("core %d: %d\t", 0, Mailbox.debug_zero[i]);
@@ -151,14 +139,14 @@ int main(int argc, char **argv) {
     sleep(1);
 
     char msg[50];
-    show_core_go();
-    show_debug_info();
     puts("Read data from board");
     addr = DRAM_BASE;
     e_read(addr, (void *) &Mailbox, sizeof(Mailbox));
-    for (i = 3; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+    // show_core_go();
+    // show_debug_info();
+    for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
         for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j) {
-            sprintf(msg, "n_sink[%d] should be %d, but %d is found", i,
+            sprintf(msg, "n_sink[%d][%d] should be %d, but %d is found", i, j,
                     expect[i][j], Mailbox.n_sink[i].array[j]);
             ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
         }
