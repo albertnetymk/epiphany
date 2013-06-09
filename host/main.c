@@ -21,7 +21,7 @@ void ok(bool assertion, char *msg)
 {
     if (!assertion) {
         printf("\t%sError: '%s' is unsatisfied.%s\n", error_color, msg, reset);
-        exit(-1);
+        // exit(-1);
     } else {
         // printf("\t%sSuccess: %s.%s\n", success_color, msg, reset);
         printf("%s.%s", success_color, reset);
@@ -155,14 +155,14 @@ int main(int argc, char **argv) {
     show_debug_info();
     puts("Read data from board");
     addr = DRAM_BASE;
-    // e_read(addr, (void *) &Mailbox, sizeof(Mailbox));
-    // for (i = 3; i < sizeof(expect)/sizeof(expect[0]); ++i) {
-    //     for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j) {
-    //         sprintf(msg, "n_sink[%d] should be %d, but %d is found", i,
-    //                 expect[i][j], Mailbox.n_sink[i].array[j]);
-    //         ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
-    //     }
-    // }
+    e_read(addr, (void *) &Mailbox, sizeof(Mailbox));
+    for (i = 3; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+        for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j) {
+            sprintf(msg, "n_sink[%d] should be %d, but %d is found", i,
+                    expect[i][j], Mailbox.n_sink[i].array[j]);
+            ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
+        }
+    }
     // while (n<2) {
     //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
     //     e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
