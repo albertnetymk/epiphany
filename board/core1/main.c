@@ -42,6 +42,9 @@ static api_t api;
 static inline api_t *init(void *a)
 {
     all.instance_Combine = a;
+    all.instance_Combine.isz = 30;
+    all.instance_Combine.osz = 24;
+    all.instance_Combine.row = true;
     actor_Combine_init(a);
     api.run = (run_t *)all.instance_Combine->run;
     api.end = (end_t *)all.instance_Combine->end;
