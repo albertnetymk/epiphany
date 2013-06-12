@@ -81,34 +81,63 @@ int main(int argc, char **argv) {
 
     Mailbox.players = end;
 
-    int data_size;
+    int input_data_size, output_data_size;
     if ( argc > 1 ) {
-        data_size = atoi(argv[1]);
+        input_data_size = atoi(argv[1]);
     } else {
-        data_size = 9;
+        input_data_size = 9;
     }
 
     // Mailbox.data_size = data_size;
     // for (i=0; i<data_size; ++i) {
     //     Mailbox.source[i] = 2*i;
     // }
-    int input[2][24] = {
-        { 1458 , -249 , -289 , -89  , 49  , 0   , 69 , -29 , 89 , -29 , -69 , 0   , 69 , 0 , -69 , 0 , 69  , 0 , 0 , 0   , 0 , 0 , 0 , 0 },
-        { -169 , -49  , 0    , -149 , -29 , -49 , 0  , 0   , 49 , 0   , 0   , -29 , 0  , 0 , 0   , 0 , -29 , 0 , 0 , -29 , 0 , 0 , 0 , -29 }
-    };
-    for (i = 0; i < sizeof(input)/sizeof(input[0]); ++i) {
-        Mailbox.n_source[i].size = 24;
-        Mailbox.n_source[i].index = 0;
-        for (j = 0; j < sizeof(input[i])/sizeof(int); ++j) {
-            Mailbox.n_source[i].array[j] = input[i][j];
+    input_data_size = 240;
+    output_data_size = 192;
+    int expect[1][200];
+    {
+        char buffer[10];
+        int n;
+        i = 0;
+        FILE *f = fopen("../in.txt", "r");
+        while(NULL != fgets(buffer, sizeof(buffer), f)) {
+            if (i<input_data_size) {
+                n = atoi(buffer);
+                Mailbox.n_source[0].array[i++] = n;
+            } else {
+                break;
+            }
         }
+        fclose(f);
+        i = 0;
+        f = fopen("../signed.txt", "r");
+        while(NULL != fgets(buffer, sizeof(buffer), f)) {
+            if (i<input_data_size) {
+                n = atoi(buffer);
+                Mailbox.n_source[1].array[i++] = n;
+            } else {
+                break;
+            }
+        }
+        fclose(f);
+        i = 0;
+        f = fopen("../expect.txt", "r");
+        while(NULL != fgets(buffer, sizeof(buffer), f)) {
+            if (i<sizeof(expect[0])/sizeof(int)) {
+                n = atoi(buffer);
+                expect[0][i++] = n;
+            } else {
+                break;
+            }
+        }
+        fclose(f);
     }
-    int expect[4][12] = {
-        { 2329  , 11048 , 531  , 2107 , -238 , -391 , -214 , -97  , 47  , 848  , -273 , 64 },
-        { 12665 , 13853 , -636 , 165  , 1839 , 780  , 1318 , 1201 , 593 , 720  , 273  , -64 },
-        { 12588 , 13222 , 252  , 482  , 1437 , 334  , 400  , 118  , 502 , 1106 , 182  , 322 },
-        { 13665 , 13941 , 493  , -258 , 1377 , 558  , 704  , 986  , 138 , 462  , -182 , -322 }
-    };
+    for (i = 0; i < sizeof(Mailbox.n_source)/sizeof(Mailbox.n_source[0]);
+            ++i) {
+        Mailbox.n_source[i].size =
+            sizeof(Mailbox.n_source)/sizeof(Mailbox.n_source[0]);
+        Mailbox.n_source[i].index = 0;
+    }
 
     // for (i=start; i<end; ++i) {
     // printf("go is %d\n", Mailbox.core.go[i]);
@@ -125,10 +154,10 @@ int main(int argc, char **argv) {
 
     // Prepare input data.
     // addr = DRAM_BASE + offsetof(shared_buf_t, source);
-    // e_write(addr, (void *) Mailbox.source, sizeof(int)*data_size);
+    // e_write(addr, (void *) Mailbox.source, sizeof(int)*input_data_size);
 
-    // addr = DRAM_BASE + offsetof(shared_buf_t, data_size);
-    // e_write(addr, (void *) &(Mailbox.data_size), sizeof(int));
+    // addr = DRAM_BASE + offsetof(shared_buf_t, input_data_size);
+    // e_write(addr, (void *) &(Mailbox.input_data_size), sizeof(int));
 
     // addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
     // e_write(addr, (void *) (&Mailbox.core.go[0]), sizeof(int)*end);
