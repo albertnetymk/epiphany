@@ -108,8 +108,17 @@ modules += $(ROOT_DIR)/board/core1
 modules += $(ROOT_DIR)/board/core2
 modules += $(ROOT_DIR)/board/core3
 modules += $(ROOT_DIR)/board/core4
-# modules += $(ROOT_DIR)/board/core5
-# modules += $(ROOT_DIR)/board/core6
+modules += $(ROOT_DIR)/board/core5
+modules += $(ROOT_DIR)/board/core6
+modules += $(ROOT_DIR)/board/core7
+modules += $(ROOT_DIR)/board/core8
+modules += $(ROOT_DIR)/board/core9
+modules += $(ROOT_DIR)/board/core10
+modules += $(ROOT_DIR)/board/core11
+modules += $(ROOT_DIR)/board/core12
+modules += $(ROOT_DIR)/board/core13
+modules += $(ROOT_DIR)/board/core14
+# modules += $(ROOT_DIR)/board/core15
 define make_core
   cores += $1
   $2 : ;
