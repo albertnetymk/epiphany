@@ -49,13 +49,14 @@ typedef struct {
 typedef struct {
     uint index;
     uint size;
-    int array[100];
+    int array[300];
 } network_source;
 
 typedef struct {
+    // even
     uint dummy;
     uint index;
-    int array[100];
+    int array[300];
 } network_sink;
 
 typedef struct {
@@ -73,7 +74,7 @@ typedef struct {
     // int debug[200];
     int debug_index[10];
     network_source n_source[2];
-    network_sink n_sink[4];
+    network_sink n_sink[1];
     mbox_t core;
 } shared_buf_t;
 
