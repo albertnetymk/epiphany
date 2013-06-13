@@ -12,42 +12,42 @@ int x3;
 int x5;
 
  inline void  a0  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   x0 = a;
   }
  inline void  a1  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   x1 = a;
   }
  inline void  a2  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   x2 = a;
   }
  inline void  a3  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   x3 = a;
   }
  inline void  a4  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   SendToken(self->Y0, x0, 1);
   SendToken(self->Y1, a, 1);
   }
  inline void  a5  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   x5 = a;
   }
  inline void  a6  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   SendToken(self->Y0, x2, 1);
   SendToken(self->Y1, a, 1);
   }
  inline void  a7  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   SendToken(self->Y0, x1, 1);
   SendToken(self->Y1, a, 1);
   }
  inline void  a8  (actor_RowSort_source *self) { 
-    int a = ConsumeToken(self->ROW, 1);
+    int a = network_consume(&Mailbox.n_source[0]);
   x0 = a;
   SendToken(self->Y0, x5, 1);
   SendToken(self->Y1, x3, 1);
@@ -61,7 +61,7 @@ int idct_rowsort_state=0;
 static void run(actor_RowSort_source *self)
 {
 if (idct_rowsort_state == 0) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a0(self);
       idct_rowsort_state = 3;
@@ -71,7 +71,7 @@ if (idct_rowsort_state == 0)
       idct_rowsort_state = 0;
     } 
 else if (idct_rowsort_state == 3) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a1(self);
       idct_rowsort_state = 6;
@@ -81,7 +81,7 @@ else if (idct_rowsort_state == 3)
       idct_rowsort_state = 3;
     } 
 else if (idct_rowsort_state == 6) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a2(self);
       idct_rowsort_state = 9;
@@ -91,7 +91,7 @@ else if (idct_rowsort_state == 6)
       idct_rowsort_state = 6;
     } 
 else if (idct_rowsort_state == 9) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a3(self);
       idct_rowsort_state = 12;
@@ -101,7 +101,7 @@ else if (idct_rowsort_state == 9)
       idct_rowsort_state = 9;
     } 
 else if (idct_rowsort_state == 12) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a4(self);
       idct_rowsort_state = 15;
@@ -111,7 +111,7 @@ else if (idct_rowsort_state == 12)
       idct_rowsort_state = 12;
     } 
 else if (idct_rowsort_state == 15) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a5(self);
       idct_rowsort_state = 18;
@@ -121,7 +121,7 @@ else if (idct_rowsort_state == 15)
       idct_rowsort_state = 15;
     } 
 else if (idct_rowsort_state == 18) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a6(self);
       idct_rowsort_state = 21;
@@ -131,7 +131,7 @@ else if (idct_rowsort_state == 18)
       idct_rowsort_state = 18;
     } 
 else if (idct_rowsort_state == 21) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a7(self);
       idct_rowsort_state = 24;
@@ -141,7 +141,7 @@ else if (idct_rowsort_state == 21)
       idct_rowsort_state = 21;
     } 
 else if (idct_rowsort_state == 24) 
-  if (TestInputPort(self->ROW, 1)) 
+  if (network_not_finished(&Mailbox.n_source[0])) 
     { 
       a8(self);
       idct_rowsort_state = 3;
@@ -155,7 +155,7 @@ else if (idct_rowsort_state == 24)
 }
 static bool not_finished(actor_RowSort_source* self)
 {
-    return might_has_input(self->ROW);
+    return network_not_finished(&Mailbox.n_source[0]);
 }
 static void end(actor_RowSort_source *self)
 {

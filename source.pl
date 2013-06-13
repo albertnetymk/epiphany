@@ -8,22 +8,22 @@ while(<>) {
     if (/might_has_input\(.*->([^)]*)\)/) {
         # from `might_has_input(self->in)`
         # to `network_not_finished(&Mailbox.n_source[0])`
-        if ($input{$1}) {
+        if (exists $input{$1}) {
             s/might_has_input\(.*->([^)]*)\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
         }
     }
     if (/ReadToken\(.*->(.*),[^)]*\)/) {
-        if ($input{$1}) {
+        if (exists $input{$1}) {
             s/ReadToken\(.*->(.*),[^)]*\)/network_read(&Mailbox.n_source\[$input{$1}\])/g;
         }
     }
     if (/TestInputPort\(.*->(.*),[^)]*\)/) {
-        if ($input{$1}) {
+        if (exists $input{$1}) {
             s/TestInputPort\(.*->(.*),[^)]*\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
         }
     }
     if (/ConsumeToken\(.*->(.*),.*\)/) {
-        if ($input{$1}) {
+        if (exists $input{$1}) {
             s/ConsumeToken\(.*->(.*),.*\)/network_consume(&Mailbox.n_source\[$input{$1}\])/g;
         }
     }
