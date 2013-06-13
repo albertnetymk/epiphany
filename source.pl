@@ -1,20 +1,33 @@
 #!/usr/bin/perl
-my %input = (X0 => 0, X1 => 1);
+my %input = (ROW => 0, SIGNED => 1);
 my $original;
+my $name = $ARGV[0];
+$name =~ s!.*/(.*)\.c!$1!;
 while(<>) {
     $original = $_;
     if (/might_has_input\(.*->([^)]*)\)/) {
         # from `might_has_input(self->in)`
         # to `network_not_finished(&Mailbox.n_source[0])`
-        s/might_has_input\(.*->([^)]*)\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
+        if ($input{$1}) {
+            s/might_has_input\(.*->([^)]*)\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
+        }
+    }
+    if (/ReadToken.*/) {
+        if ($input{$1}) {
+            s/ReadToken\(.*->(.*),[^)]*\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
+        }
     }
     if (/TestInputPort.*/) {
-        s/TestInputPort\(.*->(.*),[^)]*\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
+        if ($input{$1}) {
+            s/TestInputPort\(.*->(.*),[^)]*\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
+        }
     }
     if (/ConsumeToken.*/) {
-        s/ConsumeToken\(.*->(.*),.*\)/network_consume(&Mailbox.n_source\[$input{$1}\])/g;
+        if ($input{$1}) {
+            s/ConsumeToken\(.*->(.*),.*\)/network_consume(&Mailbox.n_source\[$input{$1}\])/g;
+        }
     }
-    s!actor_Scale!actor_Scale_source!g;
+    s!$name!${name}_source!g;
     # todo readtoken
     # print unless $original eq $_;
     print;
