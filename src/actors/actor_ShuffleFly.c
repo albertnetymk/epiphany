@@ -35,12 +35,10 @@ if (idctCol_shufflefly_state == 0)
       } 
     else 
       { 
-        wait();
         idctCol_shufflefly_state = 1;
       } 
   else 
     { 
-      wait();
       idctCol_shufflefly_state = 0;
     } 
 else if (idctCol_shufflefly_state == 5) 
@@ -52,12 +50,10 @@ else if (idctCol_shufflefly_state == 5)
       } 
     else 
       { 
-        wait();
         idctCol_shufflefly_state = 6;
       } 
   else 
     { 
-      wait();
       idctCol_shufflefly_state = 5;
     } 
 else if (idctCol_shufflefly_state == 1) 
@@ -68,7 +64,6 @@ else if (idctCol_shufflefly_state == 1)
     } 
   else 
     { 
-      wait();
       idctCol_shufflefly_state = 1;
     } 
 else if (idctCol_shufflefly_state == 6) 
@@ -79,7 +74,6 @@ else if (idctCol_shufflefly_state == 6)
     } 
   else 
     { 
-      wait();
       idctCol_shufflefly_state = 6;
     } 
 

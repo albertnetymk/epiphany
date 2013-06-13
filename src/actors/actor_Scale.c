@@ -62,12 +62,10 @@ if (idctCol_scale_state == 0)
       } 
     else 
       { 
-        wait();
         idctCol_scale_state = 1;
       } 
   else 
     { 
-      wait();
       idctCol_scale_state = 0;
     } 
 else if (idctCol_scale_state == 1) 
@@ -78,7 +76,6 @@ else if (idctCol_scale_state == 1)
     } 
   else 
     { 
-      wait();
       idctCol_scale_state = 1;
     } 
 

@@ -14,7 +14,7 @@ int ccount = 0;
 int select = 0;
 int int_state_vars_Retranspose=1;
 void initStateVarsRetranspose() {
-    int i, j, k;
+int i, j, k;
    for( k = 1- 1; k<=8 - 1; k ++)
 for( j = 1- 1; j<=8 - 1; j ++)
 for( i = 1- 1; i<=2 - 1; i ++)
@@ -139,7 +139,6 @@ if (idct_retrans_state == 0)
                   } 
                 else 
                   { 
-                    wait();
                     idct_retrans_state = 38;
                   } 
               } 
@@ -160,7 +159,6 @@ if (idct_retrans_state == 0)
                 } 
               else 
                 { 
-                  wait();
                   idct_retrans_state = 33;
                 } 
             } 
@@ -181,7 +179,6 @@ if (idct_retrans_state == 0)
               } 
             else 
               { 
-                wait();
                 idct_retrans_state = 26;
               } 
           } 
@@ -202,7 +199,6 @@ if (idct_retrans_state == 0)
             } 
           else 
             { 
-              wait();
               idct_retrans_state = 19;
             } 
         } 
@@ -223,22 +219,18 @@ else if (idct_retrans_state == 19)
           } 
         else 
           { 
-            wait();
             idct_retrans_state = 41;
           } 
       else 
         { 
-          wait();
           idct_retrans_state = 34;
         } 
     else 
       { 
-        wait();
         idct_retrans_state = 27;
       } 
   else 
     { 
-      wait();
       idct_retrans_state = 19;
     } 
 else if (idct_retrans_state == 26) 
@@ -256,17 +248,14 @@ else if (idct_retrans_state == 26)
         } 
       else 
         { 
-          wait();
           idct_retrans_state = 39;
         } 
     else 
       { 
-        wait();
         idct_retrans_state = 33;
       } 
   else 
     { 
-      wait();
       idct_retrans_state = 26;
     } 
 else if (idct_retrans_state == 33) 
@@ -283,12 +272,10 @@ else if (idct_retrans_state == 33)
       } 
     else 
       { 
-        wait();
         idct_retrans_state = 39;
       } 
   else 
     { 
-      wait();
       idct_retrans_state = 33;
     } 
 else if (idct_retrans_state == 38) 
@@ -304,7 +291,6 @@ else if (idct_retrans_state == 38)
     } 
   else 
     { 
-      wait();
       idct_retrans_state = 38;
     } 
 else if (idct_retrans_state == 27) 
@@ -322,17 +308,14 @@ else if (idct_retrans_state == 27)
         } 
       else 
         { 
-          wait();
           idct_retrans_state = 41;
         } 
     else 
       { 
-        wait();
         idct_retrans_state = 34;
       } 
   else 
     { 
-      wait();
       idct_retrans_state = 27;
     } 
 else if (idct_retrans_state == 34) 
@@ -349,12 +332,10 @@ else if (idct_retrans_state == 34)
       } 
     else 
       { 
-        wait();
         idct_retrans_state = 41;
       } 
   else 
     { 
-      wait();
       idct_retrans_state = 34;
     } 
 else if (idct_retrans_state == 39) 
@@ -370,7 +351,6 @@ else if (idct_retrans_state == 39)
     } 
   else 
     { 
-      wait();
       idct_retrans_state = 39;
     } 
 else if (idct_retrans_state == 41) 
@@ -386,7 +366,6 @@ else if (idct_retrans_state == 41)
     } 
   else 
     { 
-      wait();
       idct_retrans_state = 41;
     } 
 

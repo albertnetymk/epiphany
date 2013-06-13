@@ -13,7 +13,7 @@ int ccount = 0;
 int select = 0;
 int int_state_vars_Transpose=1;
 void initStateVarsTranspose() {
-    int i, j, k;
+int i, j, k;
    for( k = 1- 1; k<=8 - 1; k ++)
 for( j = 1- 1; j<=8 - 1; j ++)
 for( i = 1- 1; i<=2 - 1; i ++)
@@ -133,7 +133,6 @@ if (idct_trans_state == 0)
                   } 
                 else 
                   { 
-                    wait();
                     idct_trans_state = 15;
                   } 
             } 
@@ -146,7 +145,6 @@ if (idct_trans_state == 0)
                 } 
               else 
                 { 
-                  wait();
                   idct_trans_state = 23;
                 } 
             } 
@@ -159,7 +157,6 @@ if (idct_trans_state == 0)
               } 
             else 
               { 
-                wait();
                 idct_trans_state = 18;
               } 
           } 
@@ -172,7 +169,6 @@ if (idct_trans_state == 0)
             } 
           else 
             { 
-              wait();
               idct_trans_state = 13;
             } 
         } 
@@ -193,22 +189,18 @@ else if (idct_trans_state == 13)
           } 
         else 
           { 
-            wait();
             idct_trans_state = 28;
           } 
       else 
         { 
-          wait();
           idct_trans_state = 24;
         } 
     else 
       { 
-        wait();
         idct_trans_state = 19;
       } 
   else 
     { 
-      wait();
       idct_trans_state = 13;
     } 
 else if (idct_trans_state == 18) 
@@ -226,17 +218,14 @@ else if (idct_trans_state == 18)
         } 
       else 
         { 
-          wait();
           idct_trans_state = 15;
         } 
     else 
       { 
-        wait();
         idct_trans_state = 23;
       } 
   else 
     { 
-      wait();
       idct_trans_state = 18;
     } 
 else if (idct_trans_state == 23) 
@@ -253,12 +242,10 @@ else if (idct_trans_state == 23)
       } 
     else 
       { 
-        wait();
         idct_trans_state = 15;
       } 
   else 
     { 
-      wait();
       idct_trans_state = 23;
     } 
 else if (idct_trans_state == 15) 
@@ -274,7 +261,6 @@ else if (idct_trans_state == 15)
     } 
   else 
     { 
-      wait();
       idct_trans_state = 15;
     } 
 else if (idct_trans_state == 19) 
@@ -292,17 +278,14 @@ else if (idct_trans_state == 19)
         } 
       else 
         { 
-          wait();
           idct_trans_state = 28;
         } 
     else 
       { 
-        wait();
         idct_trans_state = 24;
       } 
   else 
     { 
-      wait();
       idct_trans_state = 19;
     } 
 else if (idct_trans_state == 24) 
@@ -319,12 +302,10 @@ else if (idct_trans_state == 24)
       } 
     else 
       { 
-        wait();
         idct_trans_state = 28;
       } 
   else 
     { 
-      wait();
       idct_trans_state = 24;
     } 
 else if (idct_trans_state == 28) 
@@ -340,7 +321,6 @@ else if (idct_trans_state == 28)
     } 
   else 
     { 
-      wait();
       idct_trans_state = 28;
     } 
 

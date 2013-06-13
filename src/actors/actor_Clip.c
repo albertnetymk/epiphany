@@ -119,7 +119,6 @@ if (idct_clip_state == 0)
           } 
         else 
           { 
-            wait();
             idct_clip_state = 4;
           } 
     } 
@@ -171,7 +170,6 @@ if (idct_clip_state == 0)
       } 
     else 
       { 
-        wait();
         idct_clip_state = 0;
       } 
 else if (idct_clip_state == 4) 
@@ -222,7 +220,6 @@ else if (idct_clip_state == 4)
     } 
   else 
     { 
-      wait();
       idct_clip_state = 4;
     } 
 

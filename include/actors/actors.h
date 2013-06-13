@@ -3,7 +3,7 @@
 #ifndef _ACTORS_H
 #define _ACTORS_H
 
-#include "actors/actor_RowSort.h"
+#include "actors/actor_RowSort_source.h"
 #include "actors/actor_Scale.h"
 #include "actors/actor_Combine.h"
 #include "actors/actor_ShuffleFly.h"
@@ -17,10 +17,10 @@
 #include "actors/actor_Final.h"
 #include "actors/actor_Shift.h"
 #include "actors/actor_Retranspose.h"
-#include "actors/actor_Clip.h"
+#include "actors/actor_Clip_source_sink.h"
 
 typedef struct actors_struct {
-    actor_RowSort *instance_RowSort;
+    actor_RowSort_source *instance_RowSort;
     actor_Scale *idctRow_instance_Scale;
     actor_Combine *idctRow_instance_Combine;
     actor_ShuffleFly *idctRow_instance_ShuffleFly;
@@ -34,6 +34,6 @@ typedef struct actors_struct {
     actor_Final *idctCol_instance_Final;
     actor_Shift *instance_Shift;
     actor_Retranspose *instance_Retranspose;
-    actor_Clip *instance_Clip;
+    actor_Clip_source_sink *instance_Clip;
 } actors;
 #endif

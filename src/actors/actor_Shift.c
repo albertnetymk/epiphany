@@ -32,22 +32,18 @@ if (idct_shift_state == 0)
           } 
         else 
           { 
-            wait();
             idct_shift_state = 5;
           } 
       else 
         { 
-          wait();
           idct_shift_state = 3;
         } 
     else 
       { 
-        wait();
         idct_shift_state = 1;
       } 
   else 
     { 
-      wait();
       idct_shift_state = 0;
     } 
 else if (idct_shift_state == 1) 
@@ -60,17 +56,14 @@ else if (idct_shift_state == 1)
         } 
       else 
         { 
-          wait();
           idct_shift_state = 5;
         } 
     else 
       { 
-        wait();
         idct_shift_state = 3;
       } 
   else 
     { 
-      wait();
       idct_shift_state = 1;
     } 
 else if (idct_shift_state == 3) 
@@ -82,12 +75,10 @@ else if (idct_shift_state == 3)
       } 
     else 
       { 
-        wait();
         idct_shift_state = 5;
       } 
   else 
     { 
-      wait();
       idct_shift_state = 3;
     } 
 else if (idct_shift_state == 5) 
@@ -98,7 +89,6 @@ else if (idct_shift_state == 5)
     } 
   else 
     { 
-      wait();
       idct_shift_state = 5;
     } 
 

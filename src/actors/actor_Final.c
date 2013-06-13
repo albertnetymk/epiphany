@@ -32,22 +32,18 @@ if (idctCol_final_state == 0)
           } 
         else 
           { 
-            wait();
             idctCol_final_state = 5;
           } 
       else 
         { 
-          wait();
           idctCol_final_state = 3;
         } 
     else 
       { 
-        wait();
         idctCol_final_state = 1;
       } 
   else 
     { 
-      wait();
       idctCol_final_state = 0;
     } 
 else if (idctCol_final_state == 1) 
@@ -60,17 +56,14 @@ else if (idctCol_final_state == 1)
         } 
       else 
         { 
-          wait();
           idctCol_final_state = 5;
         } 
     else 
       { 
-        wait();
         idctCol_final_state = 3;
       } 
   else 
     { 
-      wait();
       idctCol_final_state = 1;
     } 
 else if (idctCol_final_state == 3) 
@@ -82,12 +75,10 @@ else if (idctCol_final_state == 3)
       } 
     else 
       { 
-        wait();
         idctCol_final_state = 5;
       } 
   else 
     { 
-      wait();
       idctCol_final_state = 3;
     } 
 else if (idctCol_final_state == 5) 
@@ -98,7 +89,6 @@ else if (idctCol_final_state == 5)
     } 
   else 
     { 
-      wait();
       idctCol_final_state = 5;
     } 
 

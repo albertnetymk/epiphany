@@ -63,22 +63,18 @@ if (idctCol_shuffle_state == 0)
           } 
         else 
           { 
-            wait();
             idctCol_shuffle_state = 5;
           } 
       else 
         { 
-          wait();
           idctCol_shuffle_state = 3;
         } 
     else 
       { 
-        wait();
         idctCol_shuffle_state = 1;
       } 
   else 
     { 
-      wait();
       idctCol_shuffle_state = 0;
     } 
 else if (idctCol_shuffle_state == 1) 
@@ -91,17 +87,14 @@ else if (idctCol_shuffle_state == 1)
         } 
       else 
         { 
-          wait();
           idctCol_shuffle_state = 5;
         } 
     else 
       { 
-        wait();
         idctCol_shuffle_state = 3;
       } 
   else 
     { 
-      wait();
       idctCol_shuffle_state = 1;
     } 
 else if (idctCol_shuffle_state == 3) 
@@ -113,12 +106,10 @@ else if (idctCol_shuffle_state == 3)
       } 
     else 
       { 
-        wait();
         idctCol_shuffle_state = 5;
       } 
   else 
     { 
-      wait();
       idctCol_shuffle_state = 3;
     } 
 else if (idctCol_shuffle_state == 9) 
@@ -132,22 +123,18 @@ else if (idctCol_shuffle_state == 9)
           } 
         else 
           { 
-            wait();
             idctCol_shuffle_state = 14;
           } 
       else 
         { 
-          wait();
           idctCol_shuffle_state = 12;
         } 
     else 
       { 
-        wait();
         idctCol_shuffle_state = 10;
       } 
   else 
     { 
-      wait();
       idctCol_shuffle_state = 9;
     } 
 else if (idctCol_shuffle_state == 5) 
@@ -158,7 +145,6 @@ else if (idctCol_shuffle_state == 5)
     } 
   else 
     { 
-      wait();
       idctCol_shuffle_state = 5;
     } 
 else if (idctCol_shuffle_state == 10) 
@@ -171,17 +157,14 @@ else if (idctCol_shuffle_state == 10)
         } 
       else 
         { 
-          wait();
           idctCol_shuffle_state = 14;
         } 
     else 
       { 
-        wait();
         idctCol_shuffle_state = 12;
       } 
   else 
     { 
-      wait();
       idctCol_shuffle_state = 10;
     } 
 else if (idctCol_shuffle_state == 12) 
@@ -193,12 +176,10 @@ else if (idctCol_shuffle_state == 12)
       } 
     else 
       { 
-        wait();
         idctCol_shuffle_state = 14;
       } 
   else 
     { 
-      wait();
       idctCol_shuffle_state = 12;
     } 
 else if (idctCol_shuffle_state == 18) 
@@ -214,7 +195,6 @@ else if (idctCol_shuffle_state == 14)
     } 
   else 
     { 
-      wait();
       idctCol_shuffle_state = 14;
     } 
 

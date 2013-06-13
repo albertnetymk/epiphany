@@ -68,7 +68,6 @@ if (idct_rowsort_state == 0)
     } 
   else 
     { 
-      wait();
       idct_rowsort_state = 0;
     } 
 else if (idct_rowsort_state == 3) 
@@ -79,7 +78,6 @@ else if (idct_rowsort_state == 3)
     } 
   else 
     { 
-      wait();
       idct_rowsort_state = 3;
     } 
 else if (idct_rowsort_state == 6) 
@@ -90,7 +88,6 @@ else if (idct_rowsort_state == 6)
     } 
   else 
     { 
-      wait();
       idct_rowsort_state = 6;
     } 
 else if (idct_rowsort_state == 9) 
@@ -101,7 +98,6 @@ else if (idct_rowsort_state == 9)
     } 
   else 
     { 
-      wait();
       idct_rowsort_state = 9;
     } 
 else if (idct_rowsort_state == 12) 
@@ -112,7 +108,6 @@ else if (idct_rowsort_state == 12)
     } 
   else 
     { 
-      wait();
       idct_rowsort_state = 12;
     } 
 else if (idct_rowsort_state == 15) 
@@ -123,7 +118,6 @@ else if (idct_rowsort_state == 15)
     } 
   else 
     { 
-      wait();
       idct_rowsort_state = 15;
     } 
 else if (idct_rowsort_state == 18) 
@@ -134,7 +128,6 @@ else if (idct_rowsort_state == 18)
     } 
   else 
     { 
-      wait();
       idct_rowsort_state = 18;
     } 
 else if (idct_rowsort_state == 21) 
@@ -145,7 +138,6 @@ else if (idct_rowsort_state == 21)
     } 
   else 
     { 
-      wait();
       idct_rowsort_state = 21;
     } 
 else if (idct_rowsort_state == 24) 
