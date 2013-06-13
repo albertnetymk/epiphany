@@ -14,7 +14,7 @@ void initStateVarsClip() {
 
 }
 bool read_signed_guard (actor_Clip_source_sink *self) { 
-      int s = ReadToken(self->SIGNED, 1);
+      int s = network_read(&Mailbox.n_source[1]);
 
   return (count < 0);  }
 bool limit_max_guard (actor_Clip_source_sink *self) { 
@@ -31,7 +31,7 @@ bool limit_min_guard (actor_Clip_source_sink *self) {
   return (i < ( - 255) );  }
 
  inline void  read_signed  (actor_Clip_source_sink *self) { 
-    int s = ConsumeToken(self->SIGNED, 1);
+    int s = network_consume(&Mailbox.n_source[1]);
   sflag = s;
   count = 63;
   }
@@ -64,7 +64,7 @@ static void run(actor_Clip_source_sink *self)
        initStateVarsClip();
     }
 if (idct_clip_state == 0) 
-  if (TestInputPort(self->SIGNED, 1)) 
+  if (network_not_finished(&Mailbox.n_source[1])) 
     { 
       if (read_signed_guard(self)) 
         { 

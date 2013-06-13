@@ -12,17 +12,17 @@ while(<>) {
             s/might_has_input\(.*->([^)]*)\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
         }
     }
-    if (/ReadToken.*/) {
+    if (/ReadToken\(.*->(.*),[^)]*\)/) {
         if ($input{$1}) {
-            s/ReadToken\(.*->(.*),[^)]*\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
+            s/ReadToken\(.*->(.*),[^)]*\)/network_read(&Mailbox.n_source\[$input{$1}\])/g;
         }
     }
-    if (/TestInputPort.*/) {
+    if (/TestInputPort\(.*->(.*),[^)]*\)/) {
         if ($input{$1}) {
             s/TestInputPort\(.*->(.*),[^)]*\)/network_not_finished(&Mailbox.n_source\[$input{$1}\])/g;
         }
     }
-    if (/ConsumeToken.*/) {
+    if (/ConsumeToken\(.*->(.*),.*\)/) {
         if ($input{$1}) {
             s/ConsumeToken\(.*->(.*),.*\)/network_consume(&Mailbox.n_source\[$input{$1}\])/g;
         }
