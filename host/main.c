@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 
     int i, j, n;
     int start = 0;
-    int end = 5;
+    int end = 15;
     puts("Host is running ...");
     fo = stdout;
     for (i=start; i<end; ++i) {
@@ -135,8 +135,7 @@ int main(int argc, char **argv) {
     }
     for (i = 0; i < sizeof(Mailbox.n_source)/sizeof(Mailbox.n_source[0]);
             ++i) {
-        Mailbox.n_source[i].size =
-            sizeof(Mailbox.n_source)/sizeof(Mailbox.n_source[0]);
+        Mailbox.n_source[i].size = input_data_size;
         Mailbox.n_source[i].index = 0;
     }
 
