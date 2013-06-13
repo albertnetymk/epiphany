@@ -246,19 +246,32 @@ endif
 
 .PHONY: source_actor
 source_actor:
-	$(ROOT_DIR)/source.pl  $(ROOT_DIR)/src/actors/actor_Scale.c > $(ROOT_DIR)/src/actors/actor_Scale_source.c
-	 sed -r 's!actor_Scale!actor_Scale_source!g' $(ROOT_DIR)/include/actors/actor_Scale.h > $(ROOT_DIR)/include/actors/actor_Scale_source.h.tmp
-	 echo '#include "util/source.h"' > $(ROOT_DIR)/include/actors/actor_Scale_source.h
-	 cat $(ROOT_DIR)/include/actors/actor_Scale_source.h.tmp >> $(ROOT_DIR)/include/actors/actor_Scale_source.h
-	 rm $(ROOT_DIR)/include/actors/actor_Scale_source.h.tmp
+	# RowSort
+	$(ROOT_DIR)/source.pl  $(ROOT_DIR)/src/actors/actor_RowSort.c > actor_RowSort_source.c
+	mv actor_RowSort_source.c $(ROOT_DIR)/src/actors/
+	sed -r 's!actor_RowSort!actor_RowSort_source!g' $(ROOT_DIR)/include/actors/actor_RowSort.h > actor_RowSort_source.h.tmp
+	echo '#include "util/source.h"' > actor_RowSort_source.h
+	cat actor_RowSort_source.h.tmp >> actor_RowSort_source.h
+	rm actor_RowSort_source.h.tmp
+	mv actor_RowSort_source.h $(ROOT_DIR)/include/actors/
+	# Clip
+	$(ROOT_DIR)/source.pl  $(ROOT_DIR)/src/actors/actor_Clip.c > actor_Clip_source.c
+	mv actor_Clip_source.c $(ROOT_DIR)/src/actors/
+	sed -r 's!actor_Clip!actor_Clip_source!g' $(ROOT_DIR)/include/actors/actor_Clip.h > actor_Clip_source.h.tmp
+	echo '#include "util/source.h"' > actor_Clip_source.h
+	cat actor_Clip_source.h.tmp >> actor_Clip_source.h
+	rm actor_Clip_source.h.tmp
+	mv actor_Clip_source.h $(ROOT_DIR)/include/actors/
 
 .PHONY: sink_actor
 sink_actor:
-	$(ROOT_DIR)/sink.pl  $(ROOT_DIR)/src/actors/actor_Final.c > $(ROOT_DIR)/src/actors/actor_Final_sink.c
-	 sed -r 's!actor_Final!actor_Final_sink!g' $(ROOT_DIR)/include/actors/actor_Final.h > $(ROOT_DIR)/include/actors/actor_Final_sink.h.tmp
-	 echo '#include "util/sink.h"' > $(ROOT_DIR)/include/actors/actor_Final_sink.h
-	 cat $(ROOT_DIR)/include/actors/actor_Final_sink.h.tmp >> $(ROOT_DIR)/include/actors/actor_Final_sink.h
-	 rm $(ROOT_DIR)/include/actors/actor_Final_sink.h.tmp
-
+	# Clip
+	$(ROOT_DIR)/sink.pl  $(ROOT_DIR)/src/actors/actor_Clip_source.c > actor_Clip_source_sink.c
+	mv actor_Clip_source_sink.c $(ROOT_DIR)/src/actors/
+	sed -r 's!actor_Clip_source!actor_Clip_source_sink!g' $(ROOT_DIR)/include/actors/actor_Clip_source.h > actor_Clip_source_sink.h.tmp
+	echo '#include "util/sink.h"' > actor_Clip_source_sink.h
+	cat actor_Clip_source_sink.h.tmp >> actor_Clip_source_sink.h
+	rm actor_Clip_source_sink.h.tmp
+	mv actor_Clip_source_sink.h $(ROOT_DIR)/include/actors/
 
 endif
