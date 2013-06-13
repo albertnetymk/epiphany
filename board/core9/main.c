@@ -47,11 +47,11 @@ dma_cfg dma30, dma31;
 static api_t api;
 static inline api_t *init(void *a)
 {
-    all.idctRow_instance_ShuffleFly = a;
+    all.idctCol_instance_ShuffleFly = a;
     actor_ShuffleFly_init(a);
-    api.run = (run_t *)all.idctRow_instance_ShuffleFly->run;
-    api.end = (end_t *)all.idctRow_instance_ShuffleFly->end;
-    api.not_finished = (not_finished_t *)all.idctRow_instance_ShuffleFly->not_finished;
+    api.run = (run_t *)all.idctCol_instance_ShuffleFly->run;
+    api.end = (end_t *)all.idctCol_instance_ShuffleFly->end;
+    api.not_finished = (not_finished_t *)all.idctCol_instance_ShuffleFly->not_finished;
     return &api;
 }
 int main(void) {

@@ -23,58 +23,64 @@ int D1;
   SendToken(self->Y3, (D1 - d3), 1);
   }
 
-int shufflefly_state=0;
+int idctCol_shufflefly_state=0;
 static void run(actor_ShuffleFly *self)
 {
-if (shufflefly_state == 0) 
-  if (TestInputPort(self->X1, 1)) 
-    if (TestInputPort(self->X0, 1)) 
+if (idctCol_shufflefly_state == 0) 
+  if (TestInputPort(self->X0, 1)) 
+    if (TestInputPort(self->X1, 1)) 
       { 
         a0(self);
-        shufflefly_state = 5;
+        idctCol_shufflefly_state = 5;
       } 
     else 
       { 
-        shufflefly_state = 1;
+        wait();
+        idctCol_shufflefly_state = 1;
       } 
   else 
     { 
-      shufflefly_state = 0;
+      wait();
+      idctCol_shufflefly_state = 0;
     } 
-else if (shufflefly_state == 5) 
-  if (TestInputPort(self->X1, 1)) 
-    if (TestInputPort(self->X0, 1)) 
+else if (idctCol_shufflefly_state == 5) 
+  if (TestInputPort(self->X0, 1)) 
+    if (TestInputPort(self->X1, 1)) 
       { 
         a1(self);
-        shufflefly_state = 0;
+        idctCol_shufflefly_state = 0;
       } 
     else 
       { 
-        shufflefly_state = 6;
+        wait();
+        idctCol_shufflefly_state = 6;
       } 
   else 
     { 
-      shufflefly_state = 5;
+      wait();
+      idctCol_shufflefly_state = 5;
     } 
-else if (shufflefly_state == 1) 
-  if (TestInputPort(self->X0, 1)) 
+else if (idctCol_shufflefly_state == 1) 
+  if (TestInputPort(self->X1, 1)) 
     { 
       a0(self);
-      shufflefly_state = 5;
+      idctCol_shufflefly_state = 5;
     } 
   else 
     { 
-      shufflefly_state = 1;
+      wait();
+      idctCol_shufflefly_state = 1;
     } 
-else if (shufflefly_state == 6) 
-  if (TestInputPort(self->X0, 1)) 
+else if (idctCol_shufflefly_state == 6) 
+  if (TestInputPort(self->X1, 1)) 
     { 
       a1(self);
-      shufflefly_state = 0;
+      idctCol_shufflefly_state = 0;
     } 
   else 
     { 
-      shufflefly_state = 6;
+      wait();
+      idctCol_shufflefly_state = 6;
     } 
 
 }

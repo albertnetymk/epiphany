@@ -14,8 +14,6 @@ int count = 0;
     int b = ConsumeToken(self->X1, 1);
     int c = ConsumeToken(self->X2, 1);
     int d = ConsumeToken(self->X3, 1);
-  bool sw;
-
   bool s = (count == 0);
 
   int o = (row ? (s ? 128 : 0) : (s ? 65536 : 4));
@@ -33,78 +31,88 @@ int count = 0;
   SendToken(self->Y1, y1out, 1);
   }
 
-int combine_state=0;
+int idctCol_combine_state=0;
 static void run(actor_Combine *self)
 {
-if (combine_state == 0) 
-  if (TestInputPort(self->X2, 1)) 
-    if (TestInputPort(self->X3, 1)) 
-      if (TestInputPort(self->X1, 1)) 
+if (idctCol_combine_state == 0) 
+  if (TestInputPort(self->X1, 1)) 
+    if (TestInputPort(self->X2, 1)) 
+      if (TestInputPort(self->X3, 1)) 
         if (TestInputPort(self->X0, 1)) 
           { 
             combine(self);
-            combine_state = 0;
+            idctCol_combine_state = 0;
           } 
         else 
           { 
-            combine_state = 5;
+            wait();
+            idctCol_combine_state = 5;
           } 
       else 
         { 
-          combine_state = 3;
+          wait();
+          idctCol_combine_state = 3;
         } 
     else 
       { 
-        combine_state = 1;
+        wait();
+        idctCol_combine_state = 1;
       } 
   else 
     { 
-      combine_state = 0;
+      wait();
+      idctCol_combine_state = 0;
     } 
-else if (combine_state == 1) 
-  if (TestInputPort(self->X3, 1)) 
-    if (TestInputPort(self->X1, 1)) 
+else if (idctCol_combine_state == 1) 
+  if (TestInputPort(self->X2, 1)) 
+    if (TestInputPort(self->X3, 1)) 
       if (TestInputPort(self->X0, 1)) 
         { 
           combine(self);
-          combine_state = 0;
+          idctCol_combine_state = 0;
         } 
       else 
         { 
-          combine_state = 5;
+          wait();
+          idctCol_combine_state = 5;
         } 
     else 
       { 
-        combine_state = 3;
+        wait();
+        idctCol_combine_state = 3;
       } 
   else 
     { 
-      combine_state = 1;
+      wait();
+      idctCol_combine_state = 1;
     } 
-else if (combine_state == 3) 
-  if (TestInputPort(self->X1, 1)) 
+else if (idctCol_combine_state == 3) 
+  if (TestInputPort(self->X3, 1)) 
     if (TestInputPort(self->X0, 1)) 
       { 
         combine(self);
-        combine_state = 0;
+        idctCol_combine_state = 0;
       } 
     else 
       { 
-        combine_state = 5;
+        wait();
+        idctCol_combine_state = 5;
       } 
   else 
     { 
-      combine_state = 3;
+      wait();
+      idctCol_combine_state = 3;
     } 
-else if (combine_state == 5) 
+else if (idctCol_combine_state == 5) 
   if (TestInputPort(self->X0, 1)) 
     { 
       combine(self);
-      combine_state = 0;
+      idctCol_combine_state = 0;
     } 
   else 
     { 
-      combine_state = 5;
+      wait();
+      idctCol_combine_state = 5;
     } 
 
 }

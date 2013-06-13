@@ -46,37 +46,40 @@ void initStateVarsScale() {
   SendToken(self->Y3, (b * w1), 1);
   }
 
-int scale_state=0;
+int idctCol_scale_state=0;
 static void run(actor_Scale *self)
 {
     if(int_state_vars_Scale==1){
        int_state_vars_Scale=0;
        initStateVarsScale();
     }
-if (scale_state == 0) 
-  if (TestInputPort(self->X1, 1)) 
-    if (TestInputPort(self->X0, 1)) 
+if (idctCol_scale_state == 0) 
+  if (TestInputPort(self->X0, 1)) 
+    if (TestInputPort(self->X1, 1)) 
       { 
         scale(self);
-        scale_state = 0;
+        idctCol_scale_state = 0;
       } 
     else 
       { 
-        scale_state = 1;
+        wait();
+        idctCol_scale_state = 1;
       } 
   else 
     { 
-      scale_state = 0;
+      wait();
+      idctCol_scale_state = 0;
     } 
-else if (scale_state == 1) 
-  if (TestInputPort(self->X0, 1)) 
+else if (idctCol_scale_state == 1) 
+  if (TestInputPort(self->X1, 1)) 
     { 
       scale(self);
-      scale_state = 0;
+      idctCol_scale_state = 0;
     } 
   else 
     { 
-      scale_state = 1;
+      wait();
+      idctCol_scale_state = 1;
     } 
 
 }

@@ -49,153 +49,173 @@ int x7l;
   SendToken(self->Y3, (x7h + (x7l >> 8)), 1);
   }
 
-int shuffle_state=0;
+int idctCol_shuffle_state=0;
 static void run(actor_Shuffle *self)
 {
-if (shuffle_state == 0) 
+if (idctCol_shuffle_state == 0) 
   if (TestInputPort(self->X2, 1)) 
-    if (TestInputPort(self->X3, 1)) 
-      if (TestInputPort(self->X0, 1)) 
-        if (TestInputPort(self->X1, 1)) 
+    if (TestInputPort(self->X1, 1)) 
+      if (TestInputPort(self->X3, 1)) 
+        if (TestInputPort(self->X0, 1)) 
           { 
             a0(self);
-            shuffle_state = 9;
+            idctCol_shuffle_state = 9;
           } 
         else 
           { 
-            shuffle_state = 5;
+            wait();
+            idctCol_shuffle_state = 5;
           } 
       else 
         { 
-          shuffle_state = 3;
+          wait();
+          idctCol_shuffle_state = 3;
         } 
     else 
       { 
-        shuffle_state = 1;
+        wait();
+        idctCol_shuffle_state = 1;
       } 
   else 
     { 
-      shuffle_state = 0;
+      wait();
+      idctCol_shuffle_state = 0;
     } 
-else if (shuffle_state == 1) 
-  if (TestInputPort(self->X3, 1)) 
-    if (TestInputPort(self->X0, 1)) 
-      if (TestInputPort(self->X1, 1)) 
+else if (idctCol_shuffle_state == 1) 
+  if (TestInputPort(self->X1, 1)) 
+    if (TestInputPort(self->X3, 1)) 
+      if (TestInputPort(self->X0, 1)) 
         { 
           a0(self);
-          shuffle_state = 9;
+          idctCol_shuffle_state = 9;
         } 
       else 
         { 
-          shuffle_state = 5;
+          wait();
+          idctCol_shuffle_state = 5;
         } 
     else 
       { 
-        shuffle_state = 3;
+        wait();
+        idctCol_shuffle_state = 3;
       } 
   else 
     { 
-      shuffle_state = 1;
+      wait();
+      idctCol_shuffle_state = 1;
     } 
-else if (shuffle_state == 3) 
-  if (TestInputPort(self->X0, 1)) 
-    if (TestInputPort(self->X1, 1)) 
+else if (idctCol_shuffle_state == 3) 
+  if (TestInputPort(self->X3, 1)) 
+    if (TestInputPort(self->X0, 1)) 
       { 
         a0(self);
-        shuffle_state = 9;
+        idctCol_shuffle_state = 9;
       } 
     else 
       { 
-        shuffle_state = 5;
+        wait();
+        idctCol_shuffle_state = 5;
       } 
   else 
     { 
-      shuffle_state = 3;
+      wait();
+      idctCol_shuffle_state = 3;
     } 
-else if (shuffle_state == 9) 
+else if (idctCol_shuffle_state == 9) 
   if (TestInputPort(self->X0, 1)) 
     if (TestInputPort(self->X1, 1)) 
       if (TestInputPort(self->X3, 1)) 
         if (TestInputPort(self->X2, 1)) 
           { 
             a1(self);
-            shuffle_state = 18;
+            idctCol_shuffle_state = 18;
           } 
         else 
           { 
-            shuffle_state = 14;
+            wait();
+            idctCol_shuffle_state = 14;
           } 
       else 
         { 
-          shuffle_state = 12;
+          wait();
+          idctCol_shuffle_state = 12;
         } 
     else 
       { 
-        shuffle_state = 10;
+        wait();
+        idctCol_shuffle_state = 10;
       } 
   else 
     { 
-      shuffle_state = 9;
+      wait();
+      idctCol_shuffle_state = 9;
     } 
-else if (shuffle_state == 5) 
-  if (TestInputPort(self->X1, 1)) 
+else if (idctCol_shuffle_state == 5) 
+  if (TestInputPort(self->X0, 1)) 
     { 
       a0(self);
-      shuffle_state = 9;
+      idctCol_shuffle_state = 9;
     } 
   else 
     { 
-      shuffle_state = 5;
+      wait();
+      idctCol_shuffle_state = 5;
     } 
-else if (shuffle_state == 10) 
+else if (idctCol_shuffle_state == 10) 
   if (TestInputPort(self->X1, 1)) 
     if (TestInputPort(self->X3, 1)) 
       if (TestInputPort(self->X2, 1)) 
         { 
           a1(self);
-          shuffle_state = 18;
+          idctCol_shuffle_state = 18;
         } 
       else 
         { 
-          shuffle_state = 14;
+          wait();
+          idctCol_shuffle_state = 14;
         } 
     else 
       { 
-        shuffle_state = 12;
+        wait();
+        idctCol_shuffle_state = 12;
       } 
   else 
     { 
-      shuffle_state = 10;
+      wait();
+      idctCol_shuffle_state = 10;
     } 
-else if (shuffle_state == 12) 
+else if (idctCol_shuffle_state == 12) 
   if (TestInputPort(self->X3, 1)) 
     if (TestInputPort(self->X2, 1)) 
       { 
         a1(self);
-        shuffle_state = 18;
+        idctCol_shuffle_state = 18;
       } 
     else 
       { 
-        shuffle_state = 14;
+        wait();
+        idctCol_shuffle_state = 14;
       } 
   else 
     { 
-      shuffle_state = 12;
+      wait();
+      idctCol_shuffle_state = 12;
     } 
-else if (shuffle_state == 18) 
+else if (idctCol_shuffle_state == 18) 
   { 
     a2(self);
-    shuffle_state = 0;
+    idctCol_shuffle_state = 0;
   } 
-else if (shuffle_state == 14) 
+else if (idctCol_shuffle_state == 14) 
   if (TestInputPort(self->X2, 1)) 
     { 
       a1(self);
-      shuffle_state = 18;
+      idctCol_shuffle_state = 18;
     } 
   else 
     { 
-      shuffle_state = 14;
+      wait();
+      idctCol_shuffle_state = 14;
     } 
 
 }

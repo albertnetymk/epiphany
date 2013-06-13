@@ -1,7 +1,7 @@
 #include <e_coreid.h> 
 #include "util/common.h"
 #include "util/flags.h"
-actor_Final_sink instance_Final;
+actor_Shuffle instance_Shuffle;
 port_in X0;
 port_in X1;
 port_in X2;
@@ -55,11 +55,11 @@ dma_cfg dma30, dma31;
 static api_t api;
 static inline api_t *init(void *a)
 {
-    all.instance_Final = a;
-    actor_Final_sink_init(a);
-    api.run = (run_t *)all.instance_Final->run;
-    api.end = (end_t *)all.instance_Final->end;
-    api.not_finished = (not_finished_t *)all.instance_Final->not_finished;
+    all.idctRow_instance_Shuffle = a;
+    actor_Shuffle_init(a);
+    api.run = (run_t *)all.idctRow_instance_Shuffle->run;
+    api.end = (end_t *)all.idctRow_instance_Shuffle->end;
+    api.not_finished = (not_finished_t *)all.idctRow_instance_Shuffle->not_finished;
     return &api;
 }
 int main(void) {
@@ -110,14 +110,14 @@ int main(void) {
     Y3.buffers[0] = address_from_coreid(mycoreid, &Y3_b0);
     Y3.buffers[1] = address_from_coreid(mycoreid, &Y3_b1);
 #endif
-    instance_Final.X0 = address_from_coreid(mycoreid, &X0);
-    instance_Final.X1 = address_from_coreid(mycoreid, &X1);
-    instance_Final.X2 = address_from_coreid(mycoreid, &X2);
-    instance_Final.X3 = address_from_coreid(mycoreid, &X3);
-    instance_Final.Y0 = address_from_coreid(mycoreid, &Y0);
-    instance_Final.Y1 = address_from_coreid(mycoreid, &Y1);
-    instance_Final.Y2 = address_from_coreid(mycoreid, &Y2);
-    instance_Final.Y3 = address_from_coreid(mycoreid, &Y3);
-   core_main(address_from_coreid(mycoreid, &instance_Final), &init);
+    instance_Shuffle.X0 = address_from_coreid(mycoreid, &X0);
+    instance_Shuffle.X1 = address_from_coreid(mycoreid, &X1);
+    instance_Shuffle.X2 = address_from_coreid(mycoreid, &X2);
+    instance_Shuffle.X3 = address_from_coreid(mycoreid, &X3);
+    instance_Shuffle.Y0 = address_from_coreid(mycoreid, &Y0);
+    instance_Shuffle.Y1 = address_from_coreid(mycoreid, &Y1);
+    instance_Shuffle.Y2 = address_from_coreid(mycoreid, &Y2);
+    instance_Shuffle.Y3 = address_from_coreid(mycoreid, &Y3);
+   core_main(address_from_coreid(mycoreid, &instance_Shuffle), &init);
    return 0;
 }

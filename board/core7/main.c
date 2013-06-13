@@ -1,7 +1,7 @@
 #include <e_coreid.h> 
 #include "util/common.h"
 #include "util/flags.h"
-actor_ShuffleFly instance_ShuffleFly;
+actor_Scale instance_Scale;
 port_in X0;
 port_in X1;
 port_out Y0;
@@ -47,11 +47,11 @@ dma_cfg dma30, dma31;
 static api_t api;
 static inline api_t *init(void *a)
 {
-    all.idctRow_instance_ShuffleFly = a;
-    actor_ShuffleFly_init(a);
-    api.run = (run_t *)all.idctRow_instance_ShuffleFly->run;
-    api.end = (end_t *)all.idctRow_instance_ShuffleFly->end;
-    api.not_finished = (not_finished_t *)all.idctRow_instance_ShuffleFly->not_finished;
+    all.idctCol_instance_Scale = a;
+    actor_Scale_init(a);
+    api.run = (run_t *)all.idctCol_instance_Scale->run;
+    api.end = (end_t *)all.idctCol_instance_Scale->end;
+    api.not_finished = (not_finished_t *)all.idctCol_instance_Scale->not_finished;
     return &api;
 }
 int main(void) {
@@ -96,12 +96,12 @@ int main(void) {
     Y3.buffers[0] = address_from_coreid(mycoreid, &Y3_b0);
     Y3.buffers[1] = address_from_coreid(mycoreid, &Y3_b1);
 #endif
-    instance_ShuffleFly.X0 = address_from_coreid(mycoreid, &X0);
-    instance_ShuffleFly.X1 = address_from_coreid(mycoreid, &X1);
-    instance_ShuffleFly.Y0 = address_from_coreid(mycoreid, &Y0);
-    instance_ShuffleFly.Y1 = address_from_coreid(mycoreid, &Y1);
-    instance_ShuffleFly.Y2 = address_from_coreid(mycoreid, &Y2);
-    instance_ShuffleFly.Y3 = address_from_coreid(mycoreid, &Y3);
-   core_main(address_from_coreid(mycoreid, &instance_ShuffleFly), &init);
+    instance_Scale.X0 = address_from_coreid(mycoreid, &X0);
+    instance_Scale.X1 = address_from_coreid(mycoreid, &X1);
+    instance_Scale.Y0 = address_from_coreid(mycoreid, &Y0);
+    instance_Scale.Y1 = address_from_coreid(mycoreid, &Y1);
+    instance_Scale.Y2 = address_from_coreid(mycoreid, &Y2);
+    instance_Scale.Y3 = address_from_coreid(mycoreid, &Y3);
+   core_main(address_from_coreid(mycoreid, &instance_Scale), &init);
    return 0;
 }

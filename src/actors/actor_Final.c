@@ -18,78 +18,88 @@
   SendToken(self->Y3, ((b - d) >> 8), 1);
   }
 
-int final_state=0;
+int idctCol_final_state=0;
 static void run(actor_Final *self)
 {
-if (final_state == 0) 
+if (idctCol_final_state == 0) 
   if (TestInputPort(self->X1, 1)) 
-    if (TestInputPort(self->X0, 1)) 
-      if (TestInputPort(self->X2, 1)) 
-        if (TestInputPort(self->X3, 1)) 
+    if (TestInputPort(self->X3, 1)) 
+      if (TestInputPort(self->X0, 1)) 
+        if (TestInputPort(self->X2, 1)) 
           { 
             final(self);
-            final_state = 0;
+            idctCol_final_state = 0;
           } 
         else 
           { 
-            final_state = 5;
+            wait();
+            idctCol_final_state = 5;
           } 
       else 
         { 
-          final_state = 3;
+          wait();
+          idctCol_final_state = 3;
         } 
     else 
       { 
-        final_state = 1;
+        wait();
+        idctCol_final_state = 1;
       } 
   else 
     { 
-      final_state = 0;
+      wait();
+      idctCol_final_state = 0;
     } 
-else if (final_state == 1) 
-  if (TestInputPort(self->X0, 1)) 
-    if (TestInputPort(self->X2, 1)) 
-      if (TestInputPort(self->X3, 1)) 
+else if (idctCol_final_state == 1) 
+  if (TestInputPort(self->X3, 1)) 
+    if (TestInputPort(self->X0, 1)) 
+      if (TestInputPort(self->X2, 1)) 
         { 
           final(self);
-          final_state = 0;
+          idctCol_final_state = 0;
         } 
       else 
         { 
-          final_state = 5;
+          wait();
+          idctCol_final_state = 5;
         } 
     else 
       { 
-        final_state = 3;
+        wait();
+        idctCol_final_state = 3;
       } 
   else 
     { 
-      final_state = 1;
+      wait();
+      idctCol_final_state = 1;
     } 
-else if (final_state == 3) 
-  if (TestInputPort(self->X2, 1)) 
-    if (TestInputPort(self->X3, 1)) 
+else if (idctCol_final_state == 3) 
+  if (TestInputPort(self->X0, 1)) 
+    if (TestInputPort(self->X2, 1)) 
       { 
         final(self);
-        final_state = 0;
+        idctCol_final_state = 0;
       } 
     else 
       { 
-        final_state = 5;
+        wait();
+        idctCol_final_state = 5;
       } 
   else 
     { 
-      final_state = 3;
+      wait();
+      idctCol_final_state = 3;
     } 
-else if (final_state == 5) 
-  if (TestInputPort(self->X3, 1)) 
+else if (idctCol_final_state == 5) 
+  if (TestInputPort(self->X2, 1)) 
     { 
       final(self);
-      final_state = 0;
+      idctCol_final_state = 0;
     } 
   else 
     { 
-      final_state = 5;
+      wait();
+      idctCol_final_state = 5;
     } 
 
 }
