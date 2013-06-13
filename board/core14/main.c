@@ -1,7 +1,7 @@
 #include <e_coreid.h> 
 #include "util/common.h"
 #include "util/flags.h"
-actor_Clip instance_Clip;
+actor_Clip_source_sink instance_Clip;
 port_in I;
 port_in SIGNED;
 port_out O;

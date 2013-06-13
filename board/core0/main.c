@@ -1,7 +1,7 @@
 #include <e_coreid.h> 
 #include "util/common.h"
 #include "util/flags.h"
-actor_RowSort instance_RowSort;
+actor_RowSort_source instance_RowSort;
 port_in ROW;
 port_out Y0;
 port_in *Y0_dests[1];
