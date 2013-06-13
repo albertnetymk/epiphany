@@ -98,8 +98,9 @@ int main(int argc, char **argv) {
     {
         char buffer[10];
         int n;
+        FILE *f;
         i = 0;
-        FILE *f = fopen("../in.txt", "r");
+        f = fopen("../in.txt", "r");
         while(NULL != fgets(buffer, sizeof(buffer), f)) {
             if (i<input_data_size) {
                 n = atoi(buffer);
@@ -123,7 +124,7 @@ int main(int argc, char **argv) {
         i = 0;
         f = fopen("../expect.txt", "r");
         while(NULL != fgets(buffer, sizeof(buffer), f)) {
-            if (i<sizeof(expect[0])/sizeof(int)) {
+            if (i<output_data_size) {
                 n = atoi(buffer);
                 expect[0][i++] = n;
             } else {
@@ -139,8 +140,8 @@ int main(int argc, char **argv) {
         Mailbox.n_source[i].index = 0;
     }
 
-    // for (i=start; i<end; ++i) {
-    // printf("go is %d\n", Mailbox.core.go[i]);
+    // for (i=start; i<output_data_size; ++i) {
+    //     printf("%d\n", expect[0][i]);
     // }
 
     if (e_open((char *) servIP, eServLoaderPort)) {
