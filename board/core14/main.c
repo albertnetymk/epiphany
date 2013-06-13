@@ -27,7 +27,7 @@ static api_t api;
 static inline api_t *init(void *a)
 {
     all.instance_Clip = a;
-    actor_Clip_init(a);
+    actor_Clip_source_sink_init(a);
     api.run = (run_t *)all.instance_Clip->run;
     api.end = (end_t *)all.instance_Clip->end;
     api.not_finished = (not_finished_t *)all.instance_Clip->not_finished;

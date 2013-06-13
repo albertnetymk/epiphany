@@ -30,7 +30,7 @@ static api_t api;
 static inline api_t *init(void *a)
 {
     all.instance_RowSort = a;
-    actor_RowSort_init(a);
+    actor_RowSort_source_init(a);
     api.run = (run_t *)all.instance_RowSort->run;
     api.end = (end_t *)all.instance_RowSort->end;
     api.not_finished = (not_finished_t *)all.instance_RowSort->not_finished;
