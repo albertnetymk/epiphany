@@ -171,15 +171,15 @@ int main(int argc, char **argv) {
     puts("Read data from board");
     addr = DRAM_BASE;
     e_read(addr, (void *) &Mailbox, sizeof(Mailbox));
-    // show_core_go();
+    show_core_go();
     // show_debug_info();
-    for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
-        for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j) {
-            sprintf(msg, "n_sink[%d][%d] should be %d, but %d is found", i, j,
-                    expect[i][j], Mailbox.n_sink[i].array[j]);
-            ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
-        }
-    }
+    // for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+    //     for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j) {
+    //         sprintf(msg, "n_sink[%d][%d] should be %d, but %d is found", i, j,
+    //                 expect[i][j], Mailbox.n_sink[i].array[j]);
+    //         ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
+    //     }
+    // }
     // while (n<2) {
     //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
     //     e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
