@@ -18,6 +18,10 @@ void connect_network()
     connect(all.idctRow_instance_Shuffle->Y1, all.idctRow_instance_Final->X1);
     connect(all.idctRow_instance_Shuffle->Y2, all.idctRow_instance_Final->X2);
     connect(all.idctRow_instance_Shuffle->Y3, all.idctRow_instance_Final->X3);
+    connect(all.idctRow_instance_Final->Y0, all.instance_Transpose->X0);
+    connect(all.idctRow_instance_Final->Y1, all.instance_Transpose->X1);
+    connect(all.idctRow_instance_Final->Y2, all.instance_Transpose->X2);
+    connect(all.idctRow_instance_Final->Y3, all.instance_Transpose->X3);
 
     connect(all.instance_Transpose->Y0, all.idctCol_instance_Scale->X0);
     connect(all.instance_Transpose->Y1, all.idctCol_instance_Scale->X1);
