@@ -26,41 +26,16 @@ void inc_core_at_index(int i)
 }
 
 void print_core_at_index(int v, int i) {
-    unsigned char num = core_num();
-    switch (num) {
-        case 0:
-            Mailbox.debug_zero[i] = v;
-            break;
-        case 1:
-            Mailbox.debug_one[i] = v;
-            break;
-        case 2:
-            Mailbox.debug_two[i] = v;
-            break;
-        case 3:
-            Mailbox.debug_three[i] = v;
-            break;
-        case 4:
-            Mailbox.debug_four[i] = v;
-            break;
-        case 5:
-            Mailbox.debug_five[i] = v;
-            break;
-    }
-    // Mailbox.debug[num*20 + i] = v;
+    Mailbox.debug[core_num()][i] = v;
 }
 
 void print_core(int v) {
     unsigned char num = core_num();
     uint index = Mailbox.debug_index[num] + 4;
-    if (index < 20) {
+    if (index < 100) {
         print_core_at_index(v, index);
         Mailbox.debug_index[num]++;
     }
-    // if (index < 20) {
-    //     Mailbox.debug[num*20 + index] = v;
-    //     Mailbox.debug_index[num]++;
-    // }
 }
 
 
