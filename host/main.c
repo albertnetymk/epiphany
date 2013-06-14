@@ -21,7 +21,8 @@ static int expect[1][200];
 void ok(bool assertion, char *msg)
 {
     if (!assertion) {
-        printf("\t%sError: '%s' is unsatisfied.%s\n", error_color, msg, reset);
+        printf("%sx%s", error_color, reset);
+        // printf("\t%sError: '%s' is unsatisfied.%s\n", error_color, msg, reset);
         // exit(-1);
     } else {
         // printf("\t%sSuccess: %s.%s\n", success_color, msg, reset);
