@@ -102,7 +102,7 @@ inline void  transposeTwo(actor_Transpose *self)
 }
 inline void  transposeThre(actor_Transpose *self)
 {
-    select = (~(select & 1) | (~select & ~1));
+    // select = (~(select & 1) | (~select & ~1));
     select = select ^ 1;
     ccount = 64;
     rcount = 0;
