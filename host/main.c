@@ -63,11 +63,11 @@ void show_debug_info()
         }
         printf("\n");
     }
-    j = 12;
-    for (i = 4; i < 30; ++i) {
-        printf("line %d ", i-3);
-        printf("c%d: %d\n", j, Mailbox.debug[j][i]);
-    }
+    // j = 12;
+    // for (i = 4; i < 30; ++i) {
+    //     printf("line %d ", i-3);
+    //     printf("c%d: %d\n", j, Mailbox.debug[j][i]);
+    // }
 }
 
 void compare_n_sink(int size)
@@ -83,6 +83,7 @@ void compare_n_sink(int size)
             ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
         }
     }
+    printf("\n");
 }
 
 int main(int argc, char **argv) {
@@ -193,8 +194,8 @@ int main(int argc, char **argv) {
 
     puts("Read data from board");
     show_core_go();
-    show_debug_info();
-    // compare_n_sink(output_data_size);
+    // show_debug_info();
+    compare_n_sink(output_data_size);
     // while (n<2) {
     //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
     //     e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
