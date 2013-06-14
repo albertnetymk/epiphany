@@ -665,6 +665,7 @@ int epiphany_read(port_in *p)
     int result = internal_epiphany_read(p);
     timer_pause();
     inc_core_at_index(1);
+    print_core(-1);
     return result;
 }
 
