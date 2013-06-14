@@ -52,9 +52,9 @@ void show_debug_info()
     int i, j;
     // for (i = 0; i < Mailbox.players; ++i) {
     for (i = 0; i < 4; ++i) {
-        print("line %d ", i);
+        printf("line %d ", i);
         for (j = 0; j < Mailbox.players; ++j) {
-            print("c%d: %d\t", j, Mailbox.debug[j][i]);
+            printf("c%d: %d\t", j, Mailbox.debug[j][i]);
         }
         printf("\n");
     }
