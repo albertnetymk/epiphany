@@ -650,23 +650,20 @@ int epiphany_peek(port_in *p)
 
 void epiphany_write(port_out *p, int v)
 {
-    // uint index = Mailbox.core.debug_index[core_num()];
-    // Mailbox.core.debug_line[core_num()][index] = v;
-    // Mailbox.core.debug_index[core_num()]++;
+    // inc_core_at_index(2);
     timer_resume();
     internal_epiphany_write(p, v);
     timer_pause();
+    // inc_core_at_index(3);
 }
 
 int epiphany_read(port_in *p)
 {
+    // inc_core_at_index(0);
     timer_resume();
     int result = internal_epiphany_read(p);
     timer_pause();
-    // print_core(-1);
-    // uint index = Mailbox.core.debug_index[core_num()];
-    // Mailbox.core.debug_line[core_num()][index] = result;
-    // Mailbox.core.debug_index[core_num()]++;
+    // inc_core_at_index(1);
     return result;
 }
 

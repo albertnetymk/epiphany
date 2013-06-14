@@ -20,6 +20,11 @@ void print_core_index(int i) {
     Mailbox.debug_index[core_num()] = i;
 }
 
+void inc_core_at_index(int i)
+{
+    Mailbox.debug[core_num()][i]++;
+}
+
 void print_core_at_index(int v, int i) {
     unsigned char num = core_num();
     switch (num) {

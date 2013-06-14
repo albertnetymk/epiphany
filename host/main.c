@@ -49,14 +49,13 @@ void show_core_go()
 
 void show_debug_info()
 {
-    int i;
-    for (i = 0; i < 10; i += 1) {
-        printf("line %d ",  i);
-        printf("core %d: %d\t", 0, Mailbox.debug_zero[i]);
-        printf("core %d: %d\t", 1, Mailbox.debug_one[i]);
-        printf("core %d: %d\t", 2, Mailbox.debug_two[i]);
-        printf("core %d: %d\t", 3, Mailbox.debug_three[i]);
-        printf("core %d: %d\t", 4, Mailbox.debug_four[i]);
+    int i, j;
+    // for (i = 0; i < Mailbox.players; ++i) {
+    for (i = 0; i < 4; ++i) {
+        print("line %d ", i);
+        for (j = 0; j < Mailbox.players; ++j) {
+            print("c%d: %d\t", j, Mailbox.debug[j][i]);
+        }
         printf("\n");
     }
 }
