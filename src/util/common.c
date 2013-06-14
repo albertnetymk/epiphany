@@ -52,7 +52,7 @@ void print_core_at_index(int v, int i) {
 
 void print_core(int v) {
     unsigned char num = core_num();
-    uint index = Mailbox.debug_index[num];
+    uint index = Mailbox.debug_index[num] + 4;
     if (index < 20) {
         print_core_at_index(v, index);
         Mailbox.debug_index[num]++;

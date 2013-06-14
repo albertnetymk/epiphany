@@ -655,6 +655,7 @@ void epiphany_write(port_out *p, int v)
     internal_epiphany_write(p, v);
     timer_pause();
     inc_core_at_index(3);
+    print_core(v);
 }
 
 int epiphany_read(port_in *p)
