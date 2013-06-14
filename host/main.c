@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
     //     Mailbox.source[i] = 2*i;
     // }
     input_data_size = 64;
-    output_data_size = 192;
+    output_data_size = 64;
     {
         char buffer[10];
         int n;
@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
         Mailbox.n_source[i].size = input_data_size;
         Mailbox.n_source[i].index = 0;
     }
-    Mailbox.n_source[1].size = 2;
+    Mailbox.n_source[1].size = 0;
 
     // for (i=start; i<output_data_size; ++i) {
     //     printf("%d\n", expect[0][i]);
