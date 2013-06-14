@@ -38,11 +38,11 @@ void show_core_go()
     //     e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
     //     printf("core %d is in stage %d\n", i, Mailbox.core.go[i]);
     // }
+    printf("       ");
     for (i = 0; i < Mailbox.players; ++i) {
-        addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
-        e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
-        printf("core %d is in stage %d\n", i, Mailbox.core.go[i]);
+        printf("c%d: %d\n", i, Mailbox.core.go[i]);
     }
+    printf("\n");
     addr = DRAM_BASE + offsetof(shared_buf_t, sink);
     e_read(addr, (void *) Mailbox.sink, sizeof(int)*20);
     for (i = 0; i < 5; ++i) {
