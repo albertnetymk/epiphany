@@ -48,7 +48,8 @@ bool transposeTwo_guard(actor_Transpose *self)
 
     int pair = (((64 - ccount) >> 1) & 3);
 
-    int i = (~(select & 1) | (~select & ~1));
+    // int i = (~(select & 1) | (~select & ~1));
+    int i = select ^ 1;
 
     return(ccount > 0);
 }
@@ -90,7 +91,8 @@ inline void  transposeTwo(actor_Transpose *self)
 
     int pair = (((64 - ccount) >> 1) & 3);
 
-    int i = (~(select & 1) | (~select & ~1));
+    // int i = (~(select & 1) | (~select & ~1));
+    int i = select ^ 1;
 
     a = (pair == 0) ? 0 : ((pair == 1) ? 2 : ((pair == 2) ? 1 : 5));
     b = (pair == 0) ? 4 : ((pair == 1) ? 6 : ((pair == 2) ? 7 : 3));
@@ -101,6 +103,7 @@ inline void  transposeTwo(actor_Transpose *self)
 inline void  transposeThre(actor_Transpose *self)
 {
     select = (~(select & 1) | (~select & ~1));
+    select = select ^ 1;
     ccount = 64;
     rcount = 0;
 }

@@ -45,7 +45,8 @@ bool RetranceTwo_guard(actor_Retranspose *self)
 
     int row = ((64 - ccount) & 7);
 
-    int i = (~(select & 1) | (~select & ~1));
+    // int i = (~(select & 1) | (~select & ~1));
+    int i = select ^ 1;
 
     return(ccount > 0);
 }
@@ -83,14 +84,16 @@ inline void  RetranceTwo(actor_Retranspose *self)
 
     int row = ((64 - ccount) & 7);
 
-    int i = (~(select & 1) | (~select & ~1));
+    // int i = (~(select & 1) | (~select & ~1));
+    int i = select ^ 1;
 
     ccount = (ccount - 1);
     SendToken(self->Y, mem[i][row][col], 1);
 }
 inline void  RetranceThree(actor_Retranspose *self)
 {
-    select = (~(select & 1) | (~select & ~1));
+    // select = (~(select & 1) | (~select & ~1));
+    select = select ^ 1;
     ccount = 64;
     rcount = 0;
 }
