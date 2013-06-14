@@ -72,7 +72,7 @@ typedef struct {
     int debug_four[20];
     int debug_five[20];
     int debug[20][100];
-    int debug_index[10];
+    int debug_index[20];
     network_source n_source[2];
     network_sink n_sink[1];
     mbox_t core;
