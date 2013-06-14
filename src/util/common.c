@@ -108,8 +108,28 @@ inline void core_main(void *a, init_t *init)
     init_clock();
     while(1) {
         api->run(a);
-        api->run(a);
-        api->run(a);
+        if (core_num() == 0) {
+            api->run(a);
+            api->run(a);
+        }
+        if (core_num() == 4) {
+            api->run(a);
+            api->run(a);
+        }
+        if (core_num() == 6) {
+            while(Mailbox.debug[core_num()][2] < 64) {
+                api->run(a);
+            }
+        }
+        if (core_num() == 10) {
+            api->run(a);
+            api->run(a);
+        }
+        if (core_num() == 13) {
+            while(Mailbox.debug[core_num()][2] < 64) {
+                api->run(a);
+            }
+        }
         if (!api->not_finished(a)) {
             break;
         }
