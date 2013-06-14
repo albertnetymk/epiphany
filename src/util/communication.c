@@ -650,20 +650,20 @@ int epiphany_peek(port_in *p)
 
 void epiphany_write(port_out *p, int v)
 {
-    // inc_core_at_index(2);
+    inc_core_at_index(2);
     timer_resume();
     internal_epiphany_write(p, v);
     timer_pause();
-    // inc_core_at_index(3);
+    inc_core_at_index(3);
 }
 
 int epiphany_read(port_in *p)
 {
-    // inc_core_at_index(0);
+    inc_core_at_index(0);
     timer_resume();
     int result = internal_epiphany_read(p);
     timer_pause();
-    // inc_core_at_index(1);
+    inc_core_at_index(1);
     return result;
 }
 
