@@ -40,7 +40,7 @@ void show_core_go()
     // }
     printf("       ");
     for (i = 0; i < Mailbox.players; ++i) {
-        printf("c%d: %d", i, Mailbox.core.go[i]);
+        printf("c%d: %d\t", i, Mailbox.core.go[i]);
     }
     printf("\n");
     addr = DRAM_BASE + offsetof(shared_buf_t, sink);
@@ -56,12 +56,17 @@ void show_debug_info()
     e_read(addr, (void *) Mailbox.debug, sizeof(Mailbox.debug));
     int i, j;
     // for (i = 0; i < Mailbox.players; ++i) {
-    for (i = 0; i < 10; ++i) {
+    for (i = 0; i < 4; ++i) {
         printf("line %d ", i);
         for (j = 0; j < Mailbox.players; ++j) {
             printf("c%d: %d\t", j, Mailbox.debug[j][i]);
         }
         printf("\n");
+    }
+    j = 12;
+    for (i = 4; i < 30; ++i) {
+        printf("line %d ", i-3);
+        printf("c%d: %d\n", j, Mailbox.debug[j][i]);
     }
 }
 
