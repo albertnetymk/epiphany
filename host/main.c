@@ -16,6 +16,7 @@ unsigned int addr;
 const char *servIP = "127.0.0.1";
 const unsigned short eServLoaderPort = 50999;
 FILE *fo;
+static int expect[1][200];
 
 void ok(bool assertion, char *msg)
 {
@@ -29,6 +30,8 @@ void ok(bool assertion, char *msg)
 }
 void show_core_go()
 {
+    addr = DRAM_BASE + offsetof(shared_buf_t, core);
+    e_read(addr, (void *) &Mailbox.core, sizeof(mbox_t));
     int i;
     // for (i = 0; i < 1; ++i) {
     //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
@@ -49,6 +52,8 @@ void show_core_go()
 
 void show_debug_info()
 {
+    addr = DRAM_BASE + offsetof(shared_buf_t, debug);
+    e_read(addr, (void *) Mailbox.debug, sizeof(Mailbox.debug));
     int i, j;
     // for (i = 0; i < Mailbox.players; ++i) {
     for (i = 0; i < 4; ++i) {
@@ -57,6 +62,21 @@ void show_debug_info()
             printf("c%d: %d\t", j, Mailbox.debug[j][i]);
         }
         printf("\n");
+    }
+}
+
+void compare_n_sink(int size)
+{
+    int i, j;
+    char msg[50];
+    addr = DRAM_BASE + offsetof(shared_buf_t, n_sink);
+    e_read(addr, (void *) (&Mailbox.n_sink), sizeof(Mailbox.n_sink));
+    for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
+        for (j = 0; j < size; ++j) {
+            sprintf(msg, "n_sink[%d][%d] should be %d, but %d is found", i, j,
+                    expect[i][j], Mailbox.n_sink[i].array[j]);
+            ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
+        }
     }
 }
 
@@ -91,9 +111,8 @@ int main(int argc, char **argv) {
     // for (i=0; i<data_size; ++i) {
     //     Mailbox.source[i] = 2*i;
     // }
-    input_data_size = 240;
+    input_data_size = 64;
     output_data_size = 192;
-    int expect[1][200];
     {
         char buffer[10];
         int n;
@@ -137,6 +156,7 @@ int main(int argc, char **argv) {
         Mailbox.n_source[i].size = input_data_size;
         Mailbox.n_source[i].index = 0;
     }
+    Mailbox.n_source[1].size = 2;
 
     // for (i=start; i<output_data_size; ++i) {
     //     printf("%d\n", expect[0][i]);
@@ -166,19 +186,10 @@ int main(int argc, char **argv) {
     puts("Waiting for the board to finish...");
     sleep(1);
 
-    char msg[50];
     puts("Read data from board");
-    addr = DRAM_BASE;
-    e_read(addr, (void *) &Mailbox, sizeof(Mailbox));
     show_core_go();
-    // show_debug_info();
-    // for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
-    //     for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j) {
-    //         sprintf(msg, "n_sink[%d][%d] should be %d, but %d is found", i, j,
-    //                 expect[i][j], Mailbox.n_sink[i].array[j]);
-    //         ok(expect[i][j] == Mailbox.n_sink[i].array[j], msg);
-    //     }
-    // }
+    show_debug_info();
+    // compare_n_sink(output_data_size);
     // while (n<2) {
     //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
     //     e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
