@@ -23,9 +23,10 @@ void internal_epiphany_write(port_out *p, int v)
     port_in *dest;
     for (i = 0; i < p->dest_index; ++i) {
         dest = (*p->dests)[i];
-        if (dest->carrier) {
-            while (dest->write_index == dest->read_index) ;
-        }
+        // if (dest->carrier) {
+        //     while (dest->write_index == dest->read_index) ;
+        // }
+        while(dest->carrier && dest->write_index == dest->read_index) ;
         dest->array[dest->write_index] = v;
         if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
             dest->carrier = true;
@@ -38,9 +39,10 @@ void internal_epiphany_write(port_out *p, int v)
 
 int internal_epiphany_read(port_in *p)
 {
-    if (!p->carrier) {
-        while (p->read_index == p->write_index) ;
-    }
+    // if (!p->carrier) {
+    //     while (p->read_index == p->write_index) ;
+    // }
+    while(!p->carrier && p->read_index == p->write_index) ;
     int result = p->array[p->read_index];
     if (p->read_index == sizeof(p->array)/sizeof(int) - 1) {
         p->carrier = false;
@@ -53,9 +55,10 @@ int internal_epiphany_read(port_in *p)
 
 int internal_epiphany_peek(port_in *p)
 {
-    if (!p->carrier) {
-        while (p->read_index == p->write_index) ;
-    }
+    // if (!p->carrier) {
+    //     while (p->read_index == p->write_index) ;
+    // }
+    while(!p->carrier && p->read_index == p->write_index) ;
     return p->array[p->read_index];
 }
 
