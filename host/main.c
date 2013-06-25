@@ -176,36 +176,8 @@ int main(int argc, char **argv) {
                 Mailbox.core.go[Mailbox.players-1], n++);
     }
     puts("Read data from board");
-    show_core_go();
-    // show_debug_info();
+
     compare_n_sink(output_data_size);
-    // while (n<2) {
-    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[1]);
-    //     e_read(addr, (void *) (&Mailbox.core.go[1]), sizeof(int));
-    //     if (Mailbox.core.go[4] == 4) {
-    //         addr = DRAM_BASE + offsetof(shared_buf_t, sink);
-    //         for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
-    //             e_read(addr, (void *) (Mailbox.n_sink[i].array),
-    //                     sizeof(expect[i]));
-    //         }
-    //         for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
-    //             for (j = 0; j < sizeof(expect[i])/sizeof(int); ++j)
-    //             {
-    //                 sprintf(msg, "n_sink[%d] should be %d, but %d is found", i,
-    //                         expect[i][j], Mailbox.n_sink[i].array[j]);
-    //             }
-    //         }
-    //         printf("\n");
-    //         break;
-    //         // exit(-1);
-    //         // show_debug_info();
-    //     } else {
-    //         show_core_go();
-    //         show_debug_info();
-    //     }
-    //     printf("Board hasn't finished yet... %d\n", n++);
-    //     sleep(2);
-    // }
 
     for (i = 0; i < end; ++i) {
         addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks);
