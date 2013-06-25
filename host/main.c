@@ -66,7 +66,7 @@ void compare_n_sink(int size)
     int i, j;
     char msg[50];
     addr = DRAM_BASE + offsetof(shared_buf_t, n_sink);
-    e_read(addr, (void *) (&Mailbox.n_sink), sizeof(Mailbox.n_sink));
+    e_read(addr, (void *) Mailbox.n_sink, sizeof(Mailbox.n_sink));
     for (i = 0; i < sizeof(expect)/sizeof(expect[0]); ++i) {
         for (j = 0; j < size; ++j) {
             sprintf(msg, "n_sink[%d][%d] should be %d, but %d is found", i, j,
