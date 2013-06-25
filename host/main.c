@@ -31,24 +31,14 @@ void ok(bool assertion, char *msg)
 }
 void show_core_go()
 {
-    addr = DRAM_BASE + offsetof(shared_buf_t, core);
-    e_read(addr, (void *) &Mailbox.core, sizeof(mbox_t));
+    addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
+    e_read(addr, (void *) Mailbox.core.go, sizeof(int)*_Ncores);
     int i;
-    // for (i = 0; i < 1; ++i) {
-    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.go[i]);
-    //     e_read(addr, (void *) (&Mailbox.core.go[i]), sizeof(int));
-    //     printf("core %d is in stage %d\n", i, Mailbox.core.go[i]);
-    // }
     printf("       ");
     for (i = 0; i < Mailbox.players; ++i) {
         printf("c%d: %d\t", i, Mailbox.core.go[i]);
     }
     printf("\n");
-    addr = DRAM_BASE + offsetof(shared_buf_t, sink);
-    e_read(addr, (void *) Mailbox.sink, sizeof(int)*20);
-    // for (i = 0; i < 5; ++i) {
-    //     printf("sink[%d] = %d\n", i, Mailbox.sink[i]);
-    // }
 }
 
 void show_debug_info()
