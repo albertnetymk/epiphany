@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
 
     // rv = e_load("../epiphany/main.srec", 1, 1, 0);
 
-    int i, j, n;
+    int i, j, n=0;
     int start = 0;
     int end = 15;
     puts("Host is running ...");
@@ -165,6 +165,16 @@ int main(int argc, char **argv) {
     puts("Waiting for the board to finish...");
     sleep(1);
 
+    while(1) {
+        show_core_go();
+        if (Mailbox.core.go[Mailbox.players-1] == 5) {
+            break;
+        }
+        sleep(2);
+        show_debug_info();
+        printf("core is in %d, loop times: %d\n",
+                Mailbox.core.go[Mailbox.players-1], n++);
+    }
     puts("Read data from board");
     show_core_go();
     // show_debug_info();
