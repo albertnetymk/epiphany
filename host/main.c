@@ -32,7 +32,7 @@ void ok(bool assertion, char *msg)
 void show_core_go()
 {
     addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
-    e_read(addr, (void *) Mailbox.core.go, sizeof(int)*_Ncores);
+    e_read(addr, (void *) Mailbox.core.go, sizeof(Mailbox.core.go));
     int i;
     printf("       ");
     for (i = 0; i < Mailbox.players; ++i) {
@@ -217,9 +217,9 @@ int main(int argc, char **argv) {
 
     for (i = 0; i < end; ++i) {
         addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks);
-        e_read(addr, (void *) Mailbox.core.clocks, sizeof(int) * _Ncores);
+        e_read(addr, (void *) Mailbox.core.clocks, sizeof(Mailbox.core.clocks));
         addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles);
-        e_read(addr, (void *) Mailbox.core.cycles, sizeof(int) * _Ncores);
+        e_read(addr, (void *) Mailbox.core.cycles, sizeof(Mailbox.core.cycles));
 
         printf("%u, %u\n", Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
         // printf("pending/clock for %d is %u/%u\n", i,
