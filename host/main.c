@@ -159,20 +159,7 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    // Decide how many cores are used.
-    addr = DRAM_BASE + offsetof(shared_buf_t, players);
-    e_write(addr, (void *) &(Mailbox.players), sizeof(int));
-
-    // Prepare input data.
-    // addr = DRAM_BASE + offsetof(shared_buf_t, source);
-    // e_write(addr, (void *) Mailbox.source, sizeof(int)*input_data_size);
-
-    // addr = DRAM_BASE + offsetof(shared_buf_t, input_data_size);
-    // e_write(addr, (void *) &(Mailbox.input_data_size), sizeof(int));
-
-    // addr = DRAM_BASE + offsetof(shared_buf_t, core.go);
-    // e_write(addr, (void *) (&Mailbox.core.go[0]), sizeof(int)*end);
-
+    // Dump everything to the board.
     addr = DRAM_BASE;
     e_write(addr, (void *) &Mailbox, sizeof(Mailbox));
     puts("Waiting for the board to finish...");
