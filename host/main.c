@@ -150,9 +150,7 @@ int main(int argc, char **argv) {
     }
     Mailbox.n_source[1].size = input_data_size/64;
 
-    // for (i=start; i<output_data_size; ++i) {
-    //     printf("%d\n", expect[0][i]);
-    // }
+    printf("size: %d\n", input_data_size);
 
     if (e_open((char *) servIP, eServLoaderPort)) {
         fprintf(fo, "\nERROR: Can't establish connection to E-SERVER!\n\n");
@@ -175,6 +173,7 @@ int main(int argc, char **argv) {
         printf("core is in %d, loop times: %d\n",
                 Mailbox.core.go[Mailbox.players-1], n++);
     }
+
     puts("Read data from board");
 
     compare_n_sink(output_data_size);
