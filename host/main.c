@@ -16,7 +16,7 @@ unsigned int addr;
 const char *servIP = "127.0.0.1";
 const unsigned short eServLoaderPort = 50999;
 FILE *fo;
-static int expect[1][200];
+static int expect[1][64000];
 
 void ok(bool assertion, char *msg)
 {
@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
     //     Mailbox.source[i] = 2*i;
     // }
     input_data_size = 64;
-    output_data_size = 64;
+    output_data_size = input_data_size;
     {
         char buffer[10];
         int n;
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
         Mailbox.n_source[i].size = input_data_size;
         Mailbox.n_source[i].index = 0;
     }
-    Mailbox.n_source[1].size = 0;
+    Mailbox.n_source[1].size = input_data_size/64;
 
     // for (i=start; i<output_data_size; ++i) {
     //     printf("%d\n", expect[0][i]);

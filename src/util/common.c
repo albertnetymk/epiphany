@@ -83,29 +83,19 @@ inline void core_main(void *a, init_t *init)
     // init_clock();
     while(1) {
         api->run(a);
-        if (core_num() == 0) {
-            api->run(a);
-            api->run(a);
-        }
-        if (core_num() == 4) {
-            api->run(a);
-            api->run(a);
-        }
-        if (core_num() == 6) {
-            while(Mailbox.debug[core_num()][2] < 64) {
-                api->run(a);
-            }
-        }
-        if (core_num() == 10) {
-            api->run(a);
-            api->run(a);
-        }
-        if (core_num() == 13) {
-            while(Mailbox.debug[core_num()][2] < 64) {
-                api->run(a);
-            }
-        }
+        api->run(a);
         if (!api->not_finished(a)) {
+            if (core_num() == 1 || core_num() == 7) {                                                                                                          
+                while(Mailbox.debug[core_num()][2] <
+                        Mailbox.n_source[0].size*2) {                                                                             
+                    api->run(a);                                                                                                                               
+                }                                                                                                                                              
+            } else {                                                                                                                                           
+                while(Mailbox.debug[core_num()][2] <
+                        Mailbox.n_source[0].size) {                                                                               
+                    api->run(a);                                                                                                                               
+                }                                                                                                                                              
+            }  
             break;
         }
     }

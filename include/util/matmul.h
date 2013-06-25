@@ -49,14 +49,16 @@ typedef struct {
 typedef struct {
     uint index;
     uint size;
-    int array[300];
+    // int array[64000];
+    int array[6400];
 } network_source;
 
 typedef struct {
     // even
     uint dummy;
     uint index;
-    int array[300];
+    // int array[64000];
+    int array[6400];
 } network_sink;
 
 typedef struct {
