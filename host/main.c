@@ -101,14 +101,9 @@ int main(int argc, char **argv) {
     if ( argc > 1 ) {
         input_data_size = atoi(argv[1]);
     } else {
-        input_data_size = 9;
+        input_data_size = 64;
     }
 
-    // Mailbox.data_size = data_size;
-    // for (i=0; i<data_size; ++i) {
-    //     Mailbox.source[i] = 2*i;
-    // }
-    input_data_size = 64;
     output_data_size = input_data_size;
     {
         char buffer[10];
