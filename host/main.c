@@ -225,15 +225,16 @@ int main(int argc, char **argv) {
     //     sleep(2);
     // }
 
-    // for (i = 0; i < end; ++i) {
-    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks[i]);
-    //     e_read(addr, (void *) (&Mailbox.core.clocks[i]), sizeof(int));
-    //     addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles[i]);
-    //     e_read(addr, (void *) (&Mailbox.core.cycles[i]), sizeof(int));
+    for (i = 0; i < end; ++i) {
+        addr = DRAM_BASE + offsetof(shared_buf_t, core.clocks);
+        e_read(addr, (void *) Mailbox.core.clocks, sizeof(int) * _Ncores);
+        addr = DRAM_BASE + offsetof(shared_buf_t, core.cycles);
+        e_read(addr, (void *) Mailbox.core.cycles, sizeof(int) * _Ncores);
 
-    //     printf("pending/clock for %d is %u/%u\n", i,
-    //             Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
-    // }
+        printf("%u, %u\n", Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
+        // printf("pending/clock for %d is %u/%u\n", i,
+        // Mailbox.core.cycles[i], Mailbox.core.clocks[i]);
+    }
 
     if (e_close()) {
         fprintf(fo, "\nERROR: Can't close connection to E-SERVER!\n\n");

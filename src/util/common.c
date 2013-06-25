@@ -80,7 +80,7 @@ inline void core_main(void *a, init_t *init)
     }
 
     stage(3);
-    init_clock();
+    // init_clock();
     while(1) {
         api->run(a);
         if (core_num() == 0) {

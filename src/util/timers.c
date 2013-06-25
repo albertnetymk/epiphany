@@ -25,6 +25,7 @@ void timer_resume()
 {
     if (!initialized) {
         init_timer();
+        init_clock();
     }
     e_ctimer_start(E_CTIMER_1, E_CTIMER_CLK);
 }
