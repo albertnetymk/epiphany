@@ -4,18 +4,12 @@
 
 bool initialized[2] = { false, false };
 
-void init_clock()
-{
-    e_ctimer_set(E_CTIMER_0, E_CTIMER_CLK, E_CTIMER_MAX);
-    e_ctimer_start(E_CTIMER_0, E_CTIMER_CLK);
-}
-
 uint get_clock()
 {
     return E_CTIMER_MAX - e_ctimer_get(E_CTIMER_0);
 }
 
-void init_timer(uchar id)
+static void init_timer(uchar id)
 {
     initialized[id] = true;
     switch(id) {

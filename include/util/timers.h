@@ -2,10 +2,9 @@
 #define TIMERS_H_9QZH7D5O
 
 
-void init_clock();
+void timer_resume(uchar id);
+void timer_pause(uchar id);
 uint get_clock();
-void timer_resume();
-void timer_pause();
 uint get_time();
 
 #endif /* end of include guard: TIMERS_H_9QZH7D5O */
