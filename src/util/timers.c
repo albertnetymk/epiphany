@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include "util/types.h"
 
-bool initialized = false;
+bool initialized[2] = { false, false };
 
 void init_clock()
 {
@@ -15,24 +15,44 @@ uint get_clock()
     return E_CTIMER_MAX - e_ctimer_get(E_CTIMER_0);
 }
 
-void init_timer()
+void init_timer(uchar id)
 {
-    initialized = true;
-    e_ctimer_set(E_CTIMER_1, E_CTIMER_CLK, E_CTIMER_MAX);
-}
-
-void timer_resume()
-{
-    if (!initialized) {
-        init_timer();
-        init_clock();
+    initialized[id] = true;
+    switch(id) {
+        case 0:
+            e_ctimer_set(E_CTIMER_0, E_CTIMER_CLK, E_CTIMER_MAX);
+            break;
+        case 1:
+            e_ctimer_set(E_CTIMER_1, E_CTIMER_CLK, E_CTIMER_MAX);
+            break;
     }
-    e_ctimer_start(E_CTIMER_1, E_CTIMER_CLK);
 }
 
-void timer_pause()
+void timer_resume(uchar id)
 {
-    e_ctimer_stop(E_CTIMER_1);
+    if (!initialized[id]) {
+        init_timer(id);
+    }
+    switch(id) {
+        case 0:
+            e_ctimer_start(E_CTIMER_0, E_CTIMER_CLK);
+            break;
+        case 1:
+            e_ctimer_start(E_CTIMER_1, E_CTIMER_CLK);
+            break;
+    }
+}
+
+void timer_pause(uchar id)
+{
+    switch(id) {
+        case 0:
+            e_ctimer_stop(E_CTIMER_0);
+            break;
+        case 1:
+            e_ctimer_stop(E_CTIMER_1);
+            break;
+    }
 }
 
 uint get_time()
