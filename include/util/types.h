@@ -2,7 +2,7 @@
 #define TYPES_H_3N9DBLQ8
 
 typedef unsigned int uint;
-typedef unsigned int uchar;
+typedef unsigned char uchar;
 
 
 #endif /* end of include guard: TYPES_H_3N9DBLQ8 */
