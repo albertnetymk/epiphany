@@ -26,7 +26,9 @@ void internal_epiphany_write(port_out *p, int v)
         // if (dest->carrier) {
         //     while (dest->write_index == dest->read_index) ;
         // }
+        timer_resume(1);
         while(dest->carrier && dest->write_index == dest->read_index) ;
+        timer_pause(1);
         dest->array[dest->write_index] = v;
         if (dest->write_index == sizeof(dest->array)/sizeof(int) - 1 ) {
             dest->carrier = true;
@@ -42,7 +44,9 @@ int internal_epiphany_read(port_in *p)
     // if (!p->carrier) {
     //     while (p->read_index == p->write_index) ;
     // }
+    timer_resume(1);
     while(!p->carrier && p->read_index == p->write_index) ;
+    timer_pause(1);
     int result = p->array[p->read_index];
     if (p->read_index == sizeof(p->array)/sizeof(int) - 1) {
         p->carrier = false;
@@ -58,7 +62,9 @@ int internal_epiphany_peek(port_in *p)
     // if (!p->carrier) {
     //     while (p->read_index == p->write_index) ;
     // }
+    timer_resume(1);
     while(!p->carrier && p->read_index == p->write_index) ;
+    timer_pause(1);
     return p->array[p->read_index];
 }
 
@@ -123,16 +129,20 @@ inline static void dma_copy(e_dma_id_t chan, volatile void *dst, volatile void *
 
 static void wait_till_dma_over(fifo *b)
 {
+    timer_resume(1);
     while(e_dma_busy(b->dma->id)) ;
+    timer_pause(1);
 }
 
 static void do_flush(fifo *b, uint size)
 {
     switch (b->dma->status) {
         case DMA_PENDING:
+            timer_resume(1);
             while(!(b->total > 0)) ;
             while(!(b->twin->total == 0)) ;
             while(! try_dma(b->dma)) ;
+            timer_pause(1);
             dma_copy(b->dma->id, b->twin->array, b->array,
                     size, E_ALIGN_BYTE);
         case DMA_ING:
@@ -173,7 +183,9 @@ static void try_flush(fifo *b)
 
 static void wait_till_ready_to_read(volatile fifo *b)
 {
+    timer_resume(1);
     while(!(b->total > 0)) ;
+    timer_pause(1);
 }
 
 #ifdef USE_BOTH_BUFFER
@@ -645,18 +657,18 @@ bool has_input(port_in *p, uint n)
 
 int epiphany_peek(port_in *p)
 {
-    timer_resume();
+    timer_resume(0);
     int result = internal_epiphany_peek(p);
-    timer_pause();
+    timer_pause(0);
     return result;
 }
 
 void epiphany_write(port_out *p, int v)
 {
     inc_core_at_index(2);
-    timer_resume();
+    timer_resume(0);
     internal_epiphany_write(p, v);
-    timer_pause();
+    timer_pause(0);
     inc_core_at_index(3);
     print_core(v);
 }
@@ -664,9 +676,9 @@ void epiphany_write(port_out *p, int v)
 int epiphany_read(port_in *p)
 {
     inc_core_at_index(0);
-    timer_resume();
+    timer_resume(0);
     int result = internal_epiphany_read(p);
-    timer_pause();
+    timer_pause(0);
     inc_core_at_index(1);
     print_core(-1);
     return result;
