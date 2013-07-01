@@ -39,8 +39,3 @@ uint get_time()
 {
     return E_CTIMER_MAX - e_ctimer_get(E_CTIMER_1);
 }
-
-void wait()
-{
-    timer_resume();
-}
