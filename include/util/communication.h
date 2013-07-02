@@ -5,11 +5,15 @@
 #include "util/types.h"
 #include "util/flags.h"
 
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 10
+#endif
+
 #ifdef USE_DESTINATION_BUFFER
 typedef volatile struct port_in_struct {
     uchar read_index;
     uchar write_index;
-    int array[10];
+    int array[BUFFER_SIZE];
     bool carrier;
     bool end;
 } port_in;
@@ -36,7 +40,7 @@ typedef volatile struct dma_cfg_struct {
 
 typedef volatile struct fifo_struct {
     uchar total;
-    int array[10];
+    int array[BUFFER_SIZE];
     uchar size;
     volatile struct fifo_struct *twin;
     dma_cfg *dma;

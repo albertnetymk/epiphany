@@ -6,5 +6,6 @@
 // #define USE_DOUBLE_BUFFER
 // #define USE_MULTIPLE_BUFFER
 // #define BUFFER_NUMBER 2
+#define BUFFER_SIZE 10
 
 #endif /* end of include guard: FLAGS_H_8IQG2XQD */
